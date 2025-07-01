@@ -3,7 +3,16 @@
 import { motion } from "framer-motion"
 import { AnimatedTitle } from "./animated-title"
 
-const skills = ["Framer", "React Native", "Firebase", "Python", "HTML/CSS", "Tailwind CSS"]
+const techStack = [
+  { src: "/library/techstack/figma.png", alt: "Figma", url: "https://www.figma.com/" },
+  { src: "/library/techstack/firebase.png", alt: "Firebase", url: "https://firebase.google.com/" },
+  { src: "/library/techstack/framer.png", alt: "Framer", url: "https://www.framer.com/" },
+  { src: "/library/techstack/github.png", alt: "GitHub", url: "https://github.com/" },
+  { src: "/library/techstack/openai.png", alt: "OpenAI", url: "https://openai.com/" },
+  { src: "/library/techstack/python.png", alt: "Python", url: "https://www.python.org/" },
+  { src: "/library/techstack/tailwind.png", alt: "Tailwind CSS", url: "https://tailwindcss.com/" },
+  { src: "/library/techstack/vercel.png", alt: "Vercel", url: "https://vercel.com/" }
+]
 const bioText =
   "Senior at The New School studying Economics. I build expressive, high-performance digital tools — blending frontend and backend logic with a focus on design systems, clever engineering, and clean product thinking.";
 
@@ -62,28 +71,23 @@ export function AboutSection() {
           className="space-y-4"
         >
           <AnimatedTitle className="text-2xl font-bold text-foreground tracking-tighter">Tech Stack</AnimatedTitle>
-          <motion.div
-            variants={{
-              hidden: { opacity: 0 },
-              visible: { opacity: 1 },
-            }}
-            className="flex flex-wrap gap-3"
-          >
-            {skills.map((skill, i) => (
-              <motion.div
-                key={skill}
-                variants={{
-                  hidden: { opacity: 0, y: 20 },
-                  visible: { opacity: 1, y: 0 },
-                }}
-                transition={{ delay: i * 0.05 }}
-                className="px-4 py-2 rounded-full text-sm font-medium border border-[#a855f7] text-[#a855f7] backdrop-blur-md bg-[#a855f7]/5 hover:bg-[#a855f7]/10 transition-all duration-300"
-                data-cursor-hover
+          <div className="flex flex-wrap gap-5 mt-2">
+            {techStack.map(({ src, alt, url }) => (
+              <a
+                key={alt}
+                href={url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="transition-transform duration-300 hover:scale-110"
               >
-                {skill}
-              </motion.div>
+                <img
+                  src={src}
+                  alt={alt}
+                  className="w-10 h-10 min-w-[2.5rem] min-h-[2.5rem] aspect-square object-contain grayscale hover:grayscale-0"
+                />
+              </a>
             ))}
-          </motion.div>
+          </div>
         </motion.div>
       </div>
     </motion.section>
