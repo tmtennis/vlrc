@@ -71,22 +71,30 @@ export function AboutSection() {
           className="space-y-4"
         >
           <AnimatedTitle className="text-2xl font-bold text-foreground tracking-tighter">Tech Stack</AnimatedTitle>
-          <div className="flex flex-wrap gap-5 mt-2">
-            {techStack.map(({ src, alt, url }) => (
-              <a
-                key={alt}
-                href={url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="transition-transform duration-300 hover:scale-110"
-              >
-                <img
-                  src={src}
-                  alt={alt}
-                  className="w-10 h-10 min-w-[2.5rem] min-h-[2.5rem] aspect-square object-contain grayscale hover:grayscale-0"
-                />
-              </a>
-            ))}
+          <div className="relative overflow-hidden w-full mt-2 group">
+            {/* Left fading edge */}
+            <div className="pointer-events-none absolute left-0 top-0 h-full w-16 bg-gradient-to-r from-white dark:from-black to-transparent z-10" />
+
+            {/* Right fading edge */}
+            <div className="pointer-events-none absolute right-0 top-0 h-full w-16 bg-gradient-to-l from-white dark:from-black to-transparent z-10" />
+
+            <div className="flex gap-10 whitespace-nowrap animate-marquee group-hover:[animation-play-state:paused]">
+              {[...techStack, ...techStack].map(({ src, alt, url }, i) => (
+                <a
+                  key={alt + i}
+                  href={url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="transition-transform duration-300 hover:scale-110 flex-shrink-0"
+                >
+                  <img
+                    src={src}
+                    alt={alt}
+                    className="w-14 h-14 object-contain"
+                  />
+                </a>
+              ))}
+            </div>
           </div>
         </motion.div>
       </div>
