@@ -1,0 +1,42 @@
+.liquid-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 2rem;
+  border-radius: 9999px;
+  border: 2px solid hsl(var(--foreground) / 0.5);
+  color: hsl(var(--foreground));
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  overflow: hidden;
+  transition: color 0.4s ease-in-out, border-color 0.4s ease-in-out;
+  text-decoration: none;
+}
+
+.liquid-button:hover {
+  color: hsl(var(--background));
+  border-color: hsl(var(--accent));
+}
+
+.liquid-button-text {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+}
+
+.liquid-button-liquid {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200%;
+  height: 200%;
+  background-color: hsl(var(--accent));
+  transform: translate(-100%, -75%);
+  transition: transform 0.8s cubic-bezier(0.1, 0.7, 0.3, 1);
+}
+
+.liquid-button:hover .liquid-button-liquid {
+  transform: translate(-25%, -25%);
+}
