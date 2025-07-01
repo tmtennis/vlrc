@@ -4,14 +4,14 @@ import { motion } from "framer-motion"
 import { AnimatedTitle } from "./animated-title"
 
 const techStack = [
-  { src: "/library/techstack/figma.png", alt: "Figma", url: "https://www.figma.com/" },
-  { src: "/library/techstack/firebase.png", alt: "Firebase", url: "https://firebase.google.com/" },
-  { src: "/library/techstack/framer.png", alt: "Framer", url: "https://www.framer.com/" },
-  { src: "/library/techstack/github.png", alt: "GitHub", url: "https://github.com/" },
-  { src: "/library/techstack/openai.png", alt: "OpenAI", url: "https://openai.com/" },
-  { src: "/library/techstack/python.png", alt: "Python", url: "https://www.python.org/" },
-  { src: "/library/techstack/tailwind.png", alt: "Tailwind CSS", url: "https://tailwindcss.com/" },
-  { src: "/library/techstack/vercel.png", alt: "Vercel", url: "https://vercel.com/" }
+  { src: "/techstack/figma.png", alt: "Figma", url: "https://www.figma.com/" },
+  { src: "/techstack/firebase.png", alt: "Firebase", url: "https://firebase.google.com/" },
+  { src: "/techstack/framer.png", alt: "Framer", url: "https://www.framer.com/" },
+  { src: "/techstack/github.png", alt: "GitHub", url: "https://github.com/" },
+  { src: "/techstack/openai.png", alt: "OpenAI", url: "https://openai.com/" },
+  { src: "/techstack/python.png", alt: "Python", url: "https://www.python.org/" },
+  { src: "/techstack/tailwind.png", alt: "Tailwind CSS", url: "https://tailwindcss.com/" },
+  { src: "/techstack/vercel.png", alt: "Vercel", url: "https://vercel.com/" }
 ]
 const bioText =
   "Senior at The New School studying Economics. I build expressive, high-performance digital tools — blending frontend and backend logic with a focus on design systems, clever engineering, and clean product thinking.";
