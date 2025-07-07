@@ -92,3 +92,31 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+/* Modern marquee animations */
+@keyframes marquee-smooth {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-25%);
+  }
+}
+
+@keyframes shine {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-marquee-smooth {
+  animation: marquee-smooth 20s linear infinite;
+  width: max-content;
+}
+
+.animate-shine {
+  animation: shine 3s ease-in-out infinite;
+}

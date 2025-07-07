@@ -27,7 +27,7 @@ const containerVariants = {
 
 const wordVariants = {
   hidden: { opacity: 0, y: 10 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
+  visible: { opacity: 1, y: 0 },
 }
 
 export function AboutSection() {
@@ -71,30 +71,65 @@ export function AboutSection() {
           className="space-y-4"
         >
           <AnimatedTitle className="text-2xl font-bold text-foreground tracking-tighter">Tech Stack</AnimatedTitle>
-          <div className="relative overflow-hidden w-full mt-2 group">
-            {/* Left fading edge */}
-            <div className="pointer-events-none absolute left-0 top-0 h-full w-16 bg-gradient-to-r from-white dark:from-black to-transparent z-10" />
-
-            {/* Right fading edge */}
-            <div className="pointer-events-none absolute right-0 top-0 h-full w-16 bg-gradient-to-l from-white dark:from-black to-transparent z-10" />
-
-            <div className="flex gap-10 whitespace-nowrap animate-marquee group-hover:[animation-play-state:paused]">
-              {[...techStack, ...techStack].map(({ src, alt, url }, i) => (
-                <a
-                  key={alt + i}
-                  href={url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="transition-transform duration-300 hover:scale-110 flex-shrink-0"
-                >
-                  <img
-                    src={src}
-                    alt={alt}
-                    className="w-14 h-14 object-contain"
-                  />
-                </a>
-              ))}
+          <div className="relative w-full h-24 overflow-hidden rounded-xl bg-gradient-to-r from-secondary/5 via-background to-secondary/5">
+            {/* Elegant gradient overlays */}
+            <div className="absolute left-0 top-0 w-20 h-full bg-gradient-to-r from-background via-background/80 to-transparent z-10 pointer-events-none" />
+            <div className="absolute right-0 top-0 w-20 h-full bg-gradient-to-l from-background via-background/80 to-transparent z-10 pointer-events-none" />
+            
+            {/* Modern grid background */}
+            <div className="absolute inset-0 opacity-[0.02]">
+              <div className="w-full h-full bg-[linear-gradient(90deg,rgba(255,255,255,0.1)_1px,transparent_1px),linear-gradient(0deg,rgba(255,255,255,0.1)_1px,transparent_1px)] bg-[length:24px_24px]" />
             </div>
+
+            {/* Fixed infinite marquee animation */}
+            <div className="absolute inset-0 flex items-center">
+              <div className="flex animate-marquee-smooth whitespace-nowrap">
+                {/* Duplicate the tech stack enough times for seamless infinite scroll */}
+                {[...Array(6)].map((_, setIndex) => (
+                  <div key={setIndex} className="flex items-center gap-8 px-4 flex-shrink-0">
+                    {techStack.map((tech, i) => (
+                      <motion.a
+                        key={`${setIndex}-${tech.alt}-${i}`}
+                        href={tech.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group relative flex-shrink-0"
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ 
+                          delay: (i) * 0.02,
+                          duration: 0.6,
+                          ease: [0.25, 0.46, 0.45, 0.94]
+                        }}
+                      >
+                        {/* Tech icon container */}
+                        <div className="relative w-16 h-16 p-3 bg-background/40 backdrop-blur-sm border border-border/20 rounded-xl shadow-sm transition-all duration-200">
+                          <img
+                            src={tech.src}
+                            alt={tech.alt}
+                            className="w-full h-full object-contain"
+                          />
+                          
+                          {/* Reflection effect */}
+                          <div className="absolute inset-0 bg-gradient-to-t from-transparent via-transparent to-white/5 rounded-xl" />
+                        </div>
+
+                        {/* Tooltip - only show on hover but much more subtle */}
+                        <div className="absolute -bottom-12 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-20">
+                          <div className="bg-popover/90 backdrop-blur-sm text-popover-foreground px-2 py-1 rounded-md text-xs font-medium whitespace-nowrap border border-border/30 shadow-sm">
+                            {tech.alt}
+                          </div>
+                        </div>
+                      </motion.a>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Subtle shine effect */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent translate-x-[-100%] animate-shine pointer-events-none" />
           </div>
         </motion.div>
       </div>
