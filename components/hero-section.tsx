@@ -23,9 +23,9 @@ export function HeroSection() {
   }, [])
 
   return (
-    <section className="min-h-screen flex flex-col justify-center items-center relative text-center px-4">
+    <section className="min-h-screen flex flex-col justify-center items-center relative text-center px-4 py-16">
       {/* Main Content */}
-      <div className="max-w-6xl mx-auto space-y-8">
+      <div className="max-w-4xl mx-auto space-y-6 md:space-y-8">
         {/* Sleek name with typing reveal hover */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -35,7 +35,7 @@ export function HeroSection() {
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold font-display tracking-tighter leading-none relative overflow-hidden">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold font-display tracking-tighter leading-tight relative overflow-hidden">
             {/* Smooth reveal mask */}
             <motion.div
               className="absolute inset-0 bg-background z-10"
@@ -64,9 +64,9 @@ export function HeroSection() {
               Vitus Clausen
             </motion.span>
 
-            {/* Hover effect: Re-typing overlay */}
+            {/* Hover effect: Re-typing overlay - only on desktop */}
             <motion.div
-              className="absolute inset-0"
+              className="absolute inset-0 hidden md:block"
               initial={{ opacity: 0 }}
               animate={{ opacity: isHovered ? 1 : 0 }}
               transition={{ duration: 0.2 }}
@@ -135,21 +135,21 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
-          className="space-y-4"
+          className="space-y-3 md:space-y-4"
         >
-          <p className="text-xl md:text-2xl lg:text-3xl text-muted-foreground max-w-5xl mx-auto leading-relaxed">
+          <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-muted-foreground max-w-4xl mx-auto leading-relaxed px-4">
             Senior Developer & Designer building high-impact digital solutions
           </p>
           
           {/* Rotating specialties */}
-          <div className="h-8 text-lg md:text-xl text-purple-500 font-medium relative overflow-hidden">
+          <div className="h-6 sm:h-7 md:h-8 text-base sm:text-lg md:text-xl text-purple-500 font-medium relative overflow-hidden">
             <motion.div
               key={rotatingPhrases[index]}
               initial={{ y: "100%" }}
               animate={{ y: 0 }}
               exit={{ y: "-100%" }}
               transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-              className="absolute inset-0 flex items-center justify-center"
+              className="absolute inset-0 flex items-center justify-center px-4 text-center"
             >
               {rotatingPhrases[index]}
             </motion.div>
@@ -161,7 +161,7 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
-          className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4"
+          className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center pt-2 sm:pt-4 px-4"
         >
           <button
             onClick={() => {
@@ -170,16 +170,16 @@ export function HeroSection() {
                 block: 'start'
               })
             }}
-            className="group relative px-8 py-4 bg-primary text-primary-foreground rounded-xl font-medium transition-colors duration-200"
+            className="w-full sm:w-auto group relative px-6 sm:px-8 py-3 sm:py-4 bg-primary text-primary-foreground rounded-xl font-medium transition-colors duration-200 text-sm sm:text-base"
           >
             View My Work
           </button>
           
           <a
             href="mailto:vituslrclausen@gmail.com?subject=Project Inquiry&body=Hi Vitus,%0D%0A%0D%0AI'm interested in discussing a project with you.%0D%0A%0D%0ABest regards,"
-            className="group flex items-center gap-2 px-8 py-4 border border-border/50 rounded-xl font-medium text-foreground transition-colors duration-200"
+            className="w-full sm:w-auto group flex items-center justify-center gap-2 px-6 sm:px-8 py-3 sm:py-4 border border-border/50 rounded-xl font-medium text-foreground transition-colors duration-200 text-sm sm:text-base"
           >
-            <Mail className="w-5 h-5" />
+            <Mail className="w-4 h-4 sm:w-5 sm:h-5" />
             Get In Touch
           </a>
         </motion.div>

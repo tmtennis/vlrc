@@ -116,8 +116,10 @@
 
 .animate-marquee-smooth {
   animation: marquee-smooth 30s linear infinite;
+  will-change: transform;
 }
 
 .animate-shine {
   animation: shine 3s ease-in-out infinite;
+  will-change: transform;
 }

@@ -81,12 +81,12 @@ export function WorkSection() {
     setOpenFolder(openFolder === title ? null : title)
   }
   return (
-    <section id="work" className="py-24 md:py-32 relative">
-      <div className="container mx-auto px-4 md:px-8">
-        <div className="grid md:grid-cols-2 gap-16 md:gap-24">
+    <section id="work" className="py-16 md:py-24 lg:py-32 relative">
+      <div className="container mx-auto px-4 md:px-6 lg:px-8">
+        <div className="grid md:grid-cols-2 gap-12 md:gap-16 lg:gap-20">
           {/* Featured Work Column */}
           <div>
-            <AnimatedTitle className="text-3xl md:text-5xl font-bold font-display tracking-tighter mb-12 text-muted-foreground">
+            <AnimatedTitle className="text-3xl md:text-4xl lg:text-5xl font-bold font-display tracking-tighter mb-8 md:mb-12 text-muted-foreground">
               Featured Work
             </AnimatedTitle>
 
@@ -99,12 +99,12 @@ export function WorkSection() {
                   key={project.title}
                   className="group block relative hover:bg-secondary/5 transition-colors duration-200"
                 >
-                  <div className="py-8 flex flex-col justify-between items-start gap-4">
+                  <div className="py-6 md:py-8 flex flex-col justify-between items-start gap-3 md:gap-4">
                     <div className="w-full">
-                      <h3 className="text-2xl md:text-4xl font-bold font-display tracking-tighter group-hover:text-purple-500 transition-colors duration-200">
+                      <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold font-display tracking-tighter group-hover:text-purple-500 transition-colors duration-200">
                         {project.title}
                       </h3>
-                      <p className="text-muted-foreground text-sm uppercase tracking-wide mb-2">
+                      <p className="text-muted-foreground text-xs sm:text-sm uppercase tracking-wide mb-2">
                         {project.title === "tennismenace"
                           ? "Project 1"
                           : project.title === "l&p.wrld"
@@ -113,9 +113,9 @@ export function WorkSection() {
                           ? "Project 3"
                           : ""}
                       </p>
-                      <p className="text-muted-foreground mt-2 text-base group-hover:text-foreground transition-colors duration-200">{project.description}</p>
+                      <p className="text-muted-foreground mt-2 text-sm md:text-base group-hover:text-foreground transition-colors duration-200">{project.description}</p>
                     </div>
-                    <ArrowUpRight className="w-6 h-6 text-muted-foreground transition-all duration-300 group-hover:text-purple-500 group-hover:rotate-45 group-hover:scale-110 self-end" />
+                    <ArrowUpRight className="w-5 h-5 md:w-6 md:h-6 text-muted-foreground transition-all duration-300 group-hover:text-purple-500 group-hover:rotate-45 group-hover:scale-110 self-end" />
                   </div>
                   <div className="absolute left-0 bottom-0 h-[1px] bg-foreground/10 w-full" />
                   <div className="absolute left-0 bottom-0 h-[1px] bg-purple-500 w-0 group-hover:w-full transition-all duration-300 ease-out" />
@@ -126,7 +126,7 @@ export function WorkSection() {
 
           {/* Services Column - File Cabinet */}
           <div>
-            <AnimatedTitle className="text-3xl md:text-5xl font-bold font-display tracking-tighter mb-12 text-muted-foreground">
+            <AnimatedTitle className="text-3xl md:text-4xl lg:text-5xl font-bold font-display tracking-tighter mb-8 md:mb-12 text-muted-foreground">
               Services
             </AnimatedTitle>
 
