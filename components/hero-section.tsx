@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react"
 import { motion, useMotionValue, useSpring } from "framer-motion"
-import { ArrowDown, Mail } from "lucide-react"
+import { ArrowDown, Mail, ArrowRight } from "lucide-react"
 
 const rotatingPhrases = [
   "Turning Your Ideas into High-Impact Products",
@@ -11,9 +11,27 @@ const rotatingPhrases = [
   "Guiding You Through Meaningful Digital Change"
 ]
 
+const rotatingPhrasesMobile = [
+  "Turning Ideas into High-Impact Products",
+  "Building Scalable Solutions That Grow", 
+  "Designing Systems for Your Vision",
+  "Guiding Meaningful Digital Change"
+]
+
 export function HeroSection() {
   const [index, setIndex] = useState(0)
   const [isHovered, setIsHovered] = useState(false)
+  const [buttonHover, setButtonHover] = useState({ work: false, contact: false })
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
+  
+  const workButtonRef = useRef<HTMLButtonElement>(null)
+  const contactButtonRef = useRef<HTMLAnchorElement>(null)
+  
+  const mouseX = useMotionValue(0)
+  const mouseY = useMotionValue(0)
+  const springConfig = { damping: 25, stiffness: 700 }
+  const workButtonX = useSpring(mouseX, springConfig)
+  const workButtonY = useSpring(mouseY, springConfig)
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -21,6 +39,17 @@ export function HeroSection() {
     }, 3000)
     return () => clearInterval(interval)
   }, [])
+
+  const handleWorkButtonMouseMove = (event: React.MouseEvent<HTMLButtonElement>) => {
+    if (workButtonRef.current) {
+      const rect = workButtonRef.current.getBoundingClientRect()
+      const centerX = rect.left + rect.width / 2
+      const centerY = rect.top + rect.height / 2
+      
+      mouseX.set((event.clientX - centerX) * 0.1)
+      mouseY.set((event.clientY - centerY) * 0.1)
+    }
+  }
 
   return (
     <section className="min-h-screen flex flex-col justify-center items-center relative text-center px-4 py-16">
@@ -142,46 +171,195 @@ export function HeroSection() {
           </p>
           
           {/* Rotating specialties */}
-          <div className="h-6 sm:h-7 md:h-8 text-base sm:text-lg md:text-xl text-purple-500 font-medium relative overflow-hidden">
+          <div className="h-12 sm:h-10 md:h-8 text-sm sm:text-base md:text-lg lg:text-xl text-purple-500 font-medium relative overflow-hidden">
+            {/* Mobile version */}
             <motion.div
-              key={rotatingPhrases[index]}
+              key={`mobile-${rotatingPhrasesMobile[index]}`}
               initial={{ y: "100%" }}
               animate={{ y: 0 }}
               exit={{ y: "-100%" }}
               transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-              className="absolute inset-0 flex items-center justify-center px-4 text-center"
+              className="absolute inset-0 flex items-center justify-center px-2 text-center leading-tight md:hidden"
             >
-              {rotatingPhrases[index]}
+              <span className="max-w-full break-words">
+                {rotatingPhrasesMobile[index]}
+              </span>
+            </motion.div>
+            
+            {/* Desktop version */}
+            <motion.div
+              key={`desktop-${rotatingPhrases[index]}`}
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "-100%" }}
+              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+              className="absolute inset-0 flex items-center justify-center px-4 text-center leading-tight hidden md:flex"
+            >
+              <span className="max-w-full break-words">
+                {rotatingPhrases[index]}
+              </span>
             </motion.div>
           </div>
         </motion.div>
 
-        {/* CTA Buttons */}
+        {/* Enhanced CTA Buttons */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
           className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center pt-2 sm:pt-4 px-4"
         >
-          <button
+          {/* "View My Work" - Magnetic + Shimmer + 3D Effect */}
+          <motion.button
+            ref={workButtonRef}
             onClick={() => {
               document.getElementById('work')?.scrollIntoView({ 
                 behavior: 'smooth',
                 block: 'start'
               })
             }}
-            className="w-full sm:w-auto group relative px-6 sm:px-8 py-3 sm:py-4 bg-primary text-primary-foreground rounded-xl font-medium transition-colors duration-200 text-sm sm:text-base"
+            style={{ x: workButtonX, y: workButtonY }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.5 }}
+            onMouseMove={handleWorkButtonMouseMove}
+            onMouseEnter={() => {
+              setButtonHover(prev => ({ ...prev, work: true }))
+            }}
+            onMouseLeave={() => {
+              setButtonHover(prev => ({ ...prev, work: false }))
+              mouseX.set(0)
+              mouseY.set(0)
+            }}
+            className="group relative w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-primary text-primary-foreground rounded-xl font-medium transition-all duration-300 text-sm sm:text-base overflow-hidden"
           >
-            View My Work
-          </button>
+            {/* Gradient shimmer effect */}
+            <motion.div
+              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full"
+              animate={buttonHover.work ? {
+                translateX: ["100%", "100%"]
+              } : {}}
+              transition={{
+                duration: 0.8,
+                ease: "easeInOut"
+              }}
+            />
+            
+            {/* 3D shadow effect */}
+            <motion.div
+              className="absolute inset-0 bg-primary/60 rounded-xl -z-10"
+              animate={buttonHover.work ? {
+                x: 4,
+                y: 4,
+                scale: 0.98
+              } : {
+                x: 0,
+                y: 0,
+                scale: 1
+              }}
+              transition={{ duration: 0.2 }}
+            />
+            
+            {/* Button content */}
+            <div className="relative flex items-center gap-2 justify-center">
+              <span>View My Work</span>
+              <motion.div
+                animate={buttonHover.work ? { x: 4 } : { x: 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
+              </motion.div>
+            </div>
+            
+            {/* Pulsing border */}
+            <motion.div
+              className="absolute inset-0 rounded-xl border-2 border-purple-400/0"
+              animate={buttonHover.work ? {
+                borderColor: ["rgba(168, 85, 247, 0)", "rgba(168, 85, 247, 0.5)", "rgba(168, 85, 247, 0)"]
+              } : {}}
+              transition={{
+                duration: 1.5,
+                repeat: buttonHover.work ? Infinity : 0,
+                ease: "easeInOut"
+              }}
+            />
+          </motion.button>
           
-          <a
+          {/* "Get In Touch" - Icon Animation + Border Glow + Typing Dots */}
+          <motion.a
+            ref={contactButtonRef}
             href="mailto:vituslrclausen@gmail.com?subject=Project Inquiry&body=Hi Vitus,%0D%0A%0D%0AI'm interested in discussing a project with you.%0D%0A%0D%0ABest regards,"
-            className="w-full sm:w-auto group flex items-center justify-center gap-2 px-6 sm:px-8 py-3 sm:py-4 border border-border/50 rounded-xl font-medium text-foreground transition-colors duration-200 text-sm sm:text-base"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.7 }}
+            onMouseEnter={() => setButtonHover(prev => ({ ...prev, contact: true }))}
+            onMouseLeave={() => setButtonHover(prev => ({ ...prev, contact: false }))}
+            className="group relative w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 border border-border/50 rounded-xl font-medium text-foreground transition-all duration-300 text-sm sm:text-base overflow-hidden"
           >
-            <Mail className="w-4 h-4 sm:w-5 sm:h-5" />
-            Get In Touch
-          </a>
+            {/* Animated border glow */}
+            <motion.div
+              className="absolute inset-0 rounded-xl border-2 border-transparent"
+              animate={buttonHover.contact ? {
+                borderColor: ["rgba(147, 51, 234, 0)", "rgba(147, 51, 234, 0.6)", "rgba(147, 51, 234, 0)"],
+                boxShadow: [
+                  "0 0 0 rgba(147, 51, 234, 0)",
+                  "0 0 20px rgba(147, 51, 234, 0.3)",
+                  "0 0 0 rgba(147, 51, 234, 0)"
+                ]
+              } : {}}
+              transition={{
+                duration: 2,
+                repeat: buttonHover.contact ? Infinity : 0,
+                ease: "easeInOut"
+              }}
+            />
+            
+            {/* Button content */}
+            <div className="relative flex items-center justify-center gap-2">
+              {/* Animated mail icon */}
+              <motion.div
+                animate={buttonHover.contact ? {
+                  scale: [1, 1.2, 1],
+                  rotate: [0, 5, -5, 0]
+                } : {}}
+                transition={{
+                  duration: 0.6,
+                  ease: "easeInOut"
+                }}
+              >
+                <Mail className="w-4 h-4 sm:w-5 sm:h-5" />
+              </motion.div>
+              
+              <span>Get In Touch</span>
+              
+              {/* Typing dots indicator */}
+              {buttonHover.contact && (
+                <motion.div
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 10 }}
+                  className="flex gap-1"
+                >
+                  {[0, 1, 2].map((i) => (
+                    <motion.div
+                      key={i}
+                      className="w-1 h-1 bg-purple-500 rounded-full"
+                      animate={{
+                        scale: [1, 1.5, 1],
+                        opacity: [0.5, 1, 0.5]
+                      }}
+                      transition={{
+                        duration: 1,
+                        repeat: Infinity,
+                        delay: i * 0.2,
+                        ease: "easeInOut"
+                      }}
+                    />
+                  ))}
+                </motion.div>
+              )}
+            </div>
+          </motion.a>
         </motion.div>
       </div>
 

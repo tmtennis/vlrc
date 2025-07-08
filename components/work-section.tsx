@@ -1,8 +1,8 @@
 "use client"
 
-import { useRef, useState } from "react"
+import { useRef, useState, useEffect, useCallback } from "react"
 import { AnimatedTitle } from "./animated-title"
-import { ArrowUpRight, Code, Palette, Zap, Users, Folder, FileText, ChevronDown, Globe, Bot } from "lucide-react"
+import { ArrowUpRight, Code, Palette, Zap, Users, Folder, FileText, ChevronDown, Globe, Bot, ExternalLink, Calendar, User, Tag } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 
 const projects = [
@@ -10,16 +10,37 @@ const projects = [
     title: "tennismenace",
     description: "Data-driven tennis betting app with custom ELO, momentum indicators, and styled frontend.",
     link: "https://tmtennis.blog",
+    category: "Full-Stack App",
+    year: "2024",
+    status: "Live",
+    tech: ["Next.js", "Python", "Analytics"],
+    gradient: "from-blue-500/20 via-purple-500/20 to-pink-500/20",
+    accentColor: "text-blue-400",
+    borderColor: "border-blue-500/30"
   },
   {
     title: "l&p.wrld",
     description: "Custom digital platform for high-end creative professionals with advanced portfolio management.",
     link: "#",
+    category: "Creative Platform",
+    year: "2024",
+    status: "Development",
+    tech: ["React", "CMS", "Animation"],
+    gradient: "from-purple-500/20 via-pink-500/20 to-orange-500/20",
+    accentColor: "text-purple-400",
+    borderColor: "border-purple-500/30"
   },
   {
     title: "Framer Templates",
     description: "High-impact UI components I sell and remix for clients.",
     link: "#",
+    category: "Design Systems",
+    year: "2023-24",
+    status: "Active",
+    tech: ["Framer", "Components", "UI/UX"],
+    gradient: "from-green-500/20 via-teal-500/20 to-blue-500/20",
+    accentColor: "text-green-400",
+    borderColor: "border-green-500/30"
   },
 ]
 
@@ -76,13 +97,88 @@ const services = [
 
 export function WorkSection() {
   const [openFolder, setOpenFolder] = useState<string | null>(null)
+  const [hoveredProject, setHoveredProject] = useState<string | null>(null)
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
+  const sectionRef = useRef<HTMLElement>(null)
+
+  const handleMouseMove = useCallback((e: MouseEvent) => {
+    if (sectionRef.current) {
+      const rect = sectionRef.current.getBoundingClientRect()
+      setMousePosition({
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top,
+      })
+    }
+  }, [])
+
+  useEffect(() => {
+    const section = sectionRef.current
+    if (section) {
+      section.addEventListener('mousemove', handleMouseMove)
+      return () => section.removeEventListener('mousemove', handleMouseMove)
+    }
+  }, [handleMouseMove])
 
   const toggleFolder = (title: string) => {
     setOpenFolder(openFolder === title ? null : title)
   }
   return (
-    <section id="work" className="py-16 md:py-24 lg:py-32 relative">
-      <div className="container mx-auto px-4 md:px-6 lg:px-8">
+    <section ref={sectionRef} id="work" className="py-16 md:py-24 lg:py-32 relative overflow-hidden">
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0 opacity-30">
+        <motion.div
+          className="absolute top-1/4 left-1/4 w-64 h-64 bg-gradient-to-r from-purple-500/10 to-blue-500/10 rounded-full blur-3xl"
+          animate={{
+            x: [0, 50, 0],
+            y: [0, -30, 0],
+            scale: [1, 1.1, 1],
+          }}
+          transition={{
+            duration: 20,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+        <motion.div
+          className="absolute bottom-1/4 right-1/4 w-48 h-48 bg-gradient-to-r from-pink-500/10 to-orange-500/10 rounded-full blur-3xl"
+          animate={{
+            x: [0, -40, 0],
+            y: [0, 40, 0],
+            scale: [1, 0.9, 1],
+          }}
+          transition={{
+            duration: 15,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 2,
+          }}
+        />
+      </div>
+
+      {/* Interactive cursor follower for desktop */}
+      {hoveredProject && (
+        <motion.div
+          className="fixed pointer-events-none z-50 hidden md:block"
+          style={{
+            left: mousePosition.x,
+            top: mousePosition.y,
+          }}
+          initial={{ opacity: 0, scale: 0 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0 }}
+        >
+          <div className="relative -translate-x-1/2 -translate-y-1/2">
+            <div className="bg-background/90 backdrop-blur-md border border-border/50 rounded-xl p-3 shadow-2xl">
+              <div className="flex items-center gap-2 text-sm">
+                <ExternalLink className="w-4 h-4 text-purple-400" />
+                <span className="font-mono">View Project</span>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      )}
+
+      <div className="container mx-auto px-4 md:px-6 lg:px-8 relative z-10">
         <div className="grid md:grid-cols-2 gap-12 md:gap-16 lg:gap-20">
           {/* Featured Work Column */}
           <div>
@@ -90,58 +186,175 @@ export function WorkSection() {
               Featured Work
             </AnimatedTitle>
 
-            <div className="relative z-10 border-t border-foreground/10">
-              {projects.map((project) => (
-                <a
-                  href={project.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
+            <div className="relative z-10">
+              {projects.map((project, index) => (
+                <motion.div
                   key={project.title}
-                  className="group block relative hover:bg-secondary/5 transition-colors duration-200"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1, duration: 0.6 }}
+                  className="group relative"
+                  onMouseEnter={() => setHoveredProject(project.title)}
+                  onMouseLeave={() => setHoveredProject(null)}
                 >
-                  <div className="py-6 md:py-8 flex flex-col justify-between items-start gap-3 md:gap-4">
-                    <div className="w-full">
-                      <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold font-display tracking-tighter group-hover:text-purple-500 transition-colors duration-200">
+                  {/* Frosted Glass Card */}
+                  <motion.div
+                    className={`
+                      relative overflow-hidden rounded-2xl border backdrop-blur-md
+                      bg-gradient-to-br ${project.gradient}
+                      ${project.borderColor} border-opacity-30
+                      hover:border-opacity-60 transition-all duration-500
+                      group-hover:shadow-2xl group-hover:shadow-purple-500/10
+                    `}
+                    whileHover={{
+                      scale: 1.02,
+                      rotateX: 2,
+                      rotateY: 2,
+                    }}
+                    transition={{ duration: 0.3, ease: "easeOut" }}
+                    style={{
+                      transformStyle: "preserve-3d",
+                      perspective: "1000px",
+                    }}
+                  >
+                    {/* Glass reflection effect */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    
+                    {/* Content */}
+                    <a
+                      href={project.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block p-6 md:p-8 relative z-10"
+                    >
+                      {/* Header with metadata */}
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="flex items-center gap-3">
+                          <div className={`px-2 py-1 rounded-md text-xs font-mono bg-background/30 ${project.accentColor}`}>
+                            {project.category}
+                          </div>
+                          <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                            <Calendar className="w-3 h-3" />
+                            {project.year}
+                          </div>
+                        </div>
+                        <div className={`px-2 py-1 rounded-full text-xs font-mono ${project.accentColor} bg-background/20`}>
+                          {project.status}
+                        </div>
+                      </div>
+
+                      {/* Title with enhanced animation */}
+                      <motion.h3 
+                        className={`text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold font-display tracking-tighter mb-3 ${project.accentColor} transition-all duration-300`}
+                        whileHover={{ x: 10 }}
+                      >
                         {project.title}
-                      </h3>
-                      <p className="text-muted-foreground text-xs sm:text-sm uppercase tracking-wide mb-2">
-                        {project.title === "tennismenace"
-                          ? "Project 1"
-                          : project.title === "l&p.wrld"
-                          ? "Project 2"
-                          : project.title === "Framer Templates"
-                          ? "Project 3"
-                          : ""}
+                      </motion.h3>
+
+                      {/* Description */}
+                      <p className="text-muted-foreground text-sm md:text-base leading-relaxed mb-4 group-hover:text-foreground/80 transition-colors duration-300">
+                        {project.description}
                       </p>
-                      <p className="text-muted-foreground mt-2 text-sm md:text-base group-hover:text-foreground transition-colors duration-200">{project.description}</p>
-                    </div>
-                    <ArrowUpRight className="w-5 h-5 md:w-6 md:h-6 text-muted-foreground transition-all duration-300 group-hover:text-purple-500 group-hover:rotate-45 group-hover:scale-110 self-end" />
-                  </div>
-                  <div className="absolute left-0 bottom-0 h-[1px] bg-foreground/10 w-full" />
-                  <div className="absolute left-0 bottom-0 h-[1px] bg-purple-500 w-0 group-hover:w-full transition-all duration-300 ease-out" />
-                </a>
+
+                      {/* Tech stack pills */}
+                      <div className="flex flex-wrap gap-2 mb-4">
+                        {project.tech.map((tech) => (
+                          <motion.span
+                            key={tech}
+                            className="px-2 py-1 text-xs font-mono bg-background/20 rounded-md text-muted-foreground border border-border/20"
+                            whileHover={{ scale: 1.05 }}
+                          >
+                            {tech}
+                          </motion.span>
+                        ))}
+                      </div>
+
+                      {/* Enhanced CTA */}
+                      <div className="flex items-center justify-between">
+                        <motion.div 
+                          className="flex items-center gap-2 text-sm font-mono"
+                          whileHover={{ x: 5 }}
+                        >
+                          <ExternalLink className="w-4 h-4" />
+                          <span>View Project</span>
+                        </motion.div>
+                        
+                        <motion.div
+                          whileHover={{ 
+                            rotate: 45, 
+                            scale: 1.2,
+                          }}
+                          transition={{ duration: 0.2 }}
+                        >
+                          <ArrowUpRight className={`w-6 h-6 ${project.accentColor}`} />
+                        </motion.div>
+                      </div>
+                    </a>
+
+                    {/* Subtle animated border */}
+                    <motion.div
+                      className={`absolute inset-0 rounded-2xl border-2 ${project.borderColor} opacity-0 group-hover:opacity-100`}
+                      initial={false}
+                      animate={{
+                        borderImageSource: hoveredProject === project.title 
+                          ? "linear-gradient(45deg, transparent, currentColor, transparent)"
+                          : "linear-gradient(45deg, transparent, transparent, transparent)"
+                      }}
+                      transition={{ duration: 0.3 }}
+                    />
+                  </motion.div>
+
+                  {/* Spacing */}
+                  <div className="h-6" />
+                </motion.div>
               ))}
             </div>
           </div>
 
-          {/* Services Column - File Cabinet */}
+          {/* Services Column - Enhanced File Cabinet */}
           <div>
             <AnimatedTitle className="text-3xl md:text-4xl lg:text-5xl font-bold font-display tracking-tighter mb-8 md:mb-12 text-muted-foreground">
               Services
             </AnimatedTitle>
 
-            {/* File Cabinet Container */}
-            <div className="relative bg-background/20 backdrop-blur-sm border border-border/30 rounded-xl p-6">
-              {/* Cabinet Header */}
-              <div className="flex items-center gap-3 mb-6 pb-4 border-b border-border/20">
-                <div className="w-8 h-8 bg-secondary/30 rounded-md flex items-center justify-center">
+            {/* Enhanced File Cabinet Container */}
+            <motion.div 
+              className="relative bg-background/20 backdrop-blur-sm border border-border/30 rounded-xl p-6 overflow-hidden"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
+              {/* Subtle background pattern */}
+              <div className="absolute inset-0 opacity-5">
+                <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,currentColor_25%,currentColor_50%,transparent_50%,transparent_75%,currentColor_75%)] bg-[length:20px_20px]" />
+              </div>
+
+              {/* Cabinet Header with enhanced styling */}
+              <motion.div 
+                className="flex items-center gap-3 mb-6 pb-4 border-b border-border/20 relative z-10"
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2, duration: 0.5 }}
+              >
+                <motion.div 
+                  className="w-8 h-8 bg-secondary/30 rounded-md flex items-center justify-center"
+                  whileHover={{ scale: 1.1, rotate: 5 }}
+                >
                   <Folder className="w-5 h-5 text-muted-foreground" />
-                </div>
+                </motion.div>
                 <div>
                   <h3 className="font-mono text-sm text-muted-foreground">~/services</h3>
-                  <p className="text-xs text-muted-foreground/70">6 items</p>
+                  <p className="text-xs text-muted-foreground/70">{services.length} items</p>
                 </div>
-              </div>
+                <motion.div
+                  className="ml-auto w-2 h-2 bg-green-500 rounded-full"
+                  animate={{ opacity: [1, 0.3, 1] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                />
+              </motion.div>
 
               {/* File/Folder List */}
               <div className="space-y-2">
@@ -253,7 +466,7 @@ export function WorkSection() {
                   vituslrclausen@gmail.com
                 </a>
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </div>
