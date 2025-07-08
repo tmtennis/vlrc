@@ -167,7 +167,7 @@ export function HeroSection() {
           className="space-y-3 md:space-y-4"
         >
           <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-muted-foreground max-w-4xl mx-auto leading-relaxed px-4">
-            Senior Developer & Designer building high-impact digital solutions
+            Developer & designer building fast, expressive web products.
           </p>
           
           {/* Rotating specialties */}
@@ -362,23 +362,6 @@ export function HeroSection() {
           </motion.a>
         </motion.div>
       </div>
-
-      {/* Scroll Indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1, delay: 1 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
-      >
-        <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-          className="flex flex-col items-center gap-2 text-muted-foreground/50"
-        >
-          <span className="text-sm font-medium">Scroll to explore</span>
-          <ArrowDown className="w-5 h-5" />
-        </motion.div>
-      </motion.div>
 
       {/* Background Elements */}
       <div className="absolute inset-0 -z-10 overflow-hidden">

@@ -76,7 +76,7 @@
 }
 
 .animate-marquee-smooth {
-  animation: marquee-smooth 30s linear infinite;
+  animation: marquee-smooth 45s linear infinite;
 }
 
 @keyframes shine {
@@ -115,7 +115,7 @@
 }
 
 .animate-marquee-smooth {
-  animation: marquee-smooth 30s linear infinite;
+  animation: marquee-smooth 45s linear infinite;
   will-change: transform;
 }
 

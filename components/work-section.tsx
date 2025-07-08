@@ -1,8 +1,8 @@
 "use client"
 
-import { useRef, useState, useEffect, useCallback } from "react"
+import { useState } from "react"
 import { AnimatedTitle } from "./animated-title"
-import { ArrowUpRight, Code, Palette, Zap, Users, Folder, FileText, ChevronDown, Globe, Bot, ExternalLink, Calendar, User, Tag } from "lucide-react"
+import { ArrowUpRight, Code, Palette, Zap, Users, Folder, FileText, ChevronDown, Globe, Bot, ExternalLink, User, Tag, Star } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 
 const projects = [
@@ -31,99 +31,111 @@ const projects = [
     borderColor: "border-purple-500/30"
   },
   {
-    title: "Framer Templates",
-    description: "High-impact UI components I sell and remix for clients.",
+    title: "Automation & AI Integration",
+    description: "Building tailored automations that streamline operations and slash overhead, turning manual workflows into effortless, cost-efficient systems.",
     link: "#",
-    category: "Design Systems",
-    year: "2023-24",
+    category: "Automation",
+    year: "2024",
     status: "Active",
-    tech: ["Framer", "Components", "UI/UX"],
-    gradient: "from-green-500/20 via-teal-500/20 to-blue-500/20",
-    accentColor: "text-green-400",
-    borderColor: "border-green-500/30"
+    tech: ["Zapier", "OpenAI Assistants", "N8N"],
+    gradient: "from-indigo-500/20 via-violet-500/20 to-purple-500/20",
+    accentColor: "text-indigo-400",
+    borderColor: "border-indigo-500/30"
   },
 ]
 
 const services = [
   {
-    icon: Code,
-    title: "Full-Stack Development",
-    filename: "fullstack_dev",
-    description: "End-to-end web applications with modern frameworks and scalable architecture.",
-    features: ["React/Next.js", "Python/Firebase", "API Integration"],
-    color: "text-blue-400"
+    icon: Star,
+    title: "Priority Services",
+    filename: "priority_services",
+    description: "Quick quotes and fixed-rate services for immediate project needs.",
+    features: [
+      "Website Development",
+      "Landing Page Development", 
+      "Automation & AI Integration",
+      "Website Maintenance"
+    ],
+    color: "text-purple-400",
+    isPriority: true
   },
   {
-    icon: Palette,
-    title: "UI/UX Design",
-    filename: "design_systems",
-    description: "User-centered design systems that balance aesthetics with functionality.",
-    features: ["Design Systems", "Prototyping", "User Research"],
-    color: "text-purple-400"
-  },
-  {
-    icon: Zap,
-    title: "Performance Optimization",
-    filename: "optimization",
-    description: "Speed and efficiency improvements for existing applications and workflows.",
-    features: ["Code Optimization", "Database Tuning", "UX Enhancement"],
-    color: "text-yellow-400"
-  },
-  {
-    icon: Users,
-    title: "Product Strategy",
-    filename: "strategy",
-    description: "Strategic planning and technical guidance for digital product development.",
-    features: ["Technical Planning", "Brand Positioning", "Team Collaboration"],
-    color: "text-green-400"
-  },
-  {
-    icon: Globe,
-    title: "Website Management",
-    filename: "web_management",
-    description: "Comprehensive digital presence orchestration with performance monitoring, content optimization, and seamless maintenance protocols.",
-    features: ["Content Management", "Performance Monitoring", "Security Updates", "SEO Optimization"],
-    color: "text-cyan-400"
-  },
-  {
-    icon: Bot,
-    title: "Automation + AI Integration",
-    filename: "ai_automation",
-    description: "Intelligent workflow automation and cutting-edge AI integration to streamline operations and enhance user experiences.",
-    features: ["Process Automation", "AI Model Integration", "Workflow Optimization", "Intelligent Analytics"],
-    color: "text-orange-400"
+    icon: Folder,
+    title: "Additional Services",
+    filename: "additional_services",
+    description: "Extended service offerings for comprehensive project support.",
+    features: [],
+    color: "text-green-400",
+    isAdditional: true,
+    subServices: [
+      {
+        icon: Code,
+        title: "Full-Stack Development",
+        filename: "fullstack_dev",
+        description: "End-to-end web applications with modern frameworks and scalable architecture.",
+        features: ["React/Next.js", "Python/Firebase", "API Integration"],
+        color: "text-blue-400"
+      },
+      {
+        icon: Palette,
+        title: "UI/UX Design",
+        filename: "design_systems",
+        description: "User-centered design systems that balance aesthetics with functionality.",
+        features: ["Design Systems", "Prototyping", "User Research"],
+        color: "text-purple-400"
+      },
+      {
+        icon: Zap,
+        title: "Performance Optimization",
+        filename: "optimization",
+        description: "Speed and efficiency improvements for existing applications and workflows.",
+        features: ["Code Optimization", "Database Tuning", "UX Enhancement"],
+        color: "text-yellow-400"
+      },
+      {
+        icon: Users,
+        title: "Product Strategy",
+        filename: "strategy",
+        description: "Strategic planning and technical guidance for digital product development.",
+        features: ["Technical Planning", "Brand Positioning", "Team Collaboration"],
+        color: "text-green-400"
+      },
+      {
+        icon: Globe,
+        title: "Website Management",
+        filename: "web_management",
+        description: "Comprehensive digital presence orchestration with performance monitoring, content optimization, and seamless maintenance protocols.",
+        features: ["Content Management", "Performance Monitoring", "Security Updates", "SEO Optimization"],
+        color: "text-cyan-400"
+      },
+      {
+        icon: Bot,
+        title: "Automation + AI Integration",
+        filename: "ai_automation",
+        description: "Intelligent workflow automation and cutting-edge AI integration to streamline operations and enhance user experiences.",
+        features: ["Process Automation", "AI Model Integration", "Workflow Optimization", "Intelligent Analytics"],
+        color: "text-orange-400"
+      }
+    ]
   }
 ]
 
 export function WorkSection() {
   const [openFolder, setOpenFolder] = useState<string | null>(null)
-  const [hoveredProject, setHoveredProject] = useState<string | null>(null)
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
-  const sectionRef = useRef<HTMLElement>(null)
-
-  const handleMouseMove = useCallback((e: MouseEvent) => {
-    if (sectionRef.current) {
-      const rect = sectionRef.current.getBoundingClientRect()
-      setMousePosition({
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top,
-      })
-    }
-  }, [])
-
-  useEffect(() => {
-    const section = sectionRef.current
-    if (section) {
-      section.addEventListener('mousemove', handleMouseMove)
-      return () => section.removeEventListener('mousemove', handleMouseMove)
-    }
-  }, [handleMouseMove])
+  const [openSubFolder, setOpenSubFolder] = useState<string | null>(null)
 
   const toggleFolder = (title: string) => {
     setOpenFolder(openFolder === title ? null : title)
+    if (openFolder !== title) {
+      setOpenSubFolder(null) // Close sub-folders when switching main folders
+    }
+  }
+
+  const toggleSubFolder = (title: string) => {
+    setOpenSubFolder(openSubFolder === title ? null : title)
   }
   return (
-    <section ref={sectionRef} id="work" className="py-16 md:py-24 lg:py-32 relative overflow-hidden">
+    <section id="work" className="pt-24 pb-8 md:pt-28 md:pb-12 lg:pt-32 lg:pb-16 relative overflow-hidden scroll-mt-20">
       {/* Animated Background Elements */}
       <div className="absolute inset-0 opacity-30">
         <motion.div
@@ -155,199 +167,143 @@ export function WorkSection() {
         />
       </div>
 
-      {/* Interactive cursor follower for desktop */}
-      {hoveredProject && (
-        <motion.div
-          className="fixed pointer-events-none z-50 hidden md:block"
-          style={{
-            left: mousePosition.x,
-            top: mousePosition.y,
-          }}
-          initial={{ opacity: 0, scale: 0 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0 }}
-        >
-          <div className="relative -translate-x-1/2 -translate-y-1/2">
-            <div className="bg-background/90 backdrop-blur-md border border-border/50 rounded-xl p-3 shadow-2xl">
-              <div className="flex items-center gap-2 text-sm">
-                <ExternalLink className="w-4 h-4 text-purple-400" />
-                <span className="font-mono">View Project</span>
-              </div>
-            </div>
-          </div>
-        </motion.div>
-      )}
-
       <div className="container mx-auto px-4 md:px-6 lg:px-8 relative z-10">
-        <div className="grid md:grid-cols-2 gap-12 md:gap-16 lg:gap-20">
+        <div className="grid md:grid-cols-2 gap-8 md:gap-12 lg:gap-16">
           {/* Featured Work Column */}
           <div>
-            <AnimatedTitle className="text-3xl md:text-4xl lg:text-5xl font-bold font-display tracking-tighter mb-8 md:mb-12 text-muted-foreground">
+            <AnimatedTitle className="text-xl md:text-2xl lg:text-3xl font-bold font-display tracking-tighter mb-8 md:mb-10 text-muted-foreground mt-4">
               Featured Work
             </AnimatedTitle>
 
             <div className="relative z-10">
-              {projects.map((project, index) => (
-                <motion.div
-                  key={project.title}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1, duration: 0.6 }}
-                  className="group relative"
-                  onMouseEnter={() => setHoveredProject(project.title)}
-                  onMouseLeave={() => setHoveredProject(null)}
-                >
-                  {/* Frosted Glass Card */}
+              {/* 2-column grid for rectangular cards */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 md:gap-4">
+                {projects.map((project, index) => (
                   <motion.div
-                    className={`
-                      relative overflow-hidden rounded-2xl border backdrop-blur-md
-                      bg-gradient-to-br ${project.gradient}
-                      ${project.borderColor} border-opacity-30
-                      hover:border-opacity-60 transition-all duration-500
-                      group-hover:shadow-2xl group-hover:shadow-purple-500/10
-                    `}
-                    whileHover={{
-                      scale: 1.02,
-                      rotateX: 2,
-                      rotateY: 2,
-                    }}
-                    transition={{ duration: 0.3, ease: "easeOut" }}
-                    style={{
-                      transformStyle: "preserve-3d",
-                      perspective: "1000px",
-                    }}
+                    key={project.title}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: index * 0.1, duration: 0.6 }}
+                    className="group relative"
+                    style={{ aspectRatio: '1.6/1' }} // More rectangular, less height
                   >
-                    {/* Glass reflection effect */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                    
-                    {/* Content */}
-                    <a
-                      href={project.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="block p-6 md:p-8 relative z-10"
-                    >
-                      {/* Header with metadata */}
-                      <div className="flex items-start justify-between mb-4">
-                        <div className="flex items-center gap-3">
-                          <div className={`px-2 py-1 rounded-md text-xs font-mono bg-background/30 ${project.accentColor}`}>
-                            {project.category}
-                          </div>
-                          <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                            <Calendar className="w-3 h-3" />
-                            {project.year}
-                          </div>
-                        </div>
-                        <div className={`px-2 py-1 rounded-full text-xs font-mono ${project.accentColor} bg-background/20`}>
-                          {project.status}
-                        </div>
-                      </div>
-
-                      {/* Title with enhanced animation */}
-                      <motion.h3 
-                        className={`text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold font-display tracking-tighter mb-3 ${project.accentColor} transition-all duration-300`}
-                        whileHover={{ x: 10 }}
-                      >
-                        {project.title}
-                      </motion.h3>
-
-                      {/* Description */}
-                      <p className="text-muted-foreground text-sm md:text-base leading-relaxed mb-4 group-hover:text-foreground/80 transition-colors duration-300">
-                        {project.description}
-                      </p>
-
-                      {/* Tech stack pills */}
-                      <div className="flex flex-wrap gap-2 mb-4">
-                        {project.tech.map((tech) => (
-                          <motion.span
-                            key={tech}
-                            className="px-2 py-1 text-xs font-mono bg-background/20 rounded-md text-muted-foreground border border-border/20"
-                            whileHover={{ scale: 1.05 }}
-                          >
-                            {tech}
-                          </motion.span>
-                        ))}
-                      </div>
-
-                      {/* Enhanced CTA */}
-                      <div className="flex items-center justify-between">
-                        <motion.div 
-                          className="flex items-center gap-2 text-sm font-mono"
-                          whileHover={{ x: 5 }}
-                        >
-                          <ExternalLink className="w-4 h-4" />
-                          <span>View Project</span>
-                        </motion.div>
-                        
-                        <motion.div
-                          whileHover={{ 
-                            rotate: 45, 
-                            scale: 1.2,
-                          }}
-                          transition={{ duration: 0.2 }}
-                        >
-                          <ArrowUpRight className={`w-6 h-6 ${project.accentColor}`} />
-                        </motion.div>
-                      </div>
-                    </a>
-
-                    {/* Subtle animated border */}
+                    {/* Frosted Glass Card */}
                     <motion.div
-                      className={`absolute inset-0 rounded-2xl border-2 ${project.borderColor} opacity-0 group-hover:opacity-100`}
-                      initial={false}
-                      animate={{
-                        borderImageSource: hoveredProject === project.title 
-                          ? "linear-gradient(45deg, transparent, currentColor, transparent)"
-                          : "linear-gradient(45deg, transparent, transparent, transparent)"
+                      className={`
+                        relative overflow-hidden rounded-2xl border backdrop-blur-md h-full
+                        bg-gradient-to-br ${project.gradient}
+                        ${project.borderColor} border-opacity-30
+                      `}
+                      style={{
+                        transformStyle: "preserve-3d",
+                        perspective: "1000px",
                       }}
-                      transition={{ duration: 0.3 }}
-                    />
-                  </motion.div>
+                    >
+                      
+                      {/* Content */}
+                      <a
+                        href={project.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex flex-col justify-between h-full p-2 md:p-3 relative z-10"
+                      >
+                        {/* Header with metadata */}
+                        <div className="flex items-start justify-between mb-1">
+                          <div className="flex items-center gap-1">
+                            <div className={`px-1.5 py-0.5 rounded text-xs font-mono bg-background/30 ${project.accentColor}`}>
+                              {project.category}
+                            </div>
+                          </div>
+                          <div className={`px-1.5 py-0.5 rounded-full text-xs font-mono ${project.accentColor} bg-background/20`}>
+                            {project.status}
+                          </div>
+                        </div>
 
-                  {/* Spacing */}
-                  <div className="h-6" />
-                </motion.div>
-              ))}
+                        {/* Middle Content */}
+                        <div className="flex-1 flex flex-col justify-center">
+                          {/* Title */}
+                          <motion.h3 
+                            className={`text-sm sm:text-base md:text-lg font-bold font-display tracking-tighter mb-1 ${project.accentColor}`}
+                          >
+                            {project.title}
+                          </motion.h3>
+
+                          {/* Description */}
+                          <p className="text-muted-foreground text-xs leading-tight mb-1">
+                            {project.description}
+                          </p>
+                        </div>
+
+                        {/* Bottom Section */}
+                        <div className="space-y-1">
+                          {/* Tech stack pills */}
+                          <div className="flex flex-wrap gap-1">
+                            {project.tech.map((tech) => (
+                              <motion.span
+                                key={tech}
+                                className="px-1 py-0.5 text-xs font-mono bg-background/20 rounded text-muted-foreground border border-border/20"
+                              >
+                                {tech}
+                              </motion.span>
+                            ))}
+                          </div>
+
+                          {/* Enhanced CTA */}
+                          {project.title !== "Automation & AI Integration" && (
+                            <div className="flex items-center justify-between">
+                              <motion.div 
+                                className="flex items-center gap-1 text-xs font-mono"
+                              >
+                                <ExternalLink className="w-2.5 h-2.5" />
+                                <span>View Project</span>
+                              </motion.div>
+                              
+                              <motion.div>
+                                <ArrowUpRight className={`w-3 h-3 ${project.accentColor}`} />
+                              </motion.div>
+                            </div>
+                          )}
+                        </div>
+                      </a>
+                    </motion.div>
+                  </motion.div>
+                ))}
+              </div>
             </div>
           </div>
 
           {/* Services Column - Enhanced File Cabinet */}
           <div>
-            <AnimatedTitle className="text-3xl md:text-4xl lg:text-5xl font-bold font-display tracking-tighter mb-8 md:mb-12 text-muted-foreground">
+            <AnimatedTitle className="text-xl md:text-2xl lg:text-3xl font-bold font-display tracking-tighter mb-8 md:mb-10 text-muted-foreground mt-4">
               Services
             </AnimatedTitle>
 
             {/* Enhanced File Cabinet Container */}
             <motion.div 
-              className="relative bg-background/20 backdrop-blur-sm border border-border/30 rounded-xl p-6 overflow-hidden"
+              className="relative bg-background/20 backdrop-blur-sm border border-border/30 rounded-xl p-3 overflow-hidden"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              {/* Subtle background pattern */}
-              <div className="absolute inset-0 opacity-5">
-                <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,currentColor_25%,currentColor_50%,transparent_50%,transparent_75%,currentColor_75%)] bg-[length:20px_20px]" />
-              </div>
-
               {/* Cabinet Header with enhanced styling */}
               <motion.div 
-                className="flex items-center gap-3 mb-6 pb-4 border-b border-border/20 relative z-10"
+                className="flex items-center gap-2 mb-3 pb-2 border-b border-border/20 relative z-10"
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.2, duration: 0.5 }}
               >
                 <motion.div 
-                  className="w-8 h-8 bg-secondary/30 rounded-md flex items-center justify-center"
+                  className="w-6 h-6 bg-secondary/30 rounded-md flex items-center justify-center"
                   whileHover={{ scale: 1.1, rotate: 5 }}
                 >
-                  <Folder className="w-5 h-5 text-muted-foreground" />
+                  <Folder className="w-4 h-4 text-muted-foreground" />
                 </motion.div>
                 <div>
-                  <h3 className="font-mono text-sm text-muted-foreground">~/services</h3>
-                  <p className="text-xs text-muted-foreground/70">{services.length} items</p>
+                  <h3 className="font-mono text-xs text-muted-foreground">~/services</h3>
+                  <p className="text-xs text-muted-foreground/70">2 folders</p>
                 </div>
                 <motion.div
                   className="ml-auto w-2 h-2 bg-green-500 rounded-full"
@@ -357,7 +313,7 @@ export function WorkSection() {
               </motion.div>
 
               {/* File/Folder List */}
-              <div className="space-y-2">
+              <div className="space-y-1">
                 {services.map((service, index) => (
                   <motion.div
                     key={service.title}
@@ -367,28 +323,31 @@ export function WorkSection() {
                     transition={{ delay: index * 0.1, duration: 0.5 }}
                     className="group"
                   >
-                    {/* Folder/File Item */}
+                    {/* Main Folder Item */}
                     <div
                       onClick={() => toggleFolder(service.title)}
-                      className="flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all duration-200 hover:bg-secondary/10 hover:border-l-2 hover:border-purple-500/50 group/item"
+                      className={`flex items-center gap-2 p-1.5 rounded-lg cursor-pointer transition-all duration-200 hover:bg-secondary/10 hover:border-l-2 hover:border-purple-500/50 group/item ${
+                        service.isPriority ? 'bg-purple-500/5 border border-purple-500/20' : 
+                        service.isAdditional ? 'bg-green-500/5 border border-green-500/20' : ''
+                      }`}
                     >
-                      {/* File Icon */}
+                      {/* Folder Icon */}
                       <div className="relative">
                         {openFolder === service.title ? (
-                          <Folder className="w-6 h-6 text-primary" />
+                          <Folder className={`w-5 h-5 ${service.isPriority ? 'text-purple-500' : service.isAdditional ? 'text-green-500' : 'text-primary'}`} />
                         ) : (
-                          <Folder className="w-6 h-6 text-muted-foreground group-hover/item:text-purple-500 transition-colors duration-200" />
+                          <Folder className={`w-5 h-5 ${service.isPriority ? 'text-purple-400' : service.isAdditional ? 'text-green-400' : 'text-muted-foreground'} group-hover/item:text-purple-500 transition-colors duration-200`} />
                         )}
-                        <service.icon className={`absolute -bottom-1 -right-1 w-3 h-3 ${service.color} bg-background rounded-full p-0.5 group-hover/item:scale-110 transition-transform duration-200`} />
+                        <service.icon className={`absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 ${service.color} bg-background rounded-full p-0.5 group-hover/item:scale-110 transition-transform duration-200`} />
                       </div>
 
-                      {/* File Name */}
+                      {/* Folder Name */}
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2">
-                          <span className="font-mono text-sm text-foreground group-hover/item:text-purple-500 transition-colors duration-200 truncate">
+                        <div className="flex items-center gap-1">
+                          <span className="font-mono text-xs text-foreground group-hover/item:text-purple-500 transition-colors duration-200 truncate">
                             {service.filename}
                           </span>
-                          <ChevronDown className={`w-4 h-4 text-muted-foreground group-hover/item:text-purple-500 transition-all duration-200 ${
+                          <ChevronDown className={`w-3 h-3 text-muted-foreground group-hover/item:text-purple-500 transition-all duration-200 ${
                             openFolder === service.title ? 'rotate-180' : ''
                           }`} />
                         </div>
@@ -397,9 +356,9 @@ export function WorkSection() {
                         </p>
                       </div>
 
-                      {/* File Size/Type */}
+                      {/* Folder Count */}
                       <div className="text-xs text-muted-foreground/50 font-mono group-hover/item:text-muted-foreground/80 transition-colors duration-200">
-                        {service.features.length} modules
+                        {service.isAdditional ? service.subServices?.length || 0 : service.features.length}
                       </div>
 
                       {/* Hover indicator */}
@@ -416,34 +375,151 @@ export function WorkSection() {
                           transition={{ duration: 0.3, ease: "easeInOut" }}
                           className="overflow-hidden"
                         >
-                          <div className="ml-9 p-4 bg-secondary/5 rounded-lg border-l-2 border-primary/30 space-y-3">
-                            {/* File Content Preview */}
-                            <div className="flex items-start gap-3">
-                              <FileText className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
-                              <div className="flex-1">
-                                <p className="text-sm text-muted-foreground leading-relaxed mb-3">
-                                  {service.description}
-                                </p>
-                                
-                                {/* Code-like Features Display */}
-                                <div className="space-y-2">
-                                  <div className="text-xs font-mono text-muted-foreground/70">
-                                    // Available modules:
-                                  </div>
-                                  {service.features.map((feature, i) => (
-                                    <div key={feature} className="flex items-center gap-2 text-sm">
-                                      <span className="text-muted-foreground/50 font-mono">
-                                        {String(i + 1).padStart(2, '0')}.
-                                      </span>
-                                      <span className="font-mono text-foreground">
-                                        {feature}
-                                      </span>
+                          {service.isAdditional ? (
+                            // Render sub-services for Additional Services
+                            <div className="ml-6 space-y-1">
+                              {service.subServices?.map((subService, subIndex) => (
+                                <motion.div
+                                  key={subService.title}
+                                  initial={{ opacity: 0, x: -10 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  transition={{ delay: subIndex * 0.05, duration: 0.3 }}
+                                >
+                                  {/* Sub-service folder */}
+                                  <div
+                                    onClick={() => toggleSubFolder(subService.title)}
+                                    className="flex items-center gap-2 p-1.5 rounded-lg cursor-pointer transition-all duration-200 hover:bg-secondary/10 hover:border-l-2 hover:border-green-500/50 group/subitem"
+                                  >
+                                    <div className="relative">
+                                      {openSubFolder === subService.title ? (
+                                        <Folder className="w-4 h-4 text-green-500" />
+                                      ) : (
+                                        <Folder className="w-4 h-4 text-muted-foreground group-hover/subitem:text-green-500 transition-colors duration-200" />
+                                      )}
+                                      <subService.icon className={`absolute -bottom-0.5 -right-0.5 w-2 h-2 ${subService.color} bg-background rounded-full p-0.5 group-hover/subitem:scale-110 transition-transform duration-200`} />
                                     </div>
-                                  ))}
+
+                                    <div className="flex-1 min-w-0">
+                                      <div className="flex items-center gap-1">
+                                        <span className="font-mono text-xs text-foreground group-hover/subitem:text-green-500 transition-colors duration-200 truncate">
+                                          {subService.filename}
+                                        </span>
+                                        <ChevronDown className={`w-2.5 h-2.5 text-muted-foreground group-hover/subitem:text-green-500 transition-all duration-200 ${
+                                          openSubFolder === subService.title ? 'rotate-180' : ''
+                                        }`} />
+                                      </div>
+                                      <p className="text-xs text-muted-foreground/70 font-mono group-hover/subitem:text-muted-foreground transition-colors duration-200">
+                                        {subService.title}
+                                      </p>
+                                    </div>
+
+                                    <div className="text-xs text-muted-foreground/50 font-mono group-hover/subitem:text-muted-foreground/80 transition-colors duration-200">
+                                      {subService.features.length}
+                                    </div>
+                                  </div>
+
+                                  {/* Sub-service expanded content */}
+                                  <AnimatePresence>
+                                    {openSubFolder === subService.title && (
+                                      <motion.div
+                                        initial={{ height: 0, opacity: 0 }}
+                                        animate={{ height: "auto", opacity: 1 }}
+                                        exit={{ height: 0, opacity: 0 }}
+                                        transition={{ duration: 0.3, ease: "easeInOut" }}
+                                        className="overflow-hidden"
+                                      >
+                                        <div className="ml-6 p-2 bg-secondary/5 rounded-lg border-l-2 border-green-500/30 space-y-1">
+                                          <div className="flex items-start gap-2">
+                                            <FileText className="w-3 h-3 text-green-500 mt-0.5 flex-shrink-0" />
+                                            <div className="flex-1">
+                                              <p className="text-xs text-muted-foreground leading-relaxed mb-1">
+                                                {subService.description}
+                                              </p>
+                                              
+                                              <div className="space-y-1">
+                                                <div className="text-xs font-mono text-muted-foreground/70">
+                                                  // Available modules:
+                                                </div>
+                                                {subService.features.map((feature, i) => (
+                                                  <div key={feature} className="flex items-center gap-1 text-xs">
+                                                    <span className="text-muted-foreground/50 font-mono">
+                                                      {String(i + 1).padStart(2, '0')}.
+                                                    </span>
+                                                    <span className="font-mono text-foreground">
+                                                      {feature}
+                                                    </span>
+                                                  </div>
+                                                ))}
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </motion.div>
+                                    )}
+                                  </AnimatePresence>
+                                </motion.div>
+                              ))}
+                            </div>
+                          ) : (
+                            // Render regular content for Priority Services
+                            <div className="ml-6 p-2 bg-secondary/5 rounded-lg border-l-2 border-primary/30 space-y-1">
+                              <div className="flex items-start gap-2">
+                                <FileText className="w-3 h-3 text-primary mt-0.5 flex-shrink-0" />
+                                <div className="flex-1">
+                                  <p className="text-xs text-muted-foreground leading-relaxed mb-1">
+                                    {service.description}
+                                  </p>
+                                  
+                                  <div className="space-y-1">
+                                    {service.isPriority ? (
+                                      <>
+                                        <div className="text-xs font-mono text-muted-foreground/70">
+                                          // Get a Quote:
+                                        </div>
+                                        {service.features.slice(0, 3).map((feature, i) => (
+                                          <div key={feature} className="flex items-center gap-1 text-xs">
+                                            <span className="text-muted-foreground/50 font-mono">
+                                              {String(i + 1).padStart(2, '0')}.
+                                            </span>
+                                            <span className="font-mono text-foreground">
+                                              {feature}
+                                            </span>
+                                          </div>
+                                        ))}
+                                        <div className="text-xs font-mono text-muted-foreground/70 mt-1">
+                                          // Fixed Rate:
+                                        </div>
+                                        <div className="flex items-center gap-1 text-xs">
+                                          <span className="text-muted-foreground/50 font-mono">
+                                            04.
+                                          </span>
+                                          <span className="font-mono text-foreground">
+                                            {service.features[3]}
+                                          </span>
+                                        </div>
+                                      </>
+                                    ) : (
+                                      <>
+                                        <div className="text-xs font-mono text-muted-foreground/70">
+                                          // Available modules:
+                                        </div>
+                                        {service.features.map((feature, i) => (
+                                          <div key={feature} className="flex items-center gap-1 text-xs">
+                                            <span className="text-muted-foreground/50 font-mono">
+                                              {String(i + 1).padStart(2, '0')}.
+                                            </span>
+                                            <span className="font-mono text-foreground">
+                                              {feature}
+                                            </span>
+                                          </div>
+                                        ))}
+                                      </>
+                                    )}
+                                  </div>
                                 </div>
                               </div>
                             </div>
-                          </div>
+                          )}
                         </motion.div>
                       )}
                     </AnimatePresence>
@@ -452,12 +528,9 @@ export function WorkSection() {
               </div>
 
               {/* Cabinet Footer */}
-              <div className="mt-6 pt-4 border-t border-border/20 text-center space-y-2">
+              <div className="mt-3 pt-2 border-t border-border/20 text-center space-y-1">
                 <p className="text-xs text-muted-foreground/70 font-mono">
                   Click folders to expand • All services available for custom projects
-                </p>
-                <p className="text-xs text-muted-foreground/60 font-mono">
-                  Get in touch for a quote or to learn more today
                 </p>
                 <a 
                   href="mailto:vituslrclausen@gmail.com?subject=Project Inquiry&body=Hi Vitus,%0D%0A%0D%0AI'm interested in learning more about your services.%0D%0A%0D%0ABest regards,"
