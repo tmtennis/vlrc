@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react"
 import { motion, useMotionValue, useSpring } from "framer-motion"
 import { ArrowDown, Mail, ArrowRight } from "lucide-react"
+import { ParticleBackground } from "./particle-background"
 
 const rotatingPhrases = [
   "Turning Your Ideas into High-Impact Products",
@@ -52,9 +53,19 @@ export function HeroSection() {
   }
 
   return (
-    <section className="min-h-screen flex flex-col justify-center items-center relative text-center px-4 py-16">
+    <section className="min-h-screen flex flex-col justify-center items-center relative text-center px-4 py-16 overflow-hidden">
+      {/* Three.js Particle Background */}
+      <div className="absolute inset-0 z-0">
+        <ParticleBackground 
+          particleCount={80}
+          particleColor="#a855f7"
+          particleSize={1.5}
+          animationSpeed={0.3}
+        />
+      </div>
+
       {/* Main Content */}
-      <div className="max-w-4xl mx-auto space-y-6 md:space-y-8">
+      <div className="max-w-4xl mx-auto space-y-6 md:space-y-8 relative z-10">
         {/* Sleek name with typing reveal hover */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -363,10 +374,134 @@ export function HeroSection() {
         </motion.div>
       </div>
 
-      {/* Background Elements */}
+      {/* Background Elements - Animated Spray Paint Effect */}
       <div className="absolute inset-0 -z-10 overflow-hidden">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent/5 rounded-full blur-3xl" />
+        {/* Main Spray Paint Effect - Right Side */}
+        <motion.div 
+          className="absolute top-1/2 right-0 -translate-y-1/2 w-[80%] h-[90%]"
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 2, ease: "easeOut" }}
+        >
+          {/* Primary spray gradient - Much more visible */}
+          <motion.div
+            className="absolute top-0 right-0 w-[80%] h-[70%] rounded-full"
+            style={{
+              background: "radial-gradient(ellipse at center, rgba(139, 92, 246, 0.8) 0%, rgba(168, 85, 247, 0.6) 25%, rgba(236, 72, 153, 0.4) 50%, rgba(251, 113, 133, 0.2) 75%, transparent 100%)",
+              filter: "blur(40px)",
+            }}
+            animate={{
+              background: [
+                "radial-gradient(ellipse at center, rgba(139, 92, 246, 0.8) 0%, rgba(168, 85, 247, 0.6) 25%, rgba(236, 72, 153, 0.4) 50%, rgba(251, 113, 133, 0.2) 75%, transparent 100%)",
+                "radial-gradient(ellipse at center, rgba(236, 72, 153, 0.8) 0%, rgba(251, 113, 133, 0.6) 25%, rgba(249, 115, 22, 0.4) 50%, rgba(245, 158, 11, 0.2) 75%, transparent 100%)",
+                "radial-gradient(ellipse at center, rgba(99, 102, 241, 0.8) 0%, rgba(139, 92, 246, 0.6) 25%, rgba(168, 85, 247, 0.4) 50%, rgba(236, 72, 153, 0.2) 75%, transparent 100%)",
+                "radial-gradient(ellipse at center, rgba(139, 92, 246, 0.8) 0%, rgba(168, 85, 247, 0.6) 25%, rgba(236, 72, 153, 0.4) 50%, rgba(251, 113, 133, 0.2) 75%, transparent 100%)"
+              ],
+              scale: [1, 1.1, 0.9, 1],
+              rotate: [0, 5, -3, 0],
+            }}
+            transition={{
+              duration: 8,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          />
+          
+          {/* Secondary spray effect - More visible */}
+          <motion.div
+            className="absolute top-[30%] right-[15%] w-[60%] h-[50%] rounded-full"
+            style={{
+              background: "radial-gradient(ellipse at center, rgba(168, 85, 247, 0.6) 0%, rgba(236, 72, 153, 0.4) 30%, rgba(251, 113, 133, 0.2) 60%, transparent 100%)",
+              filter: "blur(30px)",
+            }}
+            animate={{
+              background: [
+                "radial-gradient(ellipse at center, rgba(168, 85, 247, 0.6) 0%, rgba(236, 72, 153, 0.4) 30%, rgba(251, 113, 133, 0.2) 60%, transparent 100%)",
+                "radial-gradient(ellipse at center, rgba(251, 113, 133, 0.6) 0%, rgba(249, 115, 22, 0.4) 30%, rgba(245, 158, 11, 0.2) 60%, transparent 100%)",
+                "radial-gradient(ellipse at center, rgba(99, 102, 241, 0.6) 0%, rgba(139, 92, 246, 0.4) 30%, rgba(168, 85, 247, 0.2) 60%, transparent 100%)",
+                "radial-gradient(ellipse at center, rgba(168, 85, 247, 0.6) 0%, rgba(236, 72, 153, 0.4) 30%, rgba(251, 113, 133, 0.2) 60%, transparent 100%)"
+              ],
+              scale: [1, 0.8, 1.2, 1],
+              x: [0, 20, -10, 0],
+              y: [0, -15, 10, 0],
+            }}
+            transition={{
+              duration: 10,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 1
+            }}
+          />
+
+          {/* Tertiary accent spray - More prominent */}
+          <motion.div
+            className="absolute bottom-[20%] right-[40%] w-[40%] h-[40%] rounded-full"
+            style={{
+              background: "radial-gradient(circle at center, rgba(236, 72, 153, 0.5) 0%, rgba(251, 113, 133, 0.3) 40%, transparent 70%)",
+              filter: "blur(25px)",
+            }}
+            animate={{
+              background: [
+                "radial-gradient(circle at center, rgba(236, 72, 153, 0.5) 0%, rgba(251, 113, 133, 0.3) 40%, transparent 70%)",
+                "radial-gradient(circle at center, rgba(249, 115, 22, 0.5) 0%, rgba(245, 158, 11, 0.3) 40%, transparent 70%)",
+                "radial-gradient(circle at center, rgba(139, 92, 246, 0.5) 0%, rgba(168, 85, 247, 0.3) 40%, transparent 70%)",
+                "radial-gradient(circle at center, rgba(236, 72, 153, 0.5) 0%, rgba(251, 113, 133, 0.3) 40%, transparent 70%)"
+              ],
+              scale: [1, 1.3, 0.7, 1],
+              rotate: [0, 15, -10, 0],
+            }}
+            transition={{
+              duration: 6,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 2
+            }}
+          />
+
+          {/* Sharp accent streaks */}
+          <motion.div
+            className="absolute top-[10%] right-[5%] w-[30%] h-[20%]"
+            style={{
+              background: "linear-gradient(135deg, rgba(139, 92, 246, 0.4) 0%, rgba(236, 72, 153, 0.2) 50%, transparent 100%)",
+              filter: "blur(15px)",
+              borderRadius: "50%",
+            }}
+            animate={{
+              background: [
+                "linear-gradient(135deg, rgba(139, 92, 246, 0.4) 0%, rgba(236, 72, 153, 0.2) 50%, transparent 100%)",
+                "linear-gradient(135deg, rgba(249, 115, 22, 0.4) 0%, rgba(245, 158, 11, 0.2) 50%, transparent 100%)",
+                "linear-gradient(135deg, rgba(99, 102, 241, 0.4) 0%, rgba(168, 85, 247, 0.2) 50%, transparent 100%)",
+                "linear-gradient(135deg, rgba(139, 92, 246, 0.4) 0%, rgba(236, 72, 153, 0.2) 50%, transparent 100%)"
+              ],
+              scale: [1, 1.2, 0.8, 1],
+              rotate: [0, 10, -5, 0],
+            }}
+            transition={{
+              duration: 7,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 0.5
+            }}
+          />
+        </motion.div>
+
+        {/* Left side subtle accent - More visible */}
+        <motion.div
+          className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full"
+          style={{
+            background: "radial-gradient(circle at center, rgba(99, 102, 241, 0.2) 0%, rgba(139, 92, 246, 0.1) 50%, transparent 100%)",
+            filter: "blur(60px)",
+          }}
+          animate={{
+            scale: [1, 1.2, 0.9, 1],
+            opacity: [0.5, 0.8, 0.3, 0.5],
+          }}
+          transition={{
+            duration: 12,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
       </div>
     </section>
   )

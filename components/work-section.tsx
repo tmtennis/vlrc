@@ -120,7 +120,7 @@ const services = [
   }
 ]
 
-export function WorkSection() {
+export function WorkSection({ onlyServices = false }) {
   const [openFolder, setOpenFolder] = useState<string | null>(null)
   const [openSubFolder, setOpenSubFolder] = useState<string | null>(null)
 
@@ -134,6 +134,87 @@ export function WorkSection() {
   const toggleSubFolder = (title: string) => {
     setOpenSubFolder(openSubFolder === title ? null : title)
   }
+
+  if (onlyServices) {
+    return (
+      <div className="w-full">
+        <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground tracking-tighter mb-8 text-left">
+          Services
+        </h2>
+        <div className="space-y-4 text-left">
+          {services.map((service, index) => (
+            <div
+              key={service.title}
+              className="group transition-all duration-200 bg-none border-none shadow-none rounded-none p-0 m-0"
+              style={{ boxShadow: "none", background: "none", border: "none", borderRadius: 0 }}
+            >
+              <div
+                onClick={() => toggleFolder(service.title)}
+                className="flex items-center gap-2 p-1.5 cursor-pointer transition-all duration-200 group/item bg-none border-none shadow-none rounded-none"
+                style={{ background: "none", border: "none", boxShadow: "none", borderRadius: 0 }}
+              >
+                <div className="relative">
+                  <Folder className={`w-5 h-5 ${service.color} group-hover/item:scale-110 transition-transform duration-200`} />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-1">
+                    <span className="font-mono text-xs text-foreground group-hover/item:${service.color} transition-colors duration-200 truncate">
+                      {service.filename}
+                    </span>
+                    <ChevronDown className={`w-3 h-3 text-muted-foreground group-hover/item:${service.color} transition-all duration-200 ${openFolder === service.title ? 'rotate-180' : ''}`} />
+                  </div>
+                  <p className="text-xs text-muted-foreground/70 font-mono group-hover/item:text-muted-foreground transition-colors duration-200">
+                    {service.title}
+                  </p>
+                </div>
+                <div className={`w-2 h-2 rounded-full ${service.color} opacity-0 group-hover/item:opacity-100 transition-opacity duration-200`} />
+              </div>
+              {/* Expanded Content */}
+              {openFolder === service.title && (
+                <div className={`ml-6 p-2 border-l-4 border-current space-y-1 bg-none border-none shadow-none rounded-none`}
+                  style={{ background: "none", border: "none", boxShadow: "none", borderRadius: 0, borderLeftColor: service.color.replace('text-', '') }}>
+                  <div className="flex items-start gap-2">
+                    <FileText className={`w-3 h-3 ${service.color} mt-0.5 flex-shrink-0`} />
+                    <div className="flex-1">
+                      <p className="text-xs text-muted-foreground leading-relaxed mb-1">
+                        {service.description}
+                      </p>
+                      {service.features.length > 0 && (
+                        <div className="space-y-1 mt-2">
+                          {service.features.map((feature, i) => (
+                            <div key={feature} className="flex items-center gap-1 text-xs">
+                              <span className="text-muted-foreground/50 font-mono">
+                                {String(i + 1).padStart(2, '0')}.
+                              </span>
+                              <span className="font-mono text-foreground">
+                                {feature}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+        <div className="mt-3 pt-2 text-left">
+          <p className="text-xs text-muted-foreground/70 font-mono">
+            Click folders to expand • All services available for custom projects
+          </p>
+          <a 
+            href="mailto:vituslrclausen@gmail.com?subject=Project Inquiry&body=Hi Vitus,%0D%0A%0D%0AI'm interested in learning more about your services.%0D%0A%0D%0ABest regards,"
+            className="inline-block text-xs font-mono text-primary underline underline-offset-2"
+          >
+            vituslrclausen@gmail.com
+          </a>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <section id="work" className="pt-24 pb-8 md:pt-28 md:pb-12 lg:pt-32 lg:pb-16 relative overflow-hidden scroll-mt-20">
       {/* Animated Background Elements */}

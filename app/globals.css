@@ -71,12 +71,13 @@
     transform: translateX(0);
   }
   100% {
-    transform: translateX(-50%);
+    transform: translateX(-100%);
   }
 }
 
 .animate-marquee-smooth {
-  animation: marquee-smooth 45s linear infinite;
+  animation: marquee-smooth 30s linear infinite;
+  will-change: transform;
 }
 
 @keyframes shine {
@@ -191,6 +192,40 @@
   will-change: opacity;
 }
 
+/* Scrollbar styling */
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(var(--border)) transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background-color: rgb(var(--border));
+  border-radius: 2px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background-color: rgb(var(--border));
+}
+
+/* Hide scrollbar */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
 /* Mobile performance */
 @media (max-width: 768px) {
   .card-3d-hover:hover {
@@ -206,3 +241,33 @@
     -webkit-backdrop-filter: blur(8px);
   }
 }
+
+/* Marquee animation for tech stack */
+@keyframes marquee-smooth {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.animate-marquee-smooth {
+  animation: marquee-smooth 30s linear infinite;
+}
+
+/* Reverse marquee */
+@keyframes marquee-reverse {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.animate-marquee-reverse {
+  animation: marquee-reverse 35s linear infinite;
+}
+
+/* Shine effect */
