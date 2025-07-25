@@ -57,10 +57,32 @@ export function HeroSection() {
       {/* Three.js Particle Background */}
       <div className="absolute inset-0 z-0">
         <ParticleBackground 
-          particleCount={80}
-          particleColor="#a855f7"
-          particleSize={1.5}
+          particleCount={200}
+          particleColor={[
+            "#FFB6C1", // Light pink
+            "#DDA0DD", // Plum
+            "#B19CD9", // Light purple
+            "#87CEEB", // Sky blue
+            "#98FB98", // Pale green
+            "#F0E68C", // Khaki
+            "#FFA07A", // Light salmon
+            "#E6E6FA", // Lavender
+            "#F5DEB3", // Wheat
+            "#20B2AA", // Light sea green
+            "#F4A460", // Sandy brown
+            "#DA70D6", // Orchid
+            "#32CD32", // Lime green
+            "#FF69B4", // Hot pink
+            "#00CED1", // Dark turquoise
+            "#FFD700", // Gold
+            "#FF6347", // Tomato
+            "#40E0D0", // Turquoise
+            "#EE82EE", // Violet
+            "#90EE90"  // Light green
+          ]}
+          particleSize={3}
           animationSpeed={0.3}
+          cursorEffect="orbit"
         />
       </div>
 
@@ -274,12 +296,6 @@ export function HeroSection() {
             {/* Button content */}
             <div className="relative flex items-center gap-2 justify-center">
               <span>View My Work</span>
-              <motion.div
-                animate={buttonHover.work ? { x: 4 } : { x: 0 }}
-                transition={{ duration: 0.2 }}
-              >
-                <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
-              </motion.div>
             </div>
             
             {/* Pulsing border */}
