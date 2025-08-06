@@ -11,18 +11,23 @@ const config: Config = {
     extend: {
       colors: {
         // Portfolio color palette
-        platinum: colors.platinum,
-        'champagne-pink': colors.champagnePink,
-        pink: colors.pink,
+        'chocolate-cosmos': colors.chocolateCosmos,
+        'claret': colors.claret,
+        'amaranth-purple': colors.amaranthPurple,
+        'rose-red': colors.roseRed,
+        'bright-pink-crayola': colors.brightPinkCrayola,
+        'bright-pink-crayola-2': colors.brightPinkCrayola2,
+        'salmon-pink': colors.salmonPink,
         'cherry-blossom-pink': colors.cherryBlossomPink,
-        'mountbatten-pink': colors.mountbattenPink,
+        'pink': colors.pink,
+        'lavender-blush': colors.lavenderBlush,
         
         // Semantic color assignments
         portfolio: {
           background: colors.background,
           text: colors.text,
           accent: colors.accent,
-          neutral: colors.neutral,
+          secondary: colors.secondary,
           muted: colors.muted,
         },
         

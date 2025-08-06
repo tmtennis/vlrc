@@ -1,7 +1,6 @@
 "use client"
 
 import React, { useState, useEffect } from 'react'
-import { WorkSection } from '@/components/work-section'
 import { motion, AnimatePresence } from 'framer-motion'
 
 interface Project {
