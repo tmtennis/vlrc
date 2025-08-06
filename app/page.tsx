@@ -271,12 +271,13 @@ export default function HomePage() {
         padding: 0,
         position: 'fixed',
         top: 0,
-        left: 0
+        left: 0,
+        overflow: 'hidden'
       }}
     >
       <style jsx>{`
         .text-element {
-          font-size: 9rem !important;
+          font-size: clamp(3rem, 8vw, 9rem) !important;
           color: #ffccd5 !important;
           font-family: Arial, sans-serif !important;
           font-weight: bold !important;
@@ -285,6 +286,42 @@ export default function HomePage() {
           margin: 0 !important;
           padding: 0 !important;
           position: absolute !important;
+        }
+        
+        @media (max-width: 768px) {
+          .text-element {
+            font-size: clamp(2rem, 10vw, 4rem) !important;
+          }
+          .home-navigation .text-element {
+            left: 20px !important;
+          }
+          .home-navigation .text-element:nth-child(1) { top: 80px !important; }
+          .home-navigation .text-element:nth-child(2) { top: 160px !important; }
+          .home-navigation .text-element:nth-child(3) { top: 240px !important; }
+          .home-navigation .text-element:nth-child(4) { top: 320px !important; }
+          .home-navigation .text-element:nth-child(5) { top: 400px !important; }
+          .vlrc-title {
+            left: 20px !important;
+            top: 10px !important;
+          }
+        }
+        
+        @media (max-width: 480px) {
+          .text-element {
+            font-size: clamp(1.5rem, 12vw, 3rem) !important;
+          }
+          .home-navigation .text-element {
+            left: 15px !important;
+          }
+          .home-navigation .text-element:nth-child(1) { top: 60px !important; }
+          .home-navigation .text-element:nth-child(2) { top: 120px !important; }
+          .home-navigation .text-element:nth-child(3) { top: 180px !important; }
+          .home-navigation .text-element:nth-child(4) { top: 240px !important; }
+          .home-navigation .text-element:nth-child(5) { top: 300px !important; }
+          .vlrc-title {
+            left: 15px !important;
+            top: 10px !important;
+          }
         }\\\\\\
 
 
@@ -344,7 +381,7 @@ export default function HomePage() {
       
       {/* Fixed VLRC Title */}
       <div 
-        className="text-element" 
+        className="text-element vlrc-title" 
         onClick={() => setActiveSection(null)}
         style={{ 
           top: 0, 
@@ -360,7 +397,7 @@ export default function HomePage() {
       </div>
       
       {activeSection === null && (
-        <div>
+        <div className="home-navigation">
           <div 
             className="text-element home-hoverable" 
             style={{ top: '120px', left: '30px', cursor: 'pointer' }}

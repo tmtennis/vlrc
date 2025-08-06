@@ -8,6 +8,11 @@ export const metadata: Metadata = {
   description: "Creative developer building tools that think, move, and convert.",
 }
 
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+}
+
 export default function RootLayout({
   children,
 }: Readonly<{
