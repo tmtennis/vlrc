@@ -32,6 +32,16 @@
     --pink: #ffccd5;
     --lavender-blush: #fff0f3;
     
+    /* Display Typography Tokens - Single source of truth for hero/menu text sizing */
+    --display-font-size: clamp(4rem, 10vw, 8rem);
+    --display-line-height: 0.9;
+    --display-weight: bold;
+    --display-tracking: normal;
+    --display-font-family: Arial, sans-serif;
+    
+    /* Layout Variables */
+    --header-h: 120px; /* Height of header area including VLRC text and spacing to horizontal line */
+    
     /* Tailwind CSS Variables - Updated with new portfolio colors */
     --background: #fff0f3; /* lavender-blush */
     --foreground: #590d22; /* chocolate-cosmos */
@@ -105,6 +115,37 @@
   h5,
   h6 {
     @apply font-display;
+  }
+
+  /* 
+   * .display-text - Single source of truth for all hero display typography
+   * Controls VLRC header and main navigation menu text sizing
+   * Maintains consistent typography across header.tsx and page.tsx
+   */
+  .display-text {
+    font-size: var(--display-font-size) !important;
+    line-height: var(--display-line-height) !important;
+    font-weight: var(--display-weight) !important;
+    letter-spacing: var(--display-tracking) !important;
+    font-style: italic !important;
+    font-family: var(--display-font-family) !important;
+    color: #ffccd5 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    position: absolute !important;
+  }
+
+  /* Responsive display typography */
+  @media (max-width: 768px) {
+    :root {
+      --display-font-size: clamp(3rem, 12vw, 5rem);
+    }
+  }
+
+  @media (max-width: 480px) {
+    :root {
+      --display-font-size: clamp(2.5rem, 15vw, 4rem);
+    }
   }
 }
 

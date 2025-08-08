@@ -2,12 +2,9 @@
 
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-
-interface Project {
-  name: string;
-  description: string;
-  stack: string;
-}
+import { useRouter } from 'next/navigation'
+import Header from '../components/Header'
+import ColorRail from '../components/ColorRail'
 
 const AutomationList = () => {
   const [expandedItem, setExpandedItem] = useState<string | null>(null)
@@ -184,10 +181,11 @@ const AutomationList = () => {
 }
 
 export default function HomePage() {
+  const router = useRouter()
   const [activeSection, setActiveSection] = useState<string | null>(null)
   const [hoveredProject, setHoveredProject] = useState<number | null>(null)
   const [fontLoaded, setFontLoaded] = useState(false)
-  const [projects, setProjects] = useState<Project[]>([])
+  const [currentTime, setCurrentTime] = useState<{date: string, time: string}>({date: '', time: ''})
 
   useEffect(() => {
     // Check if font is loaded
@@ -207,36 +205,41 @@ export default function HomePage() {
       checkFont()
     }
 
-    // Fetch projects from CSV
-    const fetchProjects = async () => {
-      try {
-        const response = await fetch('/csv/projects.csv')
-        const csvText = await response.text()
-        const lines = csvText.trim().split('\n')
-        const headers = lines[0].split(',')
-        
-        const projectData = lines.slice(1).map(line => {
-          const values = line.split(',"').map(val => val.replace(/"/g, ''))
-          return {
-            name: values[0],
-            description: values[1],
-            stack: values[2]
-          }
-        })
-        
-        setProjects(projectData)
-      } catch (error) {
-        console.error('Error fetching projects:', error)
-        // Fallback to hardcoded data if CSV fails
-        setProjects([
-          { name: 'TENNISMENACE', description: '', stack: '' },
-          { name: 'LNPWRLD', description: '', stack: '' },
-          { name: 'frank.', description: '', stack: '' }
-        ])
-      }
+  }, [])
+
+  // Clock useEffect
+  useEffect(() => {
+    const updateClock = () => {
+      const now = new Date()
+      
+      // Format date as MM/DD/YY
+      const easternDate = new Intl.DateTimeFormat('en-US', {
+        timeZone: 'America/New_York',
+        month: '2-digit',
+        day: '2-digit',
+        year: '2-digit'
+      }).format(now)
+      
+      // Format time as HH:MM:SS
+      const easternTime = new Intl.DateTimeFormat('en-US', {
+        timeZone: 'America/New_York',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false
+      }).format(now)
+      
+      setCurrentTime({ date: easternDate, time: easternTime })
     }
 
-    fetchProjects()
+    // Update immediately
+    updateClock()
+    
+    // Update every second
+    const interval = setInterval(updateClock, 1000)
+    
+    // Cleanup
+    return () => clearInterval(interval)
   }, [])
 
   const handleSectionClick = (section: string) => {
@@ -274,82 +277,45 @@ export default function HomePage() {
         left: 0,
         overflow: 'hidden'
       }}
-    >
-      <style jsx>{`
-        .text-element {
-          font-size: clamp(3rem, 8vw, 9rem) !important;
-          color: #ffccd5 !important;
-          font-family: Arial, sans-serif !important;
-          font-weight: bold !important;
-          font-style: italic !important;
-          line-height: 1 !important;
-          margin: 0 !important;
-          padding: 0 !important;
-          position: absolute !important;
+    >      <style jsx>{`
+        /* Home navigation hover effects */
+        .display-text.home-hoverable {
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+          cursor: pointer !important;
+          transform-origin: left center !important;
         }
-        
+        .display-text.home-hoverable:hover {
+          color: #ff4d6d !important;
+          transform: scale(1.03) translateX(80px) !important;
+        }
+
+        /* Responsive positioning for navigation items */
         @media (max-width: 768px) {
-          .text-element {
-            font-size: clamp(2rem, 10vw, 4rem) !important;
-          }
-          .home-navigation .text-element {
-            left: 20px !important;
-          }
-          .home-navigation .text-element:nth-child(1) { top: 80px !important; }
-          .home-navigation .text-element:nth-child(2) { top: 160px !important; }
-          .home-navigation .text-element:nth-child(3) { top: 240px !important; }
-          .home-navigation .text-element:nth-child(4) { top: 320px !important; }
-          .home-navigation .text-element:nth-child(5) { top: 400px !important; }
-          .vlrc-title {
+          .home-navigation .display-text:nth-child(1) { top: 90px !important; left: 20px !important; }
+          .home-navigation .display-text:nth-child(2) { top: 170px !important; left: 20px !important; }
+          .home-navigation .display-text:nth-child(3) { top: 250px !important; left: 20px !important; }
+          .home-navigation .display-text:nth-child(4) { top: 330px !important; left: 20px !important; }
+          .home-navigation .display-text:nth-child(5) { top: 410px !important; left: 20px !important; }
+          header {
             left: 20px !important;
             top: 10px !important;
           }
         }
         
         @media (max-width: 480px) {
-          .text-element {
-            font-size: clamp(1.5rem, 12vw, 3rem) !important;
-          }
-          .home-navigation .text-element {
-            left: 15px !important;
-          }
-          .home-navigation .text-element:nth-child(1) { top: 60px !important; }
-          .home-navigation .text-element:nth-child(2) { top: 120px !important; }
-          .home-navigation .text-element:nth-child(3) { top: 180px !important; }
-          .home-navigation .text-element:nth-child(4) { top: 240px !important; }
-          .home-navigation .text-element:nth-child(5) { top: 300px !important; }
-          .vlrc-title {
+          .home-navigation .display-text:nth-child(1) { top: 70px !important; left: 15px !important; }
+          .home-navigation .display-text:nth-child(2) { top: 130px !important; left: 15px !important; }
+          .home-navigation .display-text:nth-child(3) { top: 190px !important; left: 15px !important; }
+          .home-navigation .display-text:nth-child(4) { top: 250px !important; left: 15px !important; }
+          .home-navigation .display-text:nth-child(5) { top: 310px !important; left: 15px !important; }
+          header {
             left: 15px !important;
             top: 10px !important;
           }
-        }\\\\\\
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-        .text-element.hoverable {
-          transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1) !important;
-          cursor: pointer !important;
-          transform-origin: left center !important;
-        }
-        .text-element.hoverable:hover {
-          transform: scale(1.05) translateX(20px) !important;
+          .header-vlrc {
+            left: 15px !important;
+            top: 60px !important;
+          }
         }
         .back-button {
           font-size: 2rem !important;
@@ -377,53 +343,55 @@ export default function HomePage() {
           height: 24px !important;
           color: #ffccd5 !important;
         }
+        
       `}</style>
       
       {/* Fixed VLRC Title */}
-      <div 
-        className="text-element vlrc-title" 
-        onClick={() => setActiveSection(null)}
-        style={{ 
-          top: 0, 
-          left: '30px', 
-          zIndex: 1000,
-          whiteSpace: 'nowrap',
-          width: 'auto',
-          maxWidth: 'none',
-          cursor: 'pointer'
-        }}
-      >
-        VLRC
-      </div>
+      <Header onClick={() => setActiveSection(null)} />
+      
+      {/* Header bottom line */}
+      <div style={{
+        position: 'fixed',
+        top: '120px',
+        left: '0',
+        right: '0',
+        width: '100%',
+        height: '2px',
+        backgroundColor: '#ffccd5',
+        zIndex: 999
+      }} />
+      
+      {/* Color Cards Rail */}
+      <ColorRail />
       
       {activeSection === null && (
         <div className="home-navigation">
           <div 
-            className="text-element home-hoverable" 
+            className="display-text home-hoverable" 
             style={{ top: '120px', left: '30px', cursor: 'pointer' }}
-            onClick={() => handleSectionClick('PROJECTS')}
+            onClick={() => router.push('/featured')}
           >
-            PROJECTS
+            FEATURED
           </div>
           
           <div 
-            className="text-element home-hoverable" 
+            className="display-text home-hoverable" 
             style={{ top: '240px', left: '30px', cursor: 'pointer' }}
             onClick={() => handleSectionClick('AUTOMATION')}
-          >
-            AUTOMATION
-          </div>
-          
-          <div 
-            className="text-element home-hoverable" 
-            style={{ top: '360px', left: '30px', cursor: 'pointer' }}
-            onClick={() => handleSectionClick('SERVICES')}
           >
             SERVICES
           </div>
           
           <div 
-            className="text-element home-hoverable" 
+            className="display-text home-hoverable" 
+            style={{ top: '360px', left: '30px', cursor: 'pointer' }}
+            onClick={() => handleSectionClick('SERVICES')}
+          >
+            AUTOMATION
+          </div>
+          
+          <div 
+            className="display-text home-hoverable" 
             style={{ top: '480px', left: '30px', cursor: 'pointer' }}
             onClick={() => handleSectionClick('ABOUT')}
           >
@@ -431,7 +399,7 @@ export default function HomePage() {
           </div>
           
           <div 
-            className="text-element home-hoverable" 
+            className="display-text home-hoverable" 
             style={{ top: '600px', left: '30px', cursor: 'pointer' }}
             onClick={() => handleSectionClick('CONTACT')}
           >
@@ -439,153 +407,27 @@ export default function HomePage() {
           </div>
         </div>
       )}
-        
-        {activeSection === 'PROJECTS' && (
-          <div
-            style={{
-              position: 'absolute',
-              top: '120px',
-              left: 0,
-              right: 0,
-              bottom: 0,
-              background: '#590d22',
-              overflow: 'hidden'
-            }}
-          >
-            {/* Back button */}
-            <button
-              onClick={() => setActiveSection(null)}
-              className="back-button"
-              style={{ 
-                bottom: '30px', 
-                right: '30px', 
-                position: 'fixed',
-                zIndex: 100
-              }}
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
-              </svg>
-            </button>
 
-            {/* Split Screen Layout */}
-            <div style={{
-              display: 'flex',
-              height: '100%'
-            }}>
-              {/* Left Side - Project Names */}
-              <div style={{
-                width: '50%',
-                padding: '80px 60px',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                borderRight: '1px solid rgba(255, 204, 213, 0.1)'
-              }}>
-                {projects.map((project, index) => (
-                  <div
-                    key={project.name}
-                    style={{
-                      marginBottom: index < projects.length - 1 ? '60px' : '0',
-                      cursor: 'pointer'
-                    }}
-                    onMouseEnter={() => setHoveredProject(index)}
-                    onMouseLeave={() => setHoveredProject(null)}
-                  >
-                    <div style={{
-                      fontSize: '0.8rem',
-                      fontWeight: '600',
-                      color: '#ff4d6d',
-                      textTransform: 'uppercase',
-                      letterSpacing: '2px',
-                      marginBottom: '8px',
-                      fontFamily: 'system-ui, -apple-system, sans-serif'
-                    }}>
-                      {String(index + 1).padStart(2, '0')}
-                    </div>
-                    <div style={{
-                      fontSize: '3.5rem',
-                      fontWeight: '900',
-                      fontStyle: 'italic',
-                      color: hoveredProject === index ? '#ff4d6d' : '#ffccd5',
-                      fontFamily: 'Arial, sans-serif',
-                      lineHeight: '0.9',
-                      transition: 'color 0.2s ease'
-                    }}>
-                      {project.name.toUpperCase()}
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Right Side - Project Details */}
-              <div style={{
-                width: '50%',
-                padding: '80px 60px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}>
-                {hoveredProject !== null ? (
-                  <div style={{
-                    maxWidth: '400px',
-                    opacity: 1,
-                    transition: 'opacity 0.3s ease'
-                  }}>
-                    <div style={{
-                      fontSize: '1.2rem',
-                      fontWeight: '400',
-                      color: 'rgba(255, 240, 243, 0.9)',
-                      lineHeight: '1.6',
-                      marginBottom: '32px',
-                      fontFamily: 'system-ui, -apple-system, sans-serif'
-                    }}>
-                      {projects[hoveredProject].description}
-                    </div>
-                    
-                    <div style={{
-                      fontSize: '0.8rem',
-                      fontWeight: '600',
-                      color: '#ff4d6d',
-                      textTransform: 'uppercase',
-                      letterSpacing: '1px',
-                      marginBottom: '12px',
-                      fontFamily: 'system-ui, -apple-system, sans-serif'
-                    }}>
-                      TECHNOLOGIES
-                    </div>
-                    
-                    <div style={{
-                      fontSize: '0.9rem',
-                      fontWeight: '400',
-                      color: 'rgba(255, 240, 243, 0.7)',
-                      lineHeight: '1.5',
-                      fontFamily: 'system-ui, -apple-system, sans-serif'
-                    }}>
-                      {projects[hoveredProject].stack}
-                    </div>
-                  </div>
-                ) : (
-                  <div style={{
-                    textAlign: 'center',
-                    maxWidth: '400px'
-                  }}>
-                    <div style={{
-                      fontSize: '1.2rem',
-                      fontWeight: '400',
-                      color: 'rgba(255, 240, 243, 0.4)',
-                      lineHeight: '1.6',
-                      fontFamily: 'system-ui, -apple-system, sans-serif',
-                      fontStyle: 'italic'
-                    }}>
-                      Hover over a project to view details
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        )}
+      {/* Clock - always visible on home page */}
+      {activeSection === null && (
+        <div style={{
+          position: 'fixed',
+          top: '10px',
+          right: '30px',
+          fontSize: '1rem',
+          color: '#ffccd5',
+          fontFamily: 'system-ui, -apple-system, sans-serif',
+          fontWeight: '400',
+          zIndex: 1000,
+          letterSpacing: '1px',
+          textAlign: 'right',
+          lineHeight: '1.4'
+        }}>
+          <div>New York City</div>
+          <div>{currentTime.date}</div>
+          <div>{currentTime.time}</div>
+        </div>
+      )}
         
         {activeSection === 'AUTOMATION' && (
           <div

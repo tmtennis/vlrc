@@ -3,11 +3,6 @@ import type { Metadata } from "next"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 
-export const metadata: Metadata = {
-  title: "Vitus Clausen | Creative Developer",
-  description: "Creative developer building tools that think, move, and convert.",
-}
-
 export const viewport = {
   width: 'device-width',
   initialScale: 1,
