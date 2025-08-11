@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from 'react';
+import { motion } from 'framer-motion';
 
 export default function ColorRail() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
@@ -45,7 +46,14 @@ export default function ColorRail() {
   };
 
   return (
-    <div 
+    <motion.div 
+      initial={{ opacity: 0, width: 0, skewX: -15 }}
+      animate={{ opacity: 1, width: '150px', skewX: 0 }}
+      transition={{ 
+        duration: 0.9,
+        delay: 1.5, // Start after stroke animation (0.3 + 1.2 = 1.5)
+        ease: [0.68, -0.55, 0.265, 1.55], // Elastic ease
+      }}
       style={{
         position: 'fixed',
         top: '122px', // Start right under the stroke line (120px + 2px stroke height)
@@ -59,29 +67,39 @@ export default function ColorRail() {
       }}
     >
       {testColors.map((color, index) => (
-        <div 
+        <motion.div 
           key={index}
+          initial={{ opacity: 0, height: 0, rotateZ: 180, scale: 0 }}
+          animate={{ opacity: 1, height: '100%', rotateZ: 0, scale: 1 }}
+          whileHover={{ 
+            x: -25,
+            rotateZ: 0, // Remove any rotation/skew when hovering
+            transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] }
+          }}
+          transition={{ 
+            duration: 0.7,
+            delay: 1.8 + (9 - index) * 0.06, // Animate from bottom to top (reverse order)
+            ease: [0.175, 0.885, 0.32, 1.275], // Bounce-out easing
+            // Faster return transition when not hovering
+            x: { duration: 0.15 },
+            rotateZ: { duration: 0.15 }
+          }}
           style={{ 
             backgroundColor: color,
             width: '200px', // Much wider than the 150px container - extends beyond viewport
             height: '100%',
             borderLeft: '2px solid #ffccd5',
-            transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
             cursor: 'pointer',
             position: 'relative',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'flex-start',
-            paddingLeft: '20px'
+            paddingLeft: '20px',
+            transformOrigin: 'center bottom', // Change origin for the spin effect
+            overflow: 'hidden' // Hide content during height animation
           }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.transform = 'translateX(-25px)';
-            setHoveredIndex(index);
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = 'translateX(0)';
-            setHoveredIndex(null);
-          }}
+          onMouseEnter={() => setHoveredIndex(index)}
+          onMouseLeave={() => setHoveredIndex(null)}
           onClick={() => handleClick(color, index)}
         >
           {/* Color code text - only visible when pulled out */}
@@ -119,7 +137,7 @@ export default function ColorRail() {
               Copied!
             </div>
           )}
-        </div>
+        </motion.div>
       ))}
       
       <style jsx>{`
@@ -128,6 +146,6 @@ export default function ColorRail() {
           50% { opacity: 1; }
         }
       `}</style>
-    </div>
+    </motion.div>
   );
 }

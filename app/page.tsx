@@ -296,10 +296,6 @@ export default function HomePage() {
           .home-navigation .display-text:nth-child(3) { top: 250px !important; left: 20px !important; }
           .home-navigation .display-text:nth-child(4) { top: 330px !important; left: 20px !important; }
           .home-navigation .display-text:nth-child(5) { top: 410px !important; left: 20px !important; }
-          header {
-            left: 20px !important;
-            top: 10px !important;
-          }
         }
         
         @media (max-width: 480px) {
@@ -308,10 +304,6 @@ export default function HomePage() {
           .home-navigation .display-text:nth-child(3) { top: 190px !important; left: 15px !important; }
           .home-navigation .display-text:nth-child(4) { top: 250px !important; left: 15px !important; }
           .home-navigation .display-text:nth-child(5) { top: 310px !important; left: 15px !important; }
-          header {
-            left: 15px !important;
-            top: 10px !important;
-          }
           .header-vlrc {
             left: 15px !important;
             top: 60px !important;
@@ -346,88 +338,222 @@ export default function HomePage() {
         
       `}</style>
       
-      {/* Fixed VLRC Title */}
+      {/* Override navigation positioning */}
+      <style jsx global>{`
+        .home-navigation .display-text {
+          position: absolute !important;
+        }
+        .home-navigation .display-text:nth-child(1) { 
+          top: calc(120px + (100vh - 120px) * 0.05) !important; 
+        }
+        .home-navigation .display-text:nth-child(2) { 
+          top: calc(120px + (100vh - 120px) * 0.2375) !important; 
+        }
+        .home-navigation .display-text:nth-child(3) { 
+          top: calc(120px + (100vh - 120px) * 0.425) !important; 
+        }
+        .home-navigation .display-text:nth-child(4) { 
+          top: calc(120px + (100vh - 120px) * 0.6125) !important; 
+        }
+        .home-navigation .display-text:nth-child(5) { 
+          top: calc(120px + (100vh - 120px) * 0.80) !important; 
+        }
+      `}</style>
+      
+      {/* Fixed VLRC Title - with red color to show location */}
       <Header onClick={() => setActiveSection(null)} />
       
       {/* Header bottom line */}
-      <div style={{
-        position: 'fixed',
-        top: '120px',
-        left: '0',
-        right: '0',
-        width: '100%',
-        height: '2px',
-        backgroundColor: '#ffccd5',
-        zIndex: 999
-      }} />
+      <motion.div 
+        initial={{ scaleX: 0 }}
+        animate={{ scaleX: 1 }}
+        transition={{ 
+          duration: 1.2, 
+          delay: 0.3,
+          ease: [0.4, 0, 0.2, 1]
+        }}
+        style={{
+          position: 'fixed',
+          top: '120px',
+          left: '0',
+          right: '0',
+          width: '100%',
+          height: '2px',
+          backgroundColor: '#ffccd5',
+          zIndex: 999,
+          transformOrigin: 'left center'
+        }} 
+      />
       
       {/* Color Cards Rail */}
       <ColorRail />
       
       {activeSection === null && (
         <div className="home-navigation">
-          <div 
+          <motion.div 
+            initial={{ opacity: 0, width: 0, skewX: -15, scale: 0.8 }}
+            animate={{ opacity: 1, width: 'auto', skewX: 0, scale: 1 }}
+            whileHover={{ 
+              color: '#ff4d6d',
+              scale: 1.03,
+              x: 80,
+              skewX: 2, // Slight skew on hover for dynamic feel
+              transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] }
+            }}
+            transition={{ 
+              duration: 0.9,
+              delay: 2.4, // Start after color rail completes
+              ease: [0.68, -0.55, 0.265, 1.55], // Same elastic ease as color rail
+              // Faster return transition when not hovering
+              color: { duration: 0.15 },
+              scale: { duration: 0.15 },
+              x: { duration: 0.15 },
+              skewX: { duration: 0.15 }
+            }}
             className="display-text home-hoverable" 
-            style={{ top: '120px', left: '30px', cursor: 'pointer' }}
+            style={{ 
+              top: 'calc(120px + (100vh - 120px) * 0.05)', // 5% down from stroke line
+              left: '30px', 
+              cursor: 'pointer',
+              transformOrigin: 'left center'
+            }}
             onClick={() => router.push('/featured')}
           >
             FEATURED
-          </div>
+          </motion.div>
           
-          <div 
+          <motion.div 
+            initial={{ opacity: 0, width: 0, skewX: -15, scale: 0.8 }}
+            animate={{ opacity: 1, width: 'auto', skewX: 0, scale: 1 }}
+            whileHover={{ 
+              color: '#ff4d6d',
+              scale: 1.03,
+              x: 80,
+              skewX: 2,
+              transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] }
+            }}
+            transition={{ 
+              duration: 0.9,
+              delay: 2.6, // 0.2s after previous
+              ease: [0.68, -0.55, 0.265, 1.55], // Same elastic ease as color rail
+              // Faster return transition when not hovering
+              color: { duration: 0.15 },
+              scale: { duration: 0.15 },
+              x: { duration: 0.15 },
+              skewX: { duration: 0.15 }
+            }}
             className="display-text home-hoverable" 
-            style={{ top: '240px', left: '30px', cursor: 'pointer' }}
+            style={{ 
+              top: 'calc(120px + (100vh - 120px) * 0.20)', // 20% down from stroke line
+              left: '30px', 
+              cursor: 'pointer',
+              transformOrigin: 'left center'
+            }}
             onClick={() => handleSectionClick('AUTOMATION')}
           >
             SERVICES
-          </div>
+          </motion.div>
           
-          <div 
+          <motion.div 
+            initial={{ opacity: 0, width: 0, skewX: -15, scale: 0.8 }}
+            animate={{ opacity: 1, width: 'auto', skewX: 0, scale: 1 }}
+            whileHover={{ 
+              color: '#ff4d6d',
+              scale: 1.03,
+              x: 80,
+              skewX: 2,
+              transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] }
+            }}
+            transition={{ 
+              duration: 0.9,
+              delay: 2.8, // 0.2s after previous
+              ease: [0.68, -0.55, 0.265, 1.55], // Same elastic ease as color rail
+              // Faster return transition when not hovering
+              color: { duration: 0.15 },
+              scale: { duration: 0.15 },
+              x: { duration: 0.15 },
+              skewX: { duration: 0.15 }
+            }}
             className="display-text home-hoverable" 
-            style={{ top: '360px', left: '30px', cursor: 'pointer' }}
+            style={{ 
+              top: 'calc(120px + (100vh - 120px) * 0.35)', // 35% down from stroke line
+              left: '30px', 
+              cursor: 'pointer',
+              transformOrigin: 'left center'
+            }}
             onClick={() => handleSectionClick('SERVICES')}
           >
             AUTOMATION
-          </div>
+          </motion.div>
           
-          <div 
+          <motion.div 
+            initial={{ opacity: 0, width: 0, skewX: -15, scale: 0.8 }}
+            animate={{ opacity: 1, width: 'auto', skewX: 0, scale: 1 }}
+            whileHover={{ 
+              color: '#ff4d6d',
+              scale: 1.03,
+              x: 80,
+              skewX: 2,
+              transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] }
+            }}
+            transition={{ 
+              duration: 0.9,
+              delay: 3.0, // 0.2s after previous
+              ease: [0.68, -0.55, 0.265, 1.55], // Same elastic ease as color rail
+              // Faster return transition when not hovering
+              color: { duration: 0.15 },
+              scale: { duration: 0.15 },
+              x: { duration: 0.15 },
+              skewX: { duration: 0.15 }
+            }}
             className="display-text home-hoverable" 
-            style={{ top: '480px', left: '30px', cursor: 'pointer' }}
+            style={{ 
+              top: 'calc(120px + (100vh - 120px) * 4 / 6)', // 4/6 down from stroke line
+              left: '30px', 
+              cursor: 'pointer',
+              transformOrigin: 'left center'
+            }}
             onClick={() => handleSectionClick('ABOUT')}
           >
             ABOUT
-          </div>
+          </motion.div>
           
-          <div 
+          <motion.div 
+            initial={{ opacity: 0, width: 0, skewX: -15, scale: 0.8 }}
+            animate={{ opacity: 1, width: 'auto', skewX: 0, scale: 1 }}
+            whileHover={{ 
+              color: '#ff4d6d',
+              scale: 1.03,
+              x: 80,
+              skewX: 2,
+              transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] }
+            }}
+            transition={{ 
+              duration: 0.9,
+              delay: 3.2, // 0.2s after previous
+              ease: [0.68, -0.55, 0.265, 1.55], // Same elastic ease as color rail
+              // Faster return transition when not hovering
+              color: { duration: 0.15 },
+              scale: { duration: 0.15 },
+              x: { duration: 0.15 },
+              skewX: { duration: 0.15 }
+            }}
             className="display-text home-hoverable" 
-            style={{ top: '600px', left: '30px', cursor: 'pointer' }}
+            style={{ 
+              top: 'calc(120px + (100vh - 120px) * 5 / 6)', // 5/6 down from stroke line
+              left: '30px', 
+              cursor: 'pointer',
+              transformOrigin: 'left center'
+            }}
             onClick={() => handleSectionClick('CONTACT')}
           >
             CONTACT
-          </div>
+          </motion.div>
         </div>
       )}
 
       {/* Clock - always visible on home page */}
-      {activeSection === null && (
-        <div style={{
-          position: 'fixed',
-          top: '10px',
-          right: '30px',
-          fontSize: '1rem',
-          color: '#ffccd5',
-          fontFamily: 'system-ui, -apple-system, sans-serif',
-          fontWeight: '400',
-          zIndex: 1000,
-          letterSpacing: '1px',
-          textAlign: 'right',
-          lineHeight: '1.4'
-        }}>
-          <div>New York City</div>
-          <div>{currentTime.date}</div>
-          <div>{currentTime.time}</div>
-        </div>
-      )}
+      {/* Removed clock component */}
         
         {activeSection === 'AUTOMATION' && (
           <div
