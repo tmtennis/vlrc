@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 
 export default function ServicesPage() {
   const [isLoaded, setIsLoaded] = useState(false)
-  const [clickedAccordion, setClickedAccordion] = useState<number | null>(9) // Auto-open Full Tech Stack (index 9)
+  const [clickedAccordion, setClickedAccordion] = useState<number | null>(null) // Start with all accordions closed
   const [hoveredAccordion, setHoveredAccordion] = useState<number | null>(null)
   const router = useRouter()
 
@@ -43,6 +43,8 @@ export default function ServicesPage() {
       >
         SERVICES
       </motion.div>
+
+
 
       {/* First stroked line */}
       <motion.div 
@@ -167,8 +169,8 @@ export default function ServicesPage() {
                   x: { duration: 0.8, delay: 2.3 + (lineNumber * 0.08) + 0.5 },
                   y: { duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }
                 }}
-                onMouseEnter={() => !service.isFullStack && setHoveredAccordion(index)}
-                onMouseLeave={() => !service.isFullStack && setHoveredAccordion(null)}
+                onMouseEnter={() => setHoveredAccordion(index)}
+                onMouseLeave={() => setHoveredAccordion(null)}
                 onClick={() => setClickedAccordion(clickedAccordion === index ? null : index)}
                 style={{
                   position: 'absolute',
@@ -354,7 +356,7 @@ export default function ServicesPage() {
         onClick={() => router.back()}
         style={{
           position: 'fixed',
-          top: '20px',
+          top: '10px',
           right: '20px',
           background: 'transparent',
           border: '1px solid #ffccd5',
@@ -374,6 +376,36 @@ export default function ServicesPage() {
       >
         BACK
       </motion.button>
+
+      {/* Additional text below back button and above stroked line */}
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: isLoaded ? 1 : 0, y: isLoaded ? 0 : -10 }}
+        transition={{ duration: 0.8, delay: 0.6 }}
+        style={{
+          position: 'absolute',
+          top: '60px',
+          right: '30px',
+          textAlign: 'right',
+          color: '#ffccd5'
+        }}
+      >
+        <div style={{
+          fontSize: '24px',
+          fontWeight: 'normal',
+          marginBottom: '0px',
+          letterSpacing: '1px'
+        }}>
+          WE WEAR A LOT OF HATS...
+        </div>
+        <div style={{
+          fontSize: '20px',
+          fontWeight: 'normal',
+          letterSpacing: '0.5px'
+        }}>
+          YOU NAME IT, WE BUILD IT
+        </div>
+      </motion.div>
     </div>
   )
 }
