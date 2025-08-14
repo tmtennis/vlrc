@@ -298,7 +298,7 @@ export default function ServicesPage() {
                         justifyContent: 'flex-end',
                         minWidth: 'fit-content'
                       }}>
-                        {service.stack.map((tech, techIndex) => (
+                        {Array.isArray(service.stack) && service.stack.map((tech, techIndex) => (
                           <img
                             key={techIndex}
                             src={`/techstack/${tech}.png`}
