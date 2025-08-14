@@ -243,7 +243,11 @@ export default function HomePage() {
   }, [])
 
   const handleSectionClick = (section: string) => {
-    setActiveSection(activeSection === section ? null : section)
+    if (section === 'SERVICES') {
+      router.push('/services')
+    } else {
+      setActiveSection(activeSection === section ? null : section)
+    }
   }
 
   // Don't render content until font is loaded
@@ -312,7 +316,7 @@ export default function HomePage() {
         .back-button {
           font-size: 2rem !important;
           color: #ffccd5 !important;
-          font-family: Arial, sans-serif !important;
+          font-family: 'CercoDEMO-BlackItalic', Arial, sans-serif !important;
           font-weight: bold !important;
           font-style: italic !important;
           background: none !important;
@@ -449,7 +453,7 @@ export default function HomePage() {
               cursor: 'pointer',
               transformOrigin: 'left center'
             }}
-            onClick={() => handleSectionClick('AUTOMATION')}
+            onClick={() => handleSectionClick('SERVICES')}
           >
             SERVICES
           </motion.div>
@@ -481,7 +485,7 @@ export default function HomePage() {
               cursor: 'pointer',
               transformOrigin: 'left center'
             }}
-            onClick={() => handleSectionClick('SERVICES')}
+            onClick={() => handleSectionClick('AUTOMATION')}
           >
             AUTOMATION
           </motion.div>
@@ -594,47 +598,6 @@ export default function HomePage() {
               
               {/* Compact Collapsible Automation List */}
               <AutomationList />
-            </div>
-          </div>
-        )}
-        
-        {activeSection === 'SERVICES' && (
-          <div
-            style={{
-              position: 'absolute',
-              top: '120px',
-              left: 0,
-              right: 0,
-              bottom: 0,
-              background: '#590d22',
-              overflow: 'auto'
-            }}
-          >
-            {/* Back button - moved to bottom right */}
-            <button
-              onClick={() => setActiveSection(null)}
-              className="back-button"
-              style={{ 
-                bottom: '30px', 
-                right: '30px', 
-                position: 'fixed',
-                zIndex: 100
-              }}
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
-              </svg>
-            </button>
-
-            {/* Services content aligned like projects page */}
-            <div 
-              className="text-element" 
-              style={{ 
-                top: '0px', 
-                left: '30px' 
-              }}
-            >
-              COMING SOON
             </div>
           </div>
         )}

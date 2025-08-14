@@ -3,9 +3,9 @@
 @tailwind utilities;
 
 @layer base {
-  /* Custom font face for CercoDEMO */
+  /* Custom font face for CercoDEMO-BlackItalic */
   @font-face {
-    font-family: 'CercoDEMO';
+    font-family: 'CercoDEMO-BlackItalic';
     src: url('/fonts/CercoDEMO-BlackItalic.otf') format('opentype');
     font-weight: 900;
     font-style: italic;
@@ -14,7 +14,7 @@
 
   /* Global font setup */
   * {
-    font-family: "CercoDEMO", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+    font-family: "CercoDEMO-BlackItalic", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
     font-weight: 900;
     font-style: italic;
   }
@@ -37,7 +37,7 @@
     --display-line-height: 0.9;
     --display-weight: bold;
     --display-tracking: normal;
-    --display-font-family: Arial, sans-serif;
+    --display-font-family: "CercoDEMO-BlackItalic", Arial, sans-serif;
     
     /* Layout Variables */
     --header-h: 120px; /* Height of header area including VLRC text and spacing to horizontal line */
@@ -98,7 +98,7 @@
 
 @layer base {
   * {
-    font-family: 'Helvetica', Arial, sans-serif !important;
+    font-family: 'CercoDEMO-BlackItalic', Arial, sans-serif !important;
     font-weight: bold !important;
   }
   
