@@ -245,6 +245,10 @@ export default function HomePage() {
   const handleSectionClick = (section: string) => {
     if (section === 'SERVICES') {
       router.push('/services')
+    } else if (section === 'AUTOMATION') {
+      router.push('/automation')
+    } else if (section === 'CONTACT') {
+      router.push('/contact')
     } else {
       setActiveSection(activeSection === section ? null : section)
     }
@@ -517,9 +521,9 @@ export default function HomePage() {
               cursor: 'pointer',
               transformOrigin: 'left center'
             }}
-            onClick={() => handleSectionClick('ABOUT')}
+            onClick={() => handleSectionClick('SHOP')}
           >
-            ABOUT
+            SHOP
           </motion.div>
           
           <motion.div 
@@ -602,7 +606,7 @@ export default function HomePage() {
           </div>
         )}
         
-        {activeSection === 'ABOUT' && (
+        {activeSection === 'SHOP' && (
           <div
             style={{
               position: 'absolute',

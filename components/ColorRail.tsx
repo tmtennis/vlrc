@@ -115,28 +115,9 @@ export default function ColorRail() {
               pointerEvents: hoveredIndex === index ? 'auto' : 'none'
             }}
           >
-            {color}
+            {copiedIndex === index ? 'Copied' : color}
           </div>
           
-          {/* Copied tooltip */}
-          {copiedIndex === index && (
-            <div
-              style={{
-                position: 'absolute',
-                left: '50%',
-                top: '50%',
-                transform: 'translate(-50%, -50%)',
-                color: textColors[index],
-                fontSize: '12px',
-                fontWeight: '600',
-                zIndex: 1000,
-                animation: 'fadeInOut 1.5s ease-in-out',
-                textShadow: '0 0 4px rgba(0, 0, 0, 0.5)'
-              }}
-            >
-              Copied!
-            </div>
-          )}
         </motion.div>
       ))}
       
