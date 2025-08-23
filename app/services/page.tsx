@@ -151,15 +151,104 @@ export default function ServicesPage() {
         }
       `}</style>
 
+      {/* Tagline headline - top center, mobile responsive, word-by-word animation */}
+      <motion.div
+        initial={{ opacity: 0, y: -30 }}
+        animate={{ opacity: isLoaded ? 1 : 0, y: isLoaded ? 0 : -30 }}
+        transition={{ duration: 0.8, delay: 0.2 }}
+        style={{
+          position: 'absolute',
+          top: '30px',
+          left: 0,
+          right: 0,
+          width: '100%',
+          textAlign: 'center',
+          zIndex: 10,
+          padding: '0 10px'
+        }}
+      >
+        <motion.div
+          style={{
+            display: 'inline-block',
+            width: '100%',
+            fontWeight: 900,
+            color: '#ffccd5',
+            letterSpacing: '2px',
+            marginBottom: '0.2em',
+            lineHeight: 1.1,
+            fontSize: 'clamp(1.5rem, 6vw, 2.5rem)'
+          }}
+          initial="hidden"
+          animate="visible"
+          variants={{
+            visible: {
+              transition: {
+                staggerChildren: 0.18
+              }
+            },
+            hidden: {}
+          }}
+        >
+          {"WE WEAR A LOT OF HATS...".split(" ").map((word, i) => (
+            <motion.span
+              key={i}
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: { opacity: 1, y: 0 }
+              }}
+              style={{ display: 'inline-block', marginRight: '0.4em' }}
+            >
+              {word}
+            </motion.span>
+          ))}
+        </motion.div>
+        <motion.div
+          style={{
+            display: 'inline-block',
+            width: '100%',
+            fontWeight: 400,
+            color: '#ffccd5',
+            fontStyle: 'italic',
+            letterSpacing: '1px',
+            opacity: 0.85,
+            fontSize: 'clamp(1rem, 4vw, 1.3rem)'
+          }}
+          initial="hidden"
+          animate="visible"
+          variants={{
+            visible: {
+              transition: {
+                staggerChildren: 0.16,
+                delayChildren: 0.5
+              }
+            },
+            hidden: {}
+          }}
+        >
+          {"YOU NAME IT, WE BUILD IT".split(" ").map((word, i) => (
+            <motion.span
+              key={i}
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: { opacity: 1, y: 0 }
+              }}
+              style={{ display: 'inline-block', marginRight: '0.4em' }}
+            >
+              {word}
+            </motion.span>
+          ))}
+        </motion.div>
+      </motion.div>
+
       {/* SERVICES title */}
       <motion.div
         className="services-title"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: isLoaded ? 1 : 0, y: isLoaded ? 0 : -20 }}
-        transition={{ duration: 0.8, delay: 0.2 }}
+        transition={{ duration: 0.8, delay: 0.4 }}
         style={{
           position: 'absolute',
-          top: '-30px',
+          top: '90px',
           left: '30px',
           zIndex: 1
         }}
@@ -506,28 +595,6 @@ export default function ServicesPage() {
       >
         BACK
       </motion.button>
-
-      {/* Additional text below back button and above stroked line */}
-      <motion.div
-        className="services-subtitle-container"
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: isLoaded ? 1 : 0, y: isLoaded ? 0 : -10 }}
-        transition={{ duration: 0.8, delay: 0.6 }}
-        style={{
-          position: 'absolute',
-          top: '60px',
-          right: '30px',
-          textAlign: 'right',
-          color: '#ffccd5'
-        }}
-      >
-        <div className="services-subtitle">
-          WE WEAR A LOT OF HATS...
-        </div>
-        <div className="services-tagline">
-          YOU NAME IT, WE BUILD IT
-        </div>
-      </motion.div>
     </div>
   )
 }
