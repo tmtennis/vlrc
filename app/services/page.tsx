@@ -26,8 +26,134 @@ export default function ServicesPage() {
       margin: 0,
       padding: 0
     }}>
+      {/* Mobile/Desktop responsive styles */}
+      <style jsx>{`
+        .services-title {
+          font-size: clamp(3rem, 15vw, 150px);
+          line-height: 1;
+          color: #ffccd5;
+          font-weight: normal;
+          letter-spacing: 2px;
+        }
+        
+        .services-subtitle {
+          font-size: clamp(1rem, 4vw, 24px);
+          font-weight: normal;
+          margin-bottom: 0px;
+          letter-spacing: 1px;
+        }
+        
+        .services-tagline {
+          font-size: clamp(0.9rem, 3.5vw, 20px);
+          font-weight: normal;
+          letter-spacing: 0.5px;
+        }
+        
+        .service-item-title {
+          font-size: clamp(1.2rem, 4vw, 26px);
+          font-weight: normal;
+        }
+        
+        .service-item-details {
+          font-size: clamp(0.8rem, 2.5vw, 16px);
+          line-height: 1.6;
+        }
+        
+        @media (max-width: 768px) {
+          .services-title {
+            top: 10px !important;
+            left: 20px !important;
+            z-index: 1 !important;
+            right: auto !important;
+            width: calc(100vw - 40px) !important;
+            text-align: left !important;
+          }
+          
+          .services-subtitle-container {
+            top: 80px !important;
+            right: 20px !important;
+            left: 20px !important;
+            text-align: center !important;
+          }
+          
+          .services-content {
+            top: 160px !important;
+            left: 15px !important;
+            right: 15px !important;
+            padding-top: 20px !important;
+          }
+          
+          .back-button-mobile {
+            top: 5px !important;
+            right: 15px !important;
+            padding: 6px 12px !important;
+            font-size: 12px !important;
+          }
+          
+          .service-accordion {
+            left: 15px !important;
+            right: 15px !important;
+            padding: 0 !important;
+          }
+          
+          .tech-stack-mobile {
+            gap: 8px !important;
+            flex-wrap: wrap !important;
+          }
+          
+          .tech-icon-mobile {
+            width: 32px !important;
+            height: 32px !important;
+          }
+          
+          .full-stack-mobile {
+            gap: 16px !important;
+          }
+          
+          .full-stack-row-mobile {
+            gap: 12px !important;
+            flex-wrap: wrap !important;
+            justify-content: center !important;
+          }
+        }
+        
+        @media (max-width: 480px) {
+          .services-title {
+            top: 5px !important;
+            left: 15px !important;
+          }
+          
+          .services-subtitle-container {
+            top: 60px !important;
+            right: 15px !important;
+            left: 15px !important;
+          }
+          
+          .services-content {
+            top: 130px !important;
+            left: 10px !important;
+            right: 10px !important;
+          }
+          
+          .service-accordion {
+            left: 10px !important;
+            right: 10px !important;
+          }
+          
+          .tech-icon-mobile {
+            width: 24px !important;
+            height: 24px !important;
+          }
+          
+          .full-stack-row-mobile {
+            gap: 8px !important;
+          }
+        }
+      `}</style>
+
       {/* SERVICES title */}
       <motion.div
+        className="services-title"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: isLoaded ? 1 : 0, y: isLoaded ? 0 : -20 }}
         transition={{ duration: 0.8, delay: 0.2 }}
@@ -35,10 +161,7 @@ export default function ServicesPage() {
           position: 'absolute',
           top: '-30px',
           left: '30px',
-          fontSize: '150px',
-          color: '#ffccd5',
-          fontWeight: 'normal',
-          letterSpacing: '2px'
+          zIndex: 1
         }}
       >
         SERVICES
@@ -60,6 +183,7 @@ export default function ServicesPage() {
           delay: 0.5,
           ease: [0.87, 0, 0.13, 1]
         }}
+        className="services-content"
         style={{
           position: 'absolute',
           top: '120px',
@@ -67,7 +191,8 @@ export default function ServicesPage() {
           width: '100%',
           height: '2px',
           backgroundColor: '#ffccd5',
-          transformOrigin: 'left center'
+          transformOrigin: 'left center',
+          zIndex: 5
         }} 
       />
 
@@ -172,6 +297,7 @@ export default function ServicesPage() {
                 onMouseEnter={() => setHoveredAccordion(index)}
                 onMouseLeave={() => setHoveredAccordion(null)}
                 onClick={() => setClickedAccordion(clickedAccordion === index ? null : index)}
+                className="service-accordion"
                 style={{
                   position: 'absolute',
                   top: `${120 + (lineNumber * 45) - 35}px`,
@@ -183,13 +309,12 @@ export default function ServicesPage() {
               >
                 {/* Service title */}
                 <motion.div
+                  className="service-item-title"
                   animate={{
                     color: isExpanded ? '#c9184a' : '#ffccd5'
                   }}
                   transition={{ duration: 0.2 }}
                   style={{
-                    fontSize: '26px',
-                    fontWeight: 'normal',
                     marginBottom: isExpanded ? '12px' : '0px'
                   }}
                 >
@@ -214,6 +339,7 @@ export default function ServicesPage() {
                   {service.isFullStack ? (
                     // Full tech stack display
                     <div
+                      className="full-stack-mobile"
                       style={{
                         paddingTop: '20px',
                         display: 'flex',
@@ -224,7 +350,7 @@ export default function ServicesPage() {
                       }}
                     >
                       {/* First row - first 19 icons */}
-                      <div style={{
+                      <div className="full-stack-row-mobile" style={{
                         display: 'flex',
                         gap: '32px',
                         justifyContent: 'center',
@@ -235,6 +361,7 @@ export default function ServicesPage() {
                             key={techIndex}
                             src={`/techstack/${tech}.png`}
                             alt={tech}
+                            className="tech-icon-mobile"
                             whileHover={{ scale: 1.2 }}
                             transition={{ duration: 0.2 }}
                             style={{
@@ -247,7 +374,7 @@ export default function ServicesPage() {
                         ))}
                       </div>
                       {/* Second row - remaining 19 icons */}
-                      <div style={{
+                      <div className="full-stack-row-mobile" style={{
                         display: 'flex',
                         gap: '32px',
                         justifyContent: 'center',
@@ -258,6 +385,7 @@ export default function ServicesPage() {
                             key={techIndex + 19}
                             src={`/techstack/${tech}.png`}
                             alt={tech}
+                            className="tech-icon-mobile"
                             whileHover={{ scale: 1.2 }}
                             transition={{ duration: 0.2 }}
                             style={{
@@ -273,8 +401,8 @@ export default function ServicesPage() {
                   ) : (
                     // Regular service display
                     <div
+                      className="service-item-details"
                       style={{
-                        fontSize: '16px',
                         color: '#ffccd5',
                         opacity: 0.8,
                         lineHeight: '1.4',
@@ -292,7 +420,7 @@ export default function ServicesPage() {
                       }}>
                         {service.details}
                       </div>
-                      <div style={{ 
+                      <div className="tech-stack-mobile" style={{ 
                         display: 'flex',
                         gap: '12px',
                         flexWrap: 'wrap',
@@ -305,6 +433,7 @@ export default function ServicesPage() {
                             key={techIndex}
                             src={`/techstack/${tech}.png`}
                             alt={tech}
+                            className="tech-icon-mobile"
                             style={{
                               width: '48px',
                               height: '48px',
@@ -354,6 +483,7 @@ export default function ServicesPage() {
         animate={{ opacity: isLoaded ? 1 : 0 }}
         transition={{ duration: 0.5, delay: 1.5 }}
         onClick={() => router.back()}
+        className="back-button-mobile"
         style={{
           position: 'fixed',
           top: '10px',
@@ -379,6 +509,7 @@ export default function ServicesPage() {
 
       {/* Additional text below back button and above stroked line */}
       <motion.div
+        className="services-subtitle-container"
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: isLoaded ? 1 : 0, y: isLoaded ? 0 : -10 }}
         transition={{ duration: 0.8, delay: 0.6 }}
@@ -390,19 +521,10 @@ export default function ServicesPage() {
           color: '#ffccd5'
         }}
       >
-        <div style={{
-          fontSize: '24px',
-          fontWeight: 'normal',
-          marginBottom: '0px',
-          letterSpacing: '1px'
-        }}>
+        <div className="services-subtitle">
           WE WEAR A LOT OF HATS...
         </div>
-        <div style={{
-          fontSize: '20px',
-          fontWeight: 'normal',
-          letterSpacing: '0.5px'
-        }}>
+        <div className="services-tagline">
           YOU NAME IT, WE BUILD IT
         </div>
       </motion.div>

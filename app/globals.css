@@ -138,13 +138,13 @@
   /* Responsive display typography */
   @media (max-width: 768px) {
     :root {
-      --display-font-size: clamp(3rem, 12vw, 5rem);
+      --display-font-size: clamp(2.5rem, 10vw, 4rem);
     }
   }
 
   @media (max-width: 480px) {
     :root {
-      --display-font-size: clamp(2.5rem, 15vw, 4rem);
+      --display-font-size: clamp(2rem, 8vw, 3rem);
     }
   }
 }

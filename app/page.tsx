@@ -55,19 +55,40 @@ const AutomationList = () => {
   ]
 
   return (
-    <div style={{
-      maxWidth: '500px',
-      width: '100%',
-      position: 'absolute',
-      top: '80px',
-      left: '50px'
-    }}>
-      <div style={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '8px'
-      }}>
-        {automationServices.map((service) => (
+    <>
+      <style jsx>{`
+        .automation-container {
+          max-width: 500px;
+          width: 100%;
+          position: absolute;
+          top: 80px;
+          left: 50px;
+        }
+        
+        @media (max-width: 768px) {
+          .automation-container {
+            max-width: calc(100vw - 45px);
+            left: 20px;
+            top: 60px;
+          }
+        }
+        
+        @media (max-width: 480px) {
+          .automation-container {
+            max-width: calc(100vw - 35px);
+            left: 15px;
+            top: 40px;
+          }
+        }
+      `}</style>
+      
+      <div className="automation-container">
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '8px'
+        }}>
+          {automationServices.map((service) => (
           <div key={service.id}>
             <div 
               style={{
@@ -177,6 +198,7 @@ const AutomationList = () => {
         ))}
       </div>
     </div>
+    </>
   )
 }
 
@@ -288,29 +310,94 @@ export default function HomePage() {
           cursor: pointer !important;
           transform-origin: left center !important;
         }
-        .display-text.home-hoverable:hover {
-          color: #ff4d6d !important;
-          transform: scale(1.03) translateX(80px) !important;
+        
+        /* Desktop hover effects */
+        @media (min-width: 769px) {
+          .display-text.home-hoverable:hover {
+            color: #ff4d6d !important;
+            transform: scale(1.03) translateX(80px) !important;
+          }
+        }
+        
+        /* Mobile/tablet hover effects - reduced movement */
+        @media (max-width: 768px) {
+          .display-text.home-hoverable:hover {
+            color: #ff4d6d !important;
+            transform: scale(1.02) translateX(20px) !important;
+          }
+        }
+        
+        @media (max-width: 480px) {
+          .display-text.home-hoverable:hover {
+            color: #ff4d6d !important;
+            transform: scale(1.01) translateX(10px) !important;
+          }
         }
 
         /* Responsive positioning for navigation items */
         @media (max-width: 768px) {
-          .home-navigation .display-text:nth-child(1) { top: 90px !important; left: 20px !important; }
-          .home-navigation .display-text:nth-child(2) { top: 170px !important; left: 20px !important; }
-          .home-navigation .display-text:nth-child(3) { top: 250px !important; left: 20px !important; }
-          .home-navigation .display-text:nth-child(4) { top: 330px !important; left: 20px !important; }
-          .home-navigation .display-text:nth-child(5) { top: 410px !important; left: 20px !important; }
+          .home-navigation .display-text:nth-child(1) { 
+            top: calc(120px + (100vh - 120px) * 0.08) !important; 
+            left: 20px !important; 
+          }
+          .home-navigation .display-text:nth-child(2) { 
+            top: calc(120px + (100vh - 120px) * 0.26) !important; 
+            left: 20px !important; 
+          }
+          .home-navigation .display-text:nth-child(3) { 
+            top: calc(120px + (100vh - 120px) * 0.44) !important; 
+            left: 20px !important; 
+          }
+          .home-navigation .display-text:nth-child(4) { 
+            top: calc(120px + (100vh - 120px) * 0.62) !important; 
+            left: 20px !important; 
+          }
+          .home-navigation .display-text:nth-child(5) { 
+            top: calc(120px + (100vh - 120px) * 0.80) !important; 
+            left: 20px !important; 
+          }
         }
         
         @media (max-width: 480px) {
-          .home-navigation .display-text:nth-child(1) { top: 70px !important; left: 15px !important; }
-          .home-navigation .display-text:nth-child(2) { top: 130px !important; left: 15px !important; }
-          .home-navigation .display-text:nth-child(3) { top: 190px !important; left: 15px !important; }
-          .home-navigation .display-text:nth-child(4) { top: 250px !important; left: 15px !important; }
-          .home-navigation .display-text:nth-child(5) { top: 310px !important; left: 15px !important; }
+          .home-navigation .display-text:nth-child(1) { 
+            top: calc(120px + (100vh - 120px) * 0.05) !important; 
+            left: 15px !important; 
+          }
+          .home-navigation .display-text:nth-child(2) { 
+            top: calc(120px + (100vh - 120px) * 0.23) !important; 
+            left: 15px !important; 
+          }
+          .home-navigation .display-text:nth-child(3) { 
+            top: calc(120px + (100vh - 120px) * 0.41) !important; 
+            left: 15px !important; 
+          }
+          .home-navigation .display-text:nth-child(4) { 
+            top: calc(120px + (100vh - 120px) * 0.59) !important; 
+            left: 15px !important; 
+          }
+          .home-navigation .display-text:nth-child(5) { 
+            top: calc(120px + (100vh - 120px) * 0.77) !important; 
+            left: 15px !important; 
+          }
           .header-vlrc {
             left: 15px !important;
             top: 60px !important;
+          }
+        }
+        
+        /* Make sure navigation items don't overlap with color rail on mobile */
+        @media (max-width: 768px) {
+          .home-navigation .display-text {
+            max-width: calc(100vw - 45px) !important;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+          }
+        }
+        
+        @media (max-width: 480px) {
+          .home-navigation .display-text {
+            max-width: calc(100vw - 35px) !important;
           }
         }
         .back-button {
@@ -338,6 +425,35 @@ export default function HomePage() {
           width: 24px !important;
           height: 24px !important;
           color: #ffccd5 !important;
+        }
+        
+        /* Mobile responsive back button */
+        @media (max-width: 768px) {
+          .back-button {
+            bottom: 20px !important;
+            right: 20px !important;
+            width: 35px !important;
+            height: 35px !important;
+            font-size: 1.5rem !important;
+          }
+          .back-button svg {
+            width: 20px !important;
+            height: 20px !important;
+          }
+        }
+        
+        @media (max-width: 480px) {
+          .back-button {
+            bottom: 15px !important;
+            right: 15px !important;
+            width: 30px !important;
+            height: 30px !important;
+            font-size: 1.2rem !important;
+          }
+          .back-button svg {
+            width: 18px !important;
+            height: 18px !important;
+          }
         }
         
       `}</style>
@@ -372,8 +488,8 @@ export default function HomePage() {
         initial={{ scaleX: 0 }}
         animate={{ scaleX: 1 }}
         transition={{ 
-          duration: 1.2, 
-          delay: 0.3,
+          duration: 0.6, 
+          delay: 0.15,
           ease: [0.4, 0, 0.2, 1]
         }}
         style={{
@@ -405,8 +521,8 @@ export default function HomePage() {
               transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] }
             }}
             transition={{ 
-              duration: 0.9,
-              delay: 2.4, // Start after color rail completes
+              duration: 0.6,
+              delay: 1.2, // Start after color rail completes
               ease: [0.68, -0.55, 0.265, 1.55], // Same elastic ease as color rail
               // Faster return transition when not hovering
               color: { duration: 0.15 },
@@ -437,8 +553,8 @@ export default function HomePage() {
               transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] }
             }}
             transition={{ 
-              duration: 0.9,
-              delay: 2.6, // 0.2s after previous
+              duration: 0.6,
+              delay: 1.3, // 0.1s after previous
               ease: [0.68, -0.55, 0.265, 1.55], // Same elastic ease as color rail
               // Faster return transition when not hovering
               color: { duration: 0.15 },
@@ -469,8 +585,8 @@ export default function HomePage() {
               transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] }
             }}
             transition={{ 
-              duration: 0.9,
-              delay: 2.8, // 0.2s after previous
+              duration: 0.6,
+              delay: 1.4, // 0.1s after previous
               ease: [0.68, -0.55, 0.265, 1.55], // Same elastic ease as color rail
               // Faster return transition when not hovering
               color: { duration: 0.15 },
@@ -485,9 +601,9 @@ export default function HomePage() {
               cursor: 'pointer',
               transformOrigin: 'left center'
             }}
-            onClick={() => handleSectionClick('AUTOMATION')}
+            onClick={() => router.push('/work')}
           >
-            AUTOMATION
+            WORK
           </motion.div>
           
           <motion.div 
@@ -501,8 +617,8 @@ export default function HomePage() {
               transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] }
             }}
             transition={{ 
-              duration: 0.9,
-              delay: 3.0, // 0.2s after previous
+              duration: 0.6,
+              delay: 1.5, // 0.1s after previous
               ease: [0.68, -0.55, 0.265, 1.55], // Same elastic ease as color rail
               // Faster return transition when not hovering
               color: { duration: 0.15 },
@@ -517,9 +633,9 @@ export default function HomePage() {
               cursor: 'pointer',
               transformOrigin: 'left center'
             }}
-            onClick={() => handleSectionClick('ABOUT')}
+            onClick={() => router.push('/contact')}
           >
-            ABOUT
+            CONTACT
           </motion.div>
           
           <motion.div 
@@ -533,8 +649,8 @@ export default function HomePage() {
               transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] }
             }}
             transition={{ 
-              duration: 0.9,
-              delay: 3.2, // 0.2s after previous
+              duration: 0.6,
+              delay: 1.6, // 0.1s after previous
               ease: [0.68, -0.55, 0.265, 1.55], // Same elastic ease as color rail
               // Faster return transition when not hovering
               color: { duration: 0.15 },
@@ -549,9 +665,9 @@ export default function HomePage() {
               cursor: 'pointer',
               transformOrigin: 'left center'
             }}
-            onClick={() => handleSectionClick('CONTACT')}
+            onClick={() => window.open('https://frank-sigma.vercel.app/', '_blank')}
           >
-            CONTACT
+            SHOP
           </motion.div>
         </div>
       )}
@@ -672,6 +788,47 @@ export default function HomePage() {
             </button>
 
             {/* Contact content aligned like projects page */}
+            <div 
+              className="text-element" 
+              style={{ 
+                top: '0px', 
+                left: '30px' 
+              }}
+            >
+              COMING SOON
+            </div>
+          </div>
+        )}
+        
+        {activeSection === 'SHOP' && (
+          <div
+            style={{
+              position: 'absolute',
+              top: '120px',
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: '#590d22',
+              overflow: 'auto'
+            }}
+          >
+            {/* Back button - moved to bottom right */}
+            <button
+              onClick={() => setActiveSection(null)}
+              className="back-button"
+              style={{ 
+                bottom: '30px', 
+                right: '30px', 
+                position: 'fixed',
+                zIndex: 100
+              }}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+              </svg>
+            </button>
+
+            {/* Shop content aligned like projects page */}
             <div 
               className="text-element" 
               style={{ 
