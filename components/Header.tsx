@@ -1,12 +1,13 @@
 "use client"
 
 import { motion } from 'framer-motion';
+import SpaceCadetStudiosIcon from './weather/SpaceCadetStudiosIcon';
 
 interface HeaderProps {
-  onClick: () => void;
+  color?: string;
 }
 
-export default function Header({ onClick }: HeaderProps) {
+export default function Header({ color = '#ffccd5' }: HeaderProps) {
   return (
     <header 
       style={{ 
@@ -27,36 +28,67 @@ export default function Header({ onClick }: HeaderProps) {
         style={{
           fontWeight: 900,
           fontSize: '4rem',
-          color: '#ffccd5',
+          color: color,
           letterSpacing: '2px',
           fontFamily: 'inherit',
           textAlign: 'center',
           display: 'flex',
-          gap: '0.05em'
+          alignItems: 'center',
+          justifyContent: 'center', // center the header content
+          width: '100%',
+          gap: 0,
         }}
         initial="hidden"
         animate="visible"
         variants={{
           visible: {
             transition: {
-              staggerChildren: 0.045 // faster wave
+              staggerChildren: 0.045
             }
           },
           hidden: {}
         }}
       >
-        {"VLRC COMMODITIES".split("").map((char, i) => (
-          <motion.span
-            key={i}
-            variants={{
-              hidden: { opacity: 0, y: 30 },
-              visible: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 700, damping: 22 } }
-            }}
-            style={{ display: 'inline-block', marginRight: char === ' ' ? '0.5em' : '0' }}
-          >
-            {char}
-          </motion.span>
-        ))}
+        <motion.span
+          style={{ display: 'inline-block', marginRight: '0.7em' }}
+          initial="hidden"
+          animate="visible"
+          variants={{
+            visible: {
+              opacity: 1, y: 0, transition: { type: 'spring', stiffness: 700, damping: 22 }
+            },
+            hidden: { opacity: 0, y: 30 }
+          }}
+        >
+          SPACE
+        </motion.span>
+        <motion.span
+          style={{ display: 'inline-block', marginRight: '0.7em' }}
+          initial="hidden"
+          animate="visible"
+          variants={{
+            visible: {
+              opacity: 1, y: 0, transition: { type: 'spring', stiffness: 700, damping: 22 }
+            },
+            hidden: { opacity: 0, y: 30 }
+          }}
+        >
+          CADET
+        </motion.span>
+        <motion.span
+          style={{ display: 'inline-block', marginRight: '0.3em' }}
+          initial="hidden"
+          animate="visible"
+          variants={{
+            visible: {
+              opacity: 1, y: 0, transition: { type: 'spring', stiffness: 700, damping: 22 }
+            },
+            hidden: { opacity: 0, y: 30 }
+          }}
+        >
+          STUDIOS
+        </motion.span>
+        <SpaceCadetStudiosIcon style={{ color: color, width: 56, height: 56, marginLeft: '0.25em' }} />
       </motion.div>
     </header>
   )

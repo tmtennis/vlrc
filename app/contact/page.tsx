@@ -3,11 +3,13 @@
 import { motion } from 'framer-motion'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import WeatherIcon from '../../components/weather/WeatherIcon'
 
 export default function ContactPage() {
   const [isLoaded, setIsLoaded] = useState(false)
   const [currentTime, setCurrentTime] = useState('');
   const [currentDate, setCurrentDate] = useState('');
+  const [boxAnimated, setBoxAnimated] = useState(false);
   const router = useRouter()
 
   useEffect(() => {
@@ -40,6 +42,13 @@ export default function ContactPage() {
     const interval = setInterval(updateClock, 1000);
     return () => clearInterval(interval);
   }, []);
+
+  useEffect(() => {
+    if (isLoaded) {
+      const timer = setTimeout(() => setBoxAnimated(true), 1150); // 0.6s + 0.5s
+      return () => clearTimeout(timer);
+    }
+  }, [isLoaded]);
 
   return (
     <div style={{width: '100vw', height: '100vh', background: '#590d22', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'fixed', top: 0, left: 0, margin: 0, padding: 0}}>
@@ -97,33 +106,39 @@ export default function ContactPage() {
           transition={{ duration: 0.6, delay: 0.5, ease: [0.87, 0, 0.13, 1] }}
           style={{ position: 'absolute', top: 0, right: 0, width: '3px', height: '100%', background: '#ffccd5', borderRadius: '2px', transformOrigin: 'top center' }}
         />
-        <div style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'flex-start', // start from top
-          zIndex: 20,
-          padding: '40px 32px 32px 32px',
-          gap: '28px',
-          color: '#ffccd5',
-          fontWeight: 700,
-          fontSize: '1.5rem',
-          textAlign: 'center',
-          pointerEvents: 'none'
-        }}>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: boxAnimated ? 1 : 0 }}
+          transition={{ duration: 0.5, delay: 0 }}
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: -25,
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+            zIndex: 20,
+            padding: '40px 32px 32px 32px',
+            gap: '28px',
+            color: '#ffccd5',
+            fontWeight: 700,
+            fontSize: '1.5rem',
+            textAlign: 'center',
+            pointerEvents: 'none'
+          }}
+        >
           <div style={{ fontSize: '2rem', fontWeight: 900, textAlign: 'center' }}>New York City</div>
           <div style={{ fontSize: '1.2rem', fontWeight: 500, opacity: 0.8, textAlign: 'center' }}>United States</div>
           <div style={{ fontSize: '2.2rem', fontWeight: 700, letterSpacing: '2px', textAlign: 'center' }}>{currentTime}</div>
           <div style={{ fontSize: '1.3rem', fontWeight: 500, opacity: 0.9, textAlign: 'center' }}>{currentDate}</div>
-          <div style={{ fontSize: '1.5rem', fontWeight: 700, textAlign: 'center', opacity: 0.95 }}>
-            74° Sunny
+          <div style={{ fontSize: '1.5rem', fontWeight: 700, textAlign: 'center', opacity: 0.95, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
+            <WeatherIcon type="sunny" style={{ color: '#ffccd5', width: 64, height: 64 }} />
+            <span style={{ color: '#ffccd5', fontSize: '1.5rem', fontWeight: 700 }}>74° Sunny</span>
           </div>
-        </div>
+        </motion.div>
       </div>
     </div>
   );
