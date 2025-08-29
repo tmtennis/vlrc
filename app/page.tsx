@@ -210,23 +210,9 @@ export default function HomePage() {
   const [currentTime, setCurrentTime] = useState<{date: string, time: string}>({date: '', time: ''})
 
   useEffect(() => {
-    // Check if font is loaded
-    const checkFont = async () => {
-      try {
-        await document.fonts.load('900 italic 1em CercoDEMO')
-        setFontLoaded(true)
-      } catch (error) {
-        // Fallback after timeout
-        setTimeout(() => setFontLoaded(true), 500)
-      }
-    }
-    
-    if (document.fonts.check('900 italic 1em CercoDEMO')) {
-      setFontLoaded(true)
-    } else {
-      checkFont()
-    }
-
+    // Check if font is loaded, but don't block render
+    document.fonts.load('900 italic 1em CercoDEMO').then(() => setFontLoaded(true));
+    setTimeout(() => setFontLoaded(true), 500); // Fallback after 500ms
   }, [])
 
   // Clock useEffect
@@ -295,7 +281,6 @@ export default function HomePage() {
       <style jsx>{`
         /* Home navigation hover effects */
         .display-text.home-hoverable {
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
           cursor: pointer !important;
           transform-origin: left center !important;
         }
@@ -501,10 +486,31 @@ export default function HomePage() {
         <div className="home-navigation" style={{position: 'relative', width: '100vw', maxWidth: '100vw'}}>
           {/* FEATURED */}
           <motion.div 
-            initial={{ opacity: 0, width: 0, skewX: -15, scale: 0.8 }}
+            initial={false}
             animate={{ opacity: 1, width: 'auto', skewX: 0, scale: 1 }}
-            whileHover={{ color: '#ff4d6d', scale: 1.03, x: 80, skewX: 2, transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] } }}
-            transition={{ duration: 0.6, delay: 1.2, ease: [0.68, -0.55, 0.265, 1.55], color: { duration: 0.15 }, scale: { duration: 0.15 }, x: { duration: 0.15 }, skewX: { duration: 0.15 } }}
+            whileHover={{ 
+              color: '#ff4d6d', 
+              scale: 1.03, 
+              x: 80, 
+              skewX: 2,
+              transition: { 
+                duration: 0.15, 
+                ease: [0.4, 0, 0.2, 1],
+                color: { duration: 0.1 },
+                scale: { duration: 0.15 },
+                x: { duration: 0.15 },
+                skewX: { duration: 0.15 }
+              }
+            }}
+            transition={{ 
+              duration: 0.6, 
+              delay: 1.2, 
+              ease: [0.68, -0.55, 0.265, 1.55],
+              color: { duration: 0.1 },
+              scale: { duration: 0.15 },
+              x: { duration: 0.15 },
+              skewX: { duration: 0.15 }
+            }}
             className="display-text home-hoverable"
             style={{ top: 'calc(120px + (100vh - 120px) * 0.05)', left: '30px', cursor: 'pointer', transformOrigin: 'left center', width: '100vw', display: 'flex', alignItems: 'center', marginLeft: '120px', color: '#ffccd5' }}
             onClick={() => router.push('/featured')}
@@ -535,10 +541,31 @@ export default function HomePage() {
           </motion.div>
           {/* SERVICES */}
           <motion.div 
-            initial={{ opacity: 0, width: 0, skewX: -15, scale: 0.8 }}
+            initial={false}
             animate={{ opacity: 1, width: 'auto', skewX: 0, scale: 1 }}
-            whileHover={{ color: '#ff4d6d', scale: 1.03, x: 80, skewX: 2, transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] } }}
-            transition={{ duration: 0.6, delay: 1.3, ease: [0.68, -0.55, 0.265, 1.55], color: { duration: 0.15 }, scale: { duration: 0.15 }, x: { duration: 0.15 }, skewX: { duration: 0.15 } }}
+            whileHover={{ 
+              color: '#ff4d6d', 
+              scale: 1.03, 
+              x: 80, 
+              skewX: 2,
+              transition: { 
+                duration: 0.15, 
+                ease: [0.4, 0, 0.2, 1],
+                color: { duration: 0.1 },
+                scale: { duration: 0.15 },
+                x: { duration: 0.15 },
+                skewX: { duration: 0.15 }
+              }
+            }}
+            transition={{ 
+              duration: 0.6, 
+              delay: 1.3, 
+              ease: [0.68, -0.55, 0.265, 1.55],
+              color: { duration: 0.1 },
+              scale: { duration: 0.15 },
+              x: { duration: 0.15 },
+              skewX: { duration: 0.15 }
+            }}
             className="display-text home-hoverable"
             style={{ top: 'calc(120px + (100vh - 120px) * 0.20)', left: '30px', cursor: 'pointer', transformOrigin: 'left center', width: '100vw', display: 'flex', alignItems: 'center', marginLeft: '120px', color: '#ffccd5' }}
             onClick={() => handleSectionClick('SERVICES')}
@@ -571,10 +598,31 @@ export default function HomePage() {
           </motion.div>
           {/* WORK */}
           <motion.div 
-            initial={{ opacity: 0, width: 0, skewX: -15, scale: 0.8 }}
+            initial={false}
             animate={{ opacity: 1, width: 'auto', skewX: 0, scale: 1 }}
-            whileHover={{ color: '#ff4d6d', scale: 1.03, x: 80, skewX: 2, transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] } }}
-            transition={{ duration: 0.6, delay: 1.4, ease: [0.68, -0.55, 0.265, 1.55], color: { duration: 0.15 }, scale: { duration: 0.15 }, x: { duration: 0.15 }, skewX: { duration: 0.15 } }}
+            whileHover={{ 
+              color: '#ff4d6d', 
+              scale: 1.03, 
+              x: 80, 
+              skewX: 2,
+              transition: { 
+                duration: 0.15, 
+                ease: [0.4, 0, 0.2, 1],
+                color: { duration: 0.1 },
+                scale: { duration: 0.15 },
+                x: { duration: 0.15 },
+                skewX: { duration: 0.15 }
+              }
+            }}
+            transition={{ 
+              duration: 0.6, 
+              delay: 1.4, 
+              ease: [0.68, -0.55, 0.265, 1.55],
+              color: { duration: 0.1 },
+              scale: { duration: 0.15 },
+              x: { duration: 0.15 },
+              skewX: { duration: 0.15 }
+            }}
             className="display-text home-hoverable"
             style={{ top: 'calc(120px + (100vh - 120px) * 0.35)', left: '30px', cursor: 'pointer', transformOrigin: 'left center', width: '100vw', display: 'flex', alignItems: 'center', marginLeft: '120px', color: '#ffccd5' }}
             onClick={() => router.push('/work')}
@@ -604,10 +652,31 @@ export default function HomePage() {
           </motion.div>
           {/* CONTACT */}
           <motion.div 
-            initial={{ opacity: 0, width: 0, skewX: -15, scale: 0.8 }}
+            initial={false}
             animate={{ opacity: 1, width: 'auto', skewX: 0, scale: 1 }}
-            whileHover={{ color: '#ff4d6d', scale: 1.03, x: 80, skewX: 2, transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] } }}
-            transition={{ duration: 0.6, delay: 1.5, ease: [0.68, -0.55, 0.265, 1.55], color: { duration: 0.15 }, scale: { duration: 0.15 }, x: { duration: 0.15 }, skewX: { duration: 0.15 } }}
+            whileHover={{ 
+              color: '#ff4d6d', 
+              scale: 1.03, 
+              x: 80, 
+              skewX: 2,
+              transition: { 
+                duration: 0.15, 
+                ease: [0.4, 0, 0.2, 1],
+                color: { duration: 0.1 },
+                scale: { duration: 0.15 },
+                x: { duration: 0.15 },
+                skewX: { duration: 0.15 }
+              }
+            }}
+            transition={{ 
+              duration: 0.6, 
+              delay: 1.5, 
+              ease: [0.68, -0.55, 0.265, 1.55],
+              color: { duration: 0.1 },
+              scale: { duration: 0.15 },
+              x: { duration: 0.15 },
+              skewX: { duration: 0.15 }
+            }}
             className="display-text home-hoverable"
             style={{ top: 'calc(120px + (100vh - 120px) * 4 / 6)', left: '30px', cursor: 'pointer', transformOrigin: 'left center', width: '100vw', display: 'flex', alignItems: 'center', marginLeft: '120px', color: '#ffccd5' }}
             onClick={() => router.push('/contact')}
@@ -639,10 +708,31 @@ export default function HomePage() {
           </motion.div>
           {/* SHOP */}
           <motion.div 
-            initial={{ opacity: 0, width: 0, skewX: -15, scale: 0.8 }}
+            initial={false}
             animate={{ opacity: 1, width: 'auto', skewX: 0, scale: 1 }}
-            whileHover={{ color: '#ff4d6d', scale: 1.03, x: 80, skewX: 2, transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] } }}
-            transition={{ duration: 0.6, delay: 1.6, ease: [0.68, -0.55, 0.265, 1.55], color: { duration: 0.15 }, scale: { duration: 0.15 }, x: { duration: 0.15 }, skewX: { duration: 0.15 } }}
+            whileHover={{ 
+              color: '#ff4d6d', 
+              scale: 1.03, 
+              x: 80, 
+              skewX: 2,
+              transition: { 
+                duration: 0.15, 
+                ease: [0.4, 0, 0.2, 1],
+                color: { duration: 0.1 },
+                scale: { duration: 0.15 },
+                x: { duration: 0.15 },
+                skewX: { duration: 0.15 }
+              }
+            }}
+            transition={{ 
+              duration: 0.6, 
+              delay: 1.6, 
+              ease: [0.68, -0.55, 0.265, 1.55],
+              color: { duration: 0.1 },
+              scale: { duration: 0.15 },
+              x: { duration: 0.15 },
+              skewX: { duration: 0.15 }
+            }}
             className="display-text home-hoverable"
             style={{ top: 'calc(120px + (100vh - 120px) * 5 / 6)', left: '30px', cursor: 'pointer', transformOrigin: 'left center', display: 'flex', alignItems: 'center', marginLeft: '120px', color: '#ffccd5' }}
             onClick={() => window.open('https://frank-sigma.vercel.app/', '_blank')}
