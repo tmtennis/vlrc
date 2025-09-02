@@ -60,7 +60,20 @@ export default function Header({ color = '#ffccd5' }: HeaderProps) {
             hidden: { opacity: 0, y: 30 }
           }}
         >
-          VLRC
+          SPACE
+        </motion.span>
+        <motion.span
+          style={{ display: 'inline-block', marginRight: '0.7em' }}
+          initial="hidden"
+          animate="visible"
+          variants={{
+            visible: {
+              opacity: 1, y: 0, transition: { type: 'spring', stiffness: 700, damping: 22 }
+            },
+            hidden: { opacity: 0, y: 30 }
+          }}
+        >
+          CADET
         </motion.span>
         <motion.span
           style={{ display: 'inline-block', marginRight: '0.3em' }}
@@ -73,7 +86,7 @@ export default function Header({ color = '#ffccd5' }: HeaderProps) {
             hidden: { opacity: 0, y: 30 }
           }}
         >
-          COMMODITIES
+          STUDIOS
         </motion.span>
         <SpaceCadetStudiosIcon style={{ color: color, width: 56, height: 56, marginLeft: '0.25em' }} />
       </motion.div>

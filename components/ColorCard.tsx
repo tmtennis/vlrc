@@ -13,12 +13,59 @@ export default function ColorCard({ name, hex }: ColorCardProps) {
   const textColor = getReadableTextColor(hex);
 
   const handleClick = async () => {
+    // Try to copy to clipboard with fallback for mobile browsers
     try {
-      await navigator.clipboard.writeText(hex);
-      setShowCopied(true);
-      setTimeout(() => setShowCopied(false), 1500);
+      if (navigator?.clipboard && typeof navigator.clipboard.writeText === 'function' && window.isSecureContext) {
+        await navigator.clipboard.writeText(hex);
+        setShowCopied(true);
+        setTimeout(() => setShowCopied(false), 1500);
+      } else {
+        // Fallback for browsers that don't support clipboard API
+        fallbackCopyTextToClipboard(hex);
+      }
     } catch (err) {
       console.error('Failed to copy to clipboard:', err);
+      // Try fallback method
+      fallbackCopyTextToClipboard(hex);
+    }
+  };
+
+  const fallbackCopyTextToClipboard = (text: string) => {
+    try {
+      const textArea = document.createElement("textarea");
+      textArea.value = text;
+      textArea.style.position = "fixed";
+      textArea.style.left = "-999999px";
+      textArea.style.top = "-999999px";
+      textArea.style.opacity = "0";
+      textArea.setAttribute('readonly', '');
+      document.body.appendChild(textArea);
+      
+      // For mobile devices
+      if (navigator.userAgent.match(/ipad|android|iphone/i)) {
+        textArea.contentEditable = 'true';
+        textArea.readOnly = false;
+        const range = document.createRange();
+        range.selectNodeContents(textArea);
+        const selection = window.getSelection();
+        selection?.removeAllRanges();
+        selection?.addRange(range);
+        textArea.setSelectionRange(0, 999999);
+      } else {
+        textArea.select();
+      }
+      
+      const successful = document.execCommand('copy');
+      document.body.removeChild(textArea);
+      
+      if (successful) {
+        setShowCopied(true);
+        setTimeout(() => setShowCopied(false), 1500);
+      } else {
+        console.warn('Copy to clipboard not supported in this browser');
+      }
+    } catch (err) {
+      console.warn('Copy to clipboard not supported in this browser');
     }
   };
 

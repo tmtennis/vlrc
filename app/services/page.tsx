@@ -11,29 +11,44 @@ export default function ServicesPage() {
   const router = useRouter()
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoaded(true), 100)
+    const timer = setTimeout(() => setIsLoaded(true), 50)
     return () => clearTimeout(timer)
   }, [])
 
   return (
     <div style={{
       width: '100vw',
-      height: '100vh',
+      minHeight: '100vh',
       background: '#590d22',
-      position: 'fixed',
+      position: 'relative',
       top: 0,
       left: 0,
       margin: 0,
-      padding: 0
+      padding: 0,
+      paddingBottom: '100px',
+      willChange: 'transform',
+      transform: 'translateZ(0)',
+      overflowX: 'hidden',
+      overflowY: 'auto'
     }}>
       {/* Mobile/Desktop responsive styles */}
       <style jsx>{`
+        * {
+          -webkit-overflow-scrolling: touch;
+        }
+        
+        body {
+          overflow-x: hidden;
+        }
+        
         .services-title {
           font-size: clamp(3rem, 15vw, 150px);
           line-height: 1;
           color: #ffccd5;
           font-weight: normal;
           letter-spacing: 2px;
+          will-change: transform;
+          transform: translateZ(0);
         }
         
         .services-subtitle {
@@ -158,7 +173,7 @@ export default function ServicesPage() {
         transition={{ duration: 0.8, delay: 0.2 }}
         style={{
           position: 'absolute',
-          top: '30px',
+          top: '50px',
           left: 0,
           right: 0,
           width: '100%',
@@ -183,56 +198,24 @@ export default function ServicesPage() {
           variants={{
             visible: {
               transition: {
-                staggerChildren: 0.18
+                staggerChildren: 0.08
               }
             },
             hidden: {}
           }}
         >
-          {"WE WEAR A LOT OF HATS...".split(" ").map((word, i) => (
+          {"WE WEAR A LOT OF HATS".split(" ").map((word, i) => (
             <motion.span
               key={i}
               variants={{
                 hidden: { opacity: 0, y: 20 },
                 visible: { opacity: 1, y: 0 }
               }}
-              style={{ display: 'inline-block', marginRight: '0.4em' }}
-            >
-              {word}
-            </motion.span>
-          ))}
-        </motion.div>
-        <motion.div
-          style={{
-            display: 'inline-block',
-            width: '100%',
-            fontWeight: 400,
-            color: '#ffccd5',
-            fontStyle: 'italic',
-            letterSpacing: '1px',
-            opacity: 0.85,
-            fontSize: 'clamp(1rem, 4vw, 1.3rem)'
-          }}
-          initial="hidden"
-          animate="visible"
-          variants={{
-            visible: {
-              transition: {
-                staggerChildren: 0.16,
-                delayChildren: 0.5
-              }
-            },
-            hidden: {}
-          }}
-        >
-          {"YOU NAME IT, WE BUILD IT".split(" ").map((word, i) => (
-            <motion.span
-              key={i}
-              variants={{
-                hidden: { opacity: 0, y: 20 },
-                visible: { opacity: 1, y: 0 }
+              style={{ 
+                display: 'inline-block', 
+                marginRight: '0.4em',
+                willChange: 'transform, opacity'
               }}
-              style={{ display: 'inline-block', marginRight: '0.4em' }}
             >
               {word}
             </motion.span>
@@ -245,7 +228,7 @@ export default function ServicesPage() {
         className="services-title"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: isLoaded ? 1 : 0, y: isLoaded ? 0 : -20 }}
-        transition={{ duration: 0.8, delay: 0.4 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
         style={{
           position: 'absolute',
           top: '90px',
@@ -402,9 +385,10 @@ export default function ServicesPage() {
                   animate={{
                     color: isExpanded ? '#c9184a' : '#ffccd5'
                   }}
-                  transition={{ duration: 0.2 }}
+                  transition={{ duration: 0.15 }}
                   style={{
-                    marginBottom: isExpanded ? '12px' : '0px'
+                    marginBottom: isExpanded ? '12px' : '0px',
+                    willChange: 'color'
                   }}
                 >
                   {service.name}
@@ -418,11 +402,12 @@ export default function ServicesPage() {
                     opacity: isExpanded ? 1 : 0
                   }}
                   transition={{ 
-                    duration: 0.3,
-                    ease: [0.25, 0.46, 0.45, 0.94]
+                    duration: 0.2,
+                    ease: "easeOut"
                   }}
                   style={{
-                    overflow: 'hidden'
+                    overflow: 'hidden',
+                    willChange: 'height, opacity'
                   }}
                 >
                   {service.isFullStack ? (
