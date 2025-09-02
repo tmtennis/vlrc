@@ -280,8 +280,207 @@ export default function ServicesPage() {
         }} 
       />
 
-      {/* Paper lines with services - true accordion functionality */}
-      {Array.from({ length: 18 }, (_, index) => {
+      {/* Services Content Container */}
+      {isMobile ? (
+        /* Mobile Layout - Vertical Stack */
+        <div style={{
+          position: 'relative',
+          top: '160px',
+          left: '0',
+          right: '0',
+          padding: '20px',
+          paddingBottom: '100px'
+        }}>
+          {[
+            {
+              name: "Automation & Workflow Design",
+              details: "End-to-end automation setups between apps, with smart triggers and logic for seamless business processes",
+              stack: ["zapier", "n8n", "chatgpt", "slack", "GoogleWorkspace"]
+            },
+            {
+              name: "Web Development",
+              details: "Custom, high-performance websites with animations, interactive UI, and mobile optimization",
+              stack: ["react", "nextjs", "framer", "tailwind"]
+            },
+            {
+              name: "Mobile App Development",
+              details: "Cross-platform apps with user auth, subscriptions, and backend integration",
+              stack: ["react", "firebase", "stripe"]
+            },
+            {
+              name: "E-Commerce Solutions",
+              details: "Custom E-Commerce stores, headless setups, and automated product listing creation",
+              stack: ["shopify", "webflow", "stripe"]
+            },
+            {
+              name: "Data Visualization & Reporting",
+              details: "Interactive dashboards, heat maps, and PDF data reports",
+              stack: ["lucidchart", "react"]
+            },
+            {
+              name: "Creative & Design Services",
+              details: "Brand identity, logos, motion graphics, and interactive 3D visuals",
+              stack: ["figma", "adobe", "blender", "javascript"]
+            },
+            {
+              name: "AI / LLM Integrations",
+              details: "AI-driven chatbots, predictive analytics, and sports performance models",
+              stack: ["chatgpt", "python", "firebase"]
+            },
+            {
+              name: "Consulting & Technical Support",
+              details: "Tech stack planning, troubleshooting, and training for in-house teams",
+              stack: ["notion", "GoogleSheets", "vercel", "zapier", "salesforce", "slack"]
+            },
+            {
+              name: "Full Tech Stack",
+              details: "",
+              stack: "all",
+              isFullStack: true
+            }
+          ].map((service, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 + index * 0.1 }}
+              style={{
+                marginBottom: '40px',
+                backgroundColor: 'rgba(255, 204, 213, 0.05)',
+                borderRadius: '8px',
+                padding: '20px',
+                border: '1px solid rgba(255, 204, 213, 0.1)'
+              }}
+            >
+              {/* Service Title */}
+              <h3 style={{
+                fontSize: '1.5rem',
+                fontWeight: 'bold',
+                color: '#ffccd5',
+                marginBottom: '15px',
+                lineHeight: '1.3'
+              }}>
+                {service.name}
+              </h3>
+
+              {/* Service Description */}
+              {service.details && (
+                <p style={{
+                  fontSize: '1rem',
+                  color: '#ff8fa3',
+                  lineHeight: '1.5',
+                  marginBottom: '20px'
+                }}>
+                  {service.details}
+                </p>
+              )}
+
+              {/* Tech Stack Icons */}
+              {service.isFullStack ? (
+                <div style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '20px',
+                  alignItems: 'center'
+                }}>
+                  {/* First row - first 19 icons */}
+                  <div style={{
+                    display: 'flex',
+                    gap: '12px',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    flexWrap: 'wrap'
+                  }}>
+                    {[
+                      "GoogleAnalytics4", "GoogleBigQuery", "GoogleDrive", "GoogleSearchConsole", "GoogleSheets", "GoogleWorkspace",
+                      "adobe", "airtable", "aws", "blender", "chatgpt", "davinci", "discord", "dropbox",
+                      "figma", "firebase", "framer", "github", "javascript"
+                    ].map((tech, techIndex) => (
+                      <motion.img
+                        key={techIndex}
+                        src={`/techstack/${tech}.png`}
+                        alt={tech}
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ 
+                          duration: 0.3, 
+                          delay: 0.5 + index * 0.1 + techIndex * 0.02 
+                        }}
+                        style={{
+                          width: '32px',
+                          height: '32px',
+                          objectFit: 'contain'
+                        }}
+                      />
+                    ))}
+                  </div>
+                  {/* Second row - remaining icons */}
+                  <div style={{
+                    display: 'flex',
+                    gap: '12px',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    flexWrap: 'wrap'
+                  }}>
+                    {[
+                      "lucidchart", "n8n", "nextjs", "notion", "python", "react", "runway", "salesforce", "semrush",
+                      "shopify", "slack", "stripe", "tailwind", "typescript", "veo3", "vercel",
+                      "vscode", "webflow", "zapier"
+                    ].map((tech, techIndex) => (
+                      <motion.img
+                        key={techIndex + 19}
+                        src={`/techstack/${tech}.png`}
+                        alt={tech}
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ 
+                          duration: 0.3, 
+                          delay: 0.7 + index * 0.1 + techIndex * 0.02 
+                        }}
+                        style={{
+                          width: '32px',
+                          height: '32px',
+                          objectFit: 'contain'
+                        }}
+                      />
+                    ))}
+                  </div>
+                </div>
+              ) : service.stack && Array.isArray(service.stack) && (
+                <div style={{
+                  display: 'flex',
+                  gap: '12px',
+                  flexWrap: 'wrap',
+                  justifyContent: 'flex-start',
+                  alignItems: 'center'
+                }}>
+                  {service.stack.map((tech, techIndex) => (
+                    <motion.img
+                      key={techIndex}
+                      src={`/techstack/${tech}.png`}
+                      alt={tech}
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ 
+                        duration: 0.3, 
+                        delay: 0.5 + index * 0.1 + techIndex * 0.05 
+                      }}
+                      style={{
+                        width: '32px',
+                        height: '32px',
+                        objectFit: 'contain'
+                      }}
+                    />
+                  ))}
+                </div>
+              )}
+            </motion.div>
+          ))}
+        </div>
+      ) : (
+        /* Desktop Layout - Original Accordion */
+        <>
+          {Array.from({ length: 18 }, (_, index) => {
         const lineNumber = index + 1;
         const services = [
           {
@@ -562,6 +761,8 @@ export default function ServicesPage() {
           </div>
         );
       })}
+        </>
+      )}
 
       {/* BACK button - top right */}
       <motion.button

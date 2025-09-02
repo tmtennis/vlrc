@@ -8,6 +8,13 @@ export default function ColorRail() {
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
   const [isMobile, setIsMobile] = useState(false);
   const [isSmallMobile, setIsSmallMobile] = useState(false);
+  const [showBorders, setShowBorders] = useState(false);
+
+  useEffect(() => {
+    // Show borders after color cards finish animating
+    const timer = setTimeout(() => setShowBorders(true), 2500);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -163,7 +170,6 @@ export default function ColorRail() {
               backgroundColor: color,
               width: blockWidth,
               height: '100%',
-              borderLeft: '2px solid #ffccd5',
               cursor: 'pointer',
               position: 'relative',
               display: 'flex',
@@ -178,6 +184,27 @@ export default function ColorRail() {
             onMouseLeave={() => setHoveredIndex(null)}
             onClick={() => handleClick(color, index)}
           >
+            {/* Animated border that draws in from top to bottom */}
+            <motion.div
+              initial={{ scaleY: 0 }}
+              animate={{ scaleY: showBorders ? 1 : 0 }}
+              transition={{ 
+                duration: 0.08, 
+                delay: index * 0.08, // Each border starts when the previous one finishes
+                ease: [0.4, 0, 0.2, 1]
+              }}
+              style={{
+                position: 'absolute',
+                left: 0,
+                top: 0,
+                width: '2px',
+                height: '100%',
+                backgroundColor: '#ffccd5',
+                transformOrigin: 'top',
+                zIndex: 1
+              }}
+            />
+            
             {/* Color code text - hide on mobile */}
             {!isMobile && (
               <div
