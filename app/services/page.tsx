@@ -8,11 +8,23 @@ export default function ServicesPage() {
   const [isLoaded, setIsLoaded] = useState(false)
   const [clickedAccordion, setClickedAccordion] = useState<number | null>(null) // Start with all accordions closed
   const [hoveredAccordion, setHoveredAccordion] = useState<number | null>(null)
+  const [isMobile, setIsMobile] = useState(false)
   const router = useRouter()
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoaded(true), 50)
     return () => clearTimeout(timer)
+  }, [])
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768)
+    }
+    
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    
+    return () => window.removeEventListener('resize', checkMobile)
   }, [])
 
   return (
@@ -321,7 +333,7 @@ export default function ServicesPage() {
           }
         ];
         const service = services[index];
-        const isExpanded = clickedAccordion === index || hoveredAccordion === index;
+        const isExpanded = isMobile ? (service !== null) : (clickedAccordion === index || hoveredAccordion === index);
         
         // Full tech stack array
         const fullTechStack = [
@@ -366,16 +378,16 @@ export default function ServicesPage() {
                   x: { duration: 0.8, delay: 2.3 + (lineNumber * 0.08) + 0.5 },
                   y: { duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }
                 }}
-                onMouseEnter={() => setHoveredAccordion(index)}
-                onMouseLeave={() => setHoveredAccordion(null)}
-                onClick={() => setClickedAccordion(clickedAccordion === index ? null : index)}
+                onMouseEnter={() => !isMobile && setHoveredAccordion(index)}
+                onMouseLeave={() => !isMobile && setHoveredAccordion(null)}
+                onClick={() => !isMobile && setClickedAccordion(clickedAccordion === index ? null : index)}
                 className="service-accordion"
                 style={{
                   position: 'absolute',
                   top: `${120 + (lineNumber * 45) - 35}px`,
                   left: '30px',
                   right: '30px',
-                  cursor: 'pointer',
+                  cursor: isMobile ? 'default' : 'pointer',
                   zIndex: 10
                 }}
               >

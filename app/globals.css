@@ -102,10 +102,15 @@
     font-weight: bold !important;
   }
   
+  html {
+    overflow-x: hidden;
+  }
+  
   body {
     @apply bg-background text-foreground;
-    background-color: #ffe5d9 !important;
+    background-color: #590d22 !important;
     transition: background-color 0.5s ease-in-out, color 0.5s ease-in-out;
+    overflow-x: hidden;
   }
 
   h1,
