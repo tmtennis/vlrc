@@ -106,7 +106,7 @@ export default function ColorRail() {
       } else {
         console.warn('Copy to clipboard not supported in this browser');
       }
-    } catch (err) {
+    } catch (_) {
       console.warn('Copy to clipboard not supported in this browser');
     }
   };

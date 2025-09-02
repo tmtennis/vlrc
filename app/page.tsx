@@ -1,9 +1,8 @@
 "use client"
 
 import React, { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
-import Header from '../components/Header'
 import ColorRail from '../components/ColorRail'
 
 const AutomationList = () => {
@@ -205,9 +204,7 @@ const AutomationList = () => {
 export default function HomePage() {
   const router = useRouter()
   const [activeSection, setActiveSection] = useState<string | null>(null)
-  const [hoveredProject, setHoveredProject] = useState<number | null>(null)
   const [fontLoaded, setFontLoaded] = useState(false)
-  const [currentTime, setCurrentTime] = useState<{date: string, time: string}>({date: '', time: ''})
 
   useEffect(() => {
     // Check if font is loaded
@@ -215,7 +212,7 @@ export default function HomePage() {
       try {
         await document.fonts.load('900 italic 1em CercoDEMO')
         setFontLoaded(true)
-      } catch (error) {
+      } catch (_) {
         // Fallback after timeout
         setTimeout(() => setFontLoaded(true), 500)
       }
@@ -227,41 +224,6 @@ export default function HomePage() {
       checkFont()
     }
 
-  }, [])
-
-  // Clock useEffect
-  useEffect(() => {
-    const updateClock = () => {
-      const now = new Date()
-      
-      // Format date as MM/DD/YY
-      const easternDate = new Intl.DateTimeFormat('en-US', {
-        timeZone: 'America/New_York',
-        month: '2-digit',
-        day: '2-digit',
-        year: '2-digit'
-      }).format(now)
-      
-      // Format time as HH:MM:SS
-      const easternTime = new Intl.DateTimeFormat('en-US', {
-        timeZone: 'America/New_York',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        hour12: false
-      }).format(now)
-      
-      setCurrentTime({ date: easternDate, time: easternTime })
-    }
-
-    // Update immediately
-    updateClock()
-    
-    // Update every second
-    const interval = setInterval(updateClock, 1000)
-    
-    // Cleanup
-    return () => clearInterval(interval)
   }, [])
 
   const handleSectionClick = (section: string) => {
