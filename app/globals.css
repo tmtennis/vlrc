@@ -104,6 +104,7 @@
   
   html {
     overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
   }
   
   body {
@@ -111,6 +112,8 @@
     background-color: #590d22 !important;
     transition: background-color 0.5s ease-in-out, color 0.5s ease-in-out;
     overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    position: relative;
   }
 
   h1,

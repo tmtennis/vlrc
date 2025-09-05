@@ -16,6 +16,64 @@ export default function ServicesPage() {
     return () => clearTimeout(timer)
   }, [])
 
+  // Force scroll activation on mobile - aggressive approach
+  useEffect(() => {
+    if (isMobile) {
+      let startY = 0
+      let isScrolling = false
+      
+      const handleTouchStart = (e) => {
+        startY = e.touches[0].clientY
+        isScrolling = false
+      }
+      
+      const handleTouchMove = (e) => {
+        if (!isScrolling) {
+          const currentY = e.touches[0].clientY
+          const diffY = Math.abs(currentY - startY)
+          
+          // If it's a vertical movement, enable scrolling
+          if (diffY > 5) {
+            isScrolling = true
+            const scrollContainer = document.querySelector('[data-scrollable="true"]')
+            if (scrollContainer) {
+              // Force the container to be the scroll target
+              e.preventDefault()
+              const delta = startY - currentY
+              scrollContainer.scrollTop += delta
+              startY = currentY
+            }
+          }
+        } else {
+          // Continue scrolling
+          const currentY = e.touches[0].clientY
+          const delta = startY - currentY
+          const scrollContainer = document.querySelector('[data-scrollable="true"]')
+          if (scrollContainer) {
+            e.preventDefault()
+            scrollContainer.scrollTop += delta
+            startY = currentY
+          }
+        }
+      }
+      
+      const handleTouchEnd = () => {
+        isScrolling = false
+      }
+      
+      // Add touch handlers
+      document.addEventListener('touchstart', handleTouchStart, { passive: false })
+      document.addEventListener('touchmove', handleTouchMove, { passive: false })
+      document.addEventListener('touchend', handleTouchEnd, { passive: true })
+      
+      return () => {
+        document.removeEventListener('touchstart', handleTouchStart)
+        document.removeEventListener('touchmove', handleTouchMove)
+        document.removeEventListener('touchend', handleTouchEnd)
+      }
+    }
+  }, [isMobile])
+
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth <= 768)
@@ -26,6 +84,50 @@ export default function ServicesPage() {
     
     return () => window.removeEventListener('resize', checkMobile)
   }, [])
+
+  // Activate scroll momentum on mobile
+  useEffect(() => {
+    if (isMobile) {
+      // Force immediate scroll activation
+      const initializeScroll = () => {
+        const body = document.body
+        const container = document.querySelector('.mobile-scroll-container')
+        
+        if (container) {
+          // Trigger scroll momentum by slightly scrolling
+          container.scrollTop = 0.1
+          setTimeout(() => {
+            container.scrollTop = 0
+          }, 10)
+        }
+        
+        // Ensure body is scrollable
+        body.style.overflow = 'hidden'
+        setTimeout(() => {
+          body.style.overflow = ''
+        }, 10)
+      }
+      
+      // Initialize scroll on load
+      const timer = setTimeout(initializeScroll, 100)
+      
+      // Add passive touch listener to reactivate scrolling
+      const handleTouchStart = (e) => {
+        const target = e.target.closest('.mobile-scroll-container')
+        if (target) {
+          // Micro-scroll to activate momentum
+          target.scrollBy(0, 0)
+        }
+      }
+      
+      document.addEventListener('touchstart', handleTouchStart, { passive: true })
+      
+      return () => {
+        clearTimeout(timer)
+        document.removeEventListener('touchstart', handleTouchStart)
+      }
+    }
+  }, [isMobile, isLoaded])
 
   return (
     <div style={{
@@ -38,19 +140,51 @@ export default function ServicesPage() {
       margin: 0,
       padding: 0,
       paddingBottom: '100px',
-      willChange: 'transform',
-      transform: 'translateZ(0)',
       overflowX: 'hidden',
-      overflowY: 'auto'
+      overflowY: isMobile ? 'hidden' : 'auto',
+      WebkitOverflowScrolling: 'touch',
+      touchAction: isMobile ? 'none' : 'pan-y'
     }}>
       {/* Mobile/Desktop responsive styles */}
       <style jsx>{`
         * {
           -webkit-overflow-scrolling: touch;
+          touch-action: pan-y;
         }
         
-        body {
+        html, body {
           overflow-x: hidden;
+          scroll-behavior: smooth;
+          -webkit-overflow-scrolling: touch;
+          touch-action: manipulation;
+        }
+        
+        /* Improve touch scrolling on mobile */
+        @media (max-width: 768px) {
+          html {
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            touch-action: pan-y;
+          }
+          
+          body {
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            position: relative;
+            touch-action: pan-y;
+          }
+          
+          .mobile-scroll-container {
+            -webkit-overflow-scrolling: touch;
+            touch-action: pan-y;
+            overscroll-behavior: contain;
+          }
+          
+          /* Prevent motion components from blocking scroll */
+          .mobile-scroll-container .tech-icon-mobile {
+            pointer-events: none;
+            touch-action: none;
+          }
         }
         
         .services-title {
@@ -59,8 +193,6 @@ export default function ServicesPage() {
           color: #ffccd5;
           font-weight: normal;
           letter-spacing: 2px;
-          will-change: transform;
-          transform: translateZ(0);
         }
         
         .services-subtitle {
@@ -271,8 +403,8 @@ export default function ServicesPage() {
         style={{
           position: 'absolute',
           top: '120px',
-          left: '0',
-          width: '100%',
+          left: '-20px',
+          width: 'calc(100% + 40px)',
           height: '2px',
           backgroundColor: '#ffccd5',
           transformOrigin: 'left center',
@@ -283,14 +415,32 @@ export default function ServicesPage() {
       {/* Services Content Container */}
       {isMobile ? (
         /* Mobile Layout - Vertical Stack */
-        <div style={{
-          position: 'relative',
-          top: '160px',
-          left: '0',
-          right: '0',
-          padding: '20px',
-          paddingBottom: '100px'
-        }}>
+        <div 
+          data-scrollable="true"
+          className="mobile-scroll-container"
+          style={{
+            position: 'relative',
+            top: '160px',
+            left: '0',
+            right: '0',
+            padding: '20px',
+            paddingBottom: '200px',
+            minHeight: 'calc(100vh - 160px)',
+            height: 'auto',
+            overflowY: 'scroll',
+            overflowX: 'hidden',
+            WebkitOverflowScrolling: 'touch',
+            touchAction: 'pan-y',
+            overscrollBehavior: 'contain'
+          }}
+          onTouchStart={(e) => {
+            // Ensure scroll is immediately active and responsive
+            const element = e.currentTarget
+            element.scrollTop = element.scrollTop
+            // Force a tiny scroll to activate momentum
+            element.scrollBy(0, 0.1)
+          }}
+        >
           {[
             {
               name: "Automation & Workflow Design",
@@ -344,14 +494,30 @@ export default function ServicesPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.3 + index * 0.1 }}
+              drag={false}
               style={{
                 marginBottom: '40px',
-                backgroundColor: 'rgba(255, 204, 213, 0.05)',
-                borderRadius: '8px',
-                padding: '20px',
-                border: '1px solid rgba(255, 204, 213, 0.1)'
+                position: 'relative',
+                paddingBottom: '30px',
+                touchAction: 'pan-y',
+                pointerEvents: 'auto'
               }}
             >
+              {/* Stroked line separator */}
+              <motion.div
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{ duration: 0.4, delay: 0.5 + index * 0.1 }}
+                style={{
+                  position: 'absolute',
+                  bottom: '0',
+                  left: '-20px',
+                  right: '-20px',
+                  height: '1px',
+                  backgroundColor: '#ffccd5',
+                  transformOrigin: 'left center'
+                }}
+              />
               {/* Service Title */}
               <h3 style={{
                 fontSize: '1.5rem',
@@ -378,73 +544,40 @@ export default function ServicesPage() {
               {/* Tech Stack Icons */}
               {service.isFullStack ? (
                 <div style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '20px',
-                  alignItems: 'center'
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(40px, 1fr))',
+                  gap: '15px',
+                  maxWidth: '100%',
+                  justifyItems: 'center',
+                  marginTop: '20px'
                 }}>
-                  {/* First row - first 19 icons */}
-                  <div style={{
-                    display: 'flex',
-                    gap: '12px',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    flexWrap: 'wrap'
-                  }}>
-                    {[
-                      "GoogleAnalytics4", "GoogleBigQuery", "GoogleDrive", "GoogleSearchConsole", "GoogleSheets", "GoogleWorkspace",
-                      "adobe", "airtable", "aws", "blender", "chatgpt", "davinci", "discord", "dropbox",
-                      "figma", "firebase", "framer", "github", "javascript"
-                    ].map((tech, techIndex) => (
-                      <motion.img
-                        key={techIndex}
-                        src={`/techstack/${tech}.png`}
-                        alt={tech}
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ 
-                          duration: 0.3, 
-                          delay: 0.5 + index * 0.1 + techIndex * 0.02 
-                        }}
-                        style={{
-                          width: '32px',
-                          height: '32px',
-                          objectFit: 'contain'
-                        }}
-                      />
-                    ))}
-                  </div>
-                  {/* Second row - remaining icons */}
-                  <div style={{
-                    display: 'flex',
-                    gap: '12px',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    flexWrap: 'wrap'
-                  }}>
-                    {[
-                      "lucidchart", "n8n", "nextjs", "notion", "python", "react", "runway", "salesforce", "semrush",
-                      "shopify", "slack", "stripe", "tailwind", "typescript", "veo3", "vercel",
-                      "vscode", "webflow", "zapier"
-                    ].map((tech, techIndex) => (
-                      <motion.img
-                        key={techIndex + 19}
-                        src={`/techstack/${tech}.png`}
-                        alt={tech}
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ 
-                          duration: 0.3, 
-                          delay: 0.7 + index * 0.1 + techIndex * 0.02 
-                        }}
-                        style={{
-                          width: '32px',
-                          height: '32px',
-                          objectFit: 'contain'
-                        }}
-                      />
-                    ))}
-                  </div>
+                  {[
+                    "GoogleAnalytics4", "GoogleBigQuery", "GoogleDrive", "GoogleSearchConsole", "GoogleSheets", "GoogleWorkspace",
+                    "adobe", "airtable", "aws", "blender", "chatgpt", "davinci", "discord", "dropbox",
+                    "figma", "firebase", "framer", "github", "javascript", "lucidchart", "n8n", "nextjs", 
+                    "notion", "python", "react", "runway", "salesforce", "semrush", "shopify", "slack", 
+                    "stripe", "tailwind", "typescript", "veo3", "vercel", "vscode", "webflow", "zapier"
+                  ].map((tech, techIndex) => (
+                    <motion.img
+                      key={techIndex}
+                      src={`/techstack/${tech}.png`}
+                      alt={tech}
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ 
+                        duration: 0.3, 
+                        delay: 0.5 + index * 0.1 + techIndex * 0.02 
+                      }}
+                      drag={false}
+                      style={{
+                        width: '35px',
+                        height: '35px',
+                        objectFit: 'contain',
+                        touchAction: 'none',
+                        pointerEvents: 'none'
+                      }}
+                    />
+                  ))}
                 </div>
               ) : service.stack && Array.isArray(service.stack) && (
                 <div style={{
@@ -465,10 +598,13 @@ export default function ServicesPage() {
                         duration: 0.3, 
                         delay: 0.5 + index * 0.1 + techIndex * 0.05 
                       }}
+                      drag={false}
                       style={{
                         width: '32px',
                         height: '32px',
-                        objectFit: 'contain'
+                        objectFit: 'contain',
+                        touchAction: 'none',
+                        pointerEvents: 'none'
                       }}
                     />
                   ))}
@@ -622,66 +758,37 @@ export default function ServicesPage() {
                   }}
                 >
                   {service.isFullStack ? (
-                    // Full tech stack display
+                    // Full tech stack display - Responsive Grid
                     <div
                       className="full-stack-mobile"
                       style={{
                         paddingTop: '20px',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '32px',
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(auto-fit, minmax(48px, 1fr))',
+                        gap: '16px',
                         justifyContent: 'center',
-                        alignItems: 'center'
+                        alignItems: 'center',
+                        maxWidth: '100%'
                       }}
                     >
-                      {/* First row - first 19 icons */}
-                      <div className="full-stack-row-mobile" style={{
-                        display: 'flex',
-                        gap: '32px',
-                        justifyContent: 'center',
-                        alignItems: 'center'
-                      }}>
-                        {fullTechStack.slice(0, 19).map((tech, techIndex) => (
-                          <motion.img
-                            key={techIndex}
-                            src={`/techstack/${tech}.png`}
-                            alt={tech}
-                            className="tech-icon-mobile"
-                            whileHover={{ scale: 1.2 }}
-                            transition={{ duration: 0.2 }}
-                            style={{
-                              width: '48px',
-                              height: '48px',
-                              objectFit: 'contain',
-                              cursor: 'pointer'
-                            }}
-                          />
-                        ))}
-                      </div>
-                      {/* Second row - remaining 19 icons */}
-                      <div className="full-stack-row-mobile" style={{
-                        display: 'flex',
-                        gap: '32px',
-                        justifyContent: 'center',
-                        alignItems: 'center'
-                      }}>
-                        {fullTechStack.slice(19).map((tech, techIndex) => (
-                          <motion.img
-                            key={techIndex + 19}
-                            src={`/techstack/${tech}.png`}
-                            alt={tech}
-                            className="tech-icon-mobile"
-                            whileHover={{ scale: 1.2 }}
-                            transition={{ duration: 0.2 }}
-                            style={{
-                              width: '48px',
-                              height: '48px',
-                              objectFit: 'contain',
-                              cursor: 'pointer'
-                            }}
-                          />
-                        ))}
-                      </div>
+                      {fullTechStack.map((tech, techIndex) => (
+                        <motion.img
+                          key={techIndex}
+                          src={`/techstack/${tech}.png`}
+                          alt={tech}
+                          className="tech-icon-mobile"
+                          drag={false}
+                          style={{
+                            width: '48px',
+                            height: '48px',
+                            objectFit: 'contain',
+                            justifySelf: 'center',
+                            touchAction: 'none',
+                            pointerEvents: 'none',
+                            userSelect: 'none'
+                          }}
+                        />
+                      ))}
                     </div>
                   ) : (
                     // Regular service display
@@ -750,8 +857,8 @@ export default function ServicesPage() {
               style={{
                 position: 'absolute',
                 top: `${120 + (lineNumber * 45)}px`,
-                left: '0',
-                width: '100%',
+                left: '-20px',
+                width: 'calc(100% + 40px)',
                 height: '1px',
                 backgroundColor: '#ffccd5',
                 opacity: 0.7,
@@ -782,7 +889,6 @@ export default function ServicesPage() {
           fontSize: '14px',
           cursor: 'pointer',
           zIndex: 100,
-          borderRadius: '4px',
           transition: 'all 0.1s ease'
         }}
         whileHover={{
