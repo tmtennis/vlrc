@@ -21,6 +21,94 @@ interface Service {
   'svg-icon': string;
 }
 
+// Tech stack text-to-image mapping
+const techStackImages: { [key: string]: string } = {
+  // Exact matches first
+  'Zapier': 'zapier.png',
+  'n8n': 'n8n.png',
+  'Open-Ai': 'chatgpt.png',
+  'Slack': 'slack.png',
+  'Google Workspace': 'GoogleWorkspace.png',
+  'React': 'react.png',
+  'Next.js': 'nextjs.png',
+  'Framer': 'framer.png',
+  'Tailwind CSS': 'tailwind.png',
+  'Shopify': 'shopify.png',
+  'Webflow': 'webflow.png',
+  'Stripe': 'stripe.png',
+  'Figma': 'figma.png',
+  'Adobe Suite': 'adobe.png',
+  'Blender': 'blender.png',
+  'Three.js': 'javascript.png', // Using JS icon for Three.js
+  'Notion': 'notion.png',
+  'Google Sheets': 'GoogleSheets.png',
+  'Vercel': 'vercel.png',
+  'Salesforce': 'salesforce.png',
+  'Airtable': 'airtable.png',
+  'AWS': 'aws.png',
+  'BigQuery': 'GoogleBigQuery.png',
+  'Google Analytics': 'GoogleAnalytics4.png',
+  'Firebase': 'firebase.png',
+  'GitHub': 'github.png',
+  'Discord': 'discord.png',
+  'Dropbox': 'dropbox.png',
+  'Python': 'python.png',
+  'TypeScript': 'typescript.png',
+  'JavaScript': 'javascript.png',
+  'VS Code': 'vscode.png',
+  'Lucidchart': 'lucidchart.png',
+  'DaVinci': 'davinci.png',
+  'Runway': 'runway.png',
+  'Veo3': 'veo3.png',
+  'SEMrush': 'semrush.png',
+  'Google Drive': 'GoogleDrive.png',
+  'Google Search Console': 'GoogleSearchConsole.png'
+};
+
+// Get all available tech stack images
+const getAllTechStackImages = (): string[] => {
+  return [
+    'GoogleAnalytics4.png',
+    'GoogleBigQuery.png', 
+    'GoogleDrive.png',
+    'GoogleSearchConsole.png',
+    'GoogleSheets.png',
+    'GoogleWorkspace.png',
+    'adobe.png',
+    'airtable.png',
+    'aws.png',
+    'blender.png',
+    'chatgpt.png',
+    'davinci.png',
+    'discord.png',
+    'dropbox.png',
+    'figma.png',
+    'firebase.png',
+    'framer.png',
+    'github.png',
+    'javascript.png',
+    'lucidchart.png',
+    'n8n.png',
+    'nextjs.png',
+    'notion.png',
+    'python.png',
+    'react.png',
+    'runway.png',
+    'salesforce.png',
+    'semrush.png',
+    'shopify.png',
+    'slack.png',
+    'stripe.png',
+    'tailwind.png',
+    'typescript.png',
+    'veo3.png',
+    'vercel.png',
+    'vscode.png',
+    'webflow.png',
+    'zapier.png'
+  ];
+};
+
 // Service data (in a real app, this would be loaded from CSV)
 const services: Service[] = [
   {
@@ -64,6 +152,12 @@ const services: Service[] = [
     Details: "Secure migration of data between platforms with validation, cleanup, and integration into existing workflows",
     Stack: "Google Sheets, Airtable, Zapier, n8n, AWS, BigQuery",
     'svg-icon': "data-integration.svg"
+  },
+  {
+    Service: "Full Tech Stack",
+    Details: "Comprehensive overview of all technologies, tools, and platforms I work with across different projects and services",
+    Stack: "all-tech-stack", // Special identifier for full tech stack
+    'svg-icon': "techstack.svg"
   }
 ];
 
@@ -347,20 +441,67 @@ const ServiceItem = memo(({ service, index, styles, svgFilter }: {
                   {service.Details}
                 </p>
                 <div className="flex flex-wrap gap-3">
-                  {service.Stack.split(', ').map((tech, techIndex) => (
-                    <span
-                      key={techIndex}
-                      className={`${inter.className} px-4 py-2 text-sm sm:text-base font-semibold rounded-full border border-opacity-30`}
-                      style={{ 
-                        color: styles.text,
-                        borderColor: styles.text,
-                        backgroundColor: 'transparent',
-                        transition: 'color 0.3s ease, border-color 0.3s ease'
-                      }}
-                    >
-                      {tech}
-                    </span>
-                  ))}
+                  {service.Stack === "all-tech-stack" ? (
+                    // Special handling for Full Tech Stack - show all available images without containers
+                    getAllTechStackImages().map((imageName, techIndex) => (
+                      <motion.div
+                        key={techIndex}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        transition={{ duration: 0.2 }}
+                        className="flex-shrink-0"
+                      >
+                        <Image
+                          src={`/techstack/${imageName}`}
+                          alt={imageName.replace('.png', '')}
+                          width={48}
+                          height={48}
+                          className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 object-contain"
+                        />
+                      </motion.div>
+                    ))
+                  ) : (
+                    // Regular services - show tech stack as images only, no containers or text
+                    service.Stack.split(', ').map((tech, techIndex) => {
+                      const imageName = techStackImages[tech];
+                      
+                      if (imageName) {
+                        return (
+                          <motion.div
+                            key={techIndex}
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            transition={{ duration: 0.2 }}
+                            className="flex-shrink-0"
+                          >
+                            <Image
+                              src={`/techstack/${imageName}`}
+                              alt={tech}
+                              width={32}
+                              height={32}
+                              className="w-6 h-6 sm:w-8 sm:h-8 lg:w-10 lg:h-10 object-contain"
+                            />
+                          </motion.div>
+                        );
+                      } else {
+                        // Fallback to text-only for items without images
+                        return (
+                          <span
+                            key={techIndex}
+                            className={`${inter.className} px-4 py-2 text-sm sm:text-base font-semibold rounded-full border border-opacity-30`}
+                            style={{ 
+                              color: styles.text,
+                              borderColor: styles.text,
+                              backgroundColor: 'transparent',
+                              transition: 'color 0.3s ease, border-color 0.3s ease'
+                            }}
+                          >
+                            {tech}
+                          </span>
+                        );
+                      }
+                    })
+                  )}
                 </div>
               </div>
             </motion.div>
