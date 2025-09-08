@@ -360,7 +360,6 @@ const ServiceItem = memo(({ service, index, styles, svgFilter }: {
         <div 
           className="w-full py-8 cursor-pointer group"
           onClick={handleInteraction}
-          onTouchStart={handleInteraction}
         >
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-6">
@@ -392,28 +391,6 @@ const ServiceItem = memo(({ service, index, styles, svgFilter }: {
                 {service.Service}
               </h3>
             </div>
-            {/* Show expand/collapse indicator on mobile */}
-            {isMobile && (
-              <motion.div
-                animate={{ rotate: isExpanded ? 180 : 0 }}
-                transition={{ duration: 0.3, ease: "easeInOut" }}
-                className="flex-shrink-0 ml-4"
-              >
-                <div 
-                  className="w-6 h-6 flex items-center justify-center"
-                  style={{ color: styles.text }}
-                >
-                  <svg 
-                    width="16" 
-                    height="16" 
-                    viewBox="0 0 16 16" 
-                    fill="currentColor"
-                  >
-                    <path d="M8 12l-4-4h8l-4 4z"/>
-                  </svg>
-                </div>
-              </motion.div>
-            )}
           </div>
         </div>
         
