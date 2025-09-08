@@ -3,6 +3,11 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  
+  /* Default theme variables (will be overridden by JS) */
+  --theme-bg: #edf2fb;
+  --theme-text: #abc4ff;
+  --theme-accent: #b6ccfe;
 }
 
 @theme inline {
@@ -10,6 +15,132 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  
+  /* Blue Serenity Colors */
+  --color-blue-bg-lightest: #edf2fb;
+  --color-blue-bg-lighter: #e2eafc;
+  --color-blue-bg-light: #d7e3fc;
+  --color-blue-container-light: #ccdbfd;
+  --color-blue-container-medium: #c1d3fe;
+  --color-blue-accent-medium: #b6ccfe;
+  --color-blue-accent-strong: #abc4ff;
+  
+  /* Summer Sunset Colors */
+  --color-sunset-bg-lightest: #ffe0e9;
+  --color-sunset-bg-lighter: #ffc2d4;
+  --color-sunset-bg-light: #ff9ebb;
+  --color-sunset-container-light: #ff7aa2;
+  --color-sunset-container-medium: #e05780;
+  --color-sunset-accent-medium: #b9375e;
+  --color-sunset-accent-strong: #8a2846;
+  --color-sunset-deep-primary: #8a2846;
+  --color-sunset-deep-secondary: #602437;
+  --color-sunset-deep-tertiary: #522e38;
+  
+  /* Bright Green Colors */
+  --color-green-bg-lightest: #9ef01a;
+  --color-green-bg-lighter: #ccff33;
+  --color-green-bg-light: #70e000;
+  --color-green-container-light: #38b000;
+  --color-green-container-medium: #008000;
+  --color-green-accent-medium: #007200;
+  --color-green-accent-strong: #004b23;
+  --color-green-deep-primary: #004b23;
+  --color-green-deep-secondary: #006400;
+  --color-green-deep-tertiary: #007200;
+  
+  /* Muted Earthy Colors */
+  --color-earthy-bg-lightest: #ffcdb2;
+  --color-earthy-bg-lighter: #ffb4a2;
+  --color-earthy-bg-light: #e5989b;
+  --color-earthy-container-light: #e5989b;
+  --color-earthy-container-medium: #b5838d;
+  --color-earthy-accent-medium: #b5838d;
+  --color-earthy-accent-strong: #6d6875;
+  --color-earthy-deep-primary: #6d6875;
+  --color-earthy-deep-secondary: #b5838d;
+  --color-earthy-deep-tertiary: #e5989b;
+  
+  /* Red Sunburst Colors */
+  --color-red-bg-lightest: #ff9b54;
+  --color-red-bg-lighter: #ff7f51;
+  --color-red-bg-light: #ce4257;
+  --color-red-container-light: #ce4257;
+  --color-red-container-medium: #720026;
+  --color-red-accent-medium: #720026;
+  --color-red-accent-strong: #4f000b;
+  --color-red-deep-primary: #4f000b;
+  --color-red-deep-secondary: #720026;
+  --color-red-deep-tertiary: #ce4257;
+  
+  /* Pastel Dream Colors */
+  --color-pastel-bg-lightest: #cdb4db;
+  --color-pastel-bg-lighter: #bde0fe;
+  --color-pastel-bg-light: #a2d2ff;
+  --color-pastel-container-light: #ffc8dd;
+  --color-pastel-container-medium: #ffafcc;
+  --color-pastel-accent-medium: #ffafcc;
+  --color-pastel-accent-strong: #ffc8dd;
+  
+  /* Golden Twilight Colors */
+  --color-golden-bg-lightest: #000814;
+  --color-golden-bg-lighter: #001d3d;
+  --color-golden-bg-light: #003566;
+  --color-golden-container-light: #003566;
+  --color-golden-container-medium: #001d3d;
+  --color-golden-accent-medium: #ffc300;
+  --color-golden-accent-strong: #ffd60a;
+  --color-golden-deep-primary: #ffd60a;
+  --color-golden-deep-secondary: #ffc300;
+  --color-golden-deep-tertiary: #003566;
+  
+  /* Rustic Charm Colors */
+  --color-rustic-bg-lightest: #fffcf2;
+  --color-rustic-bg-lighter: #ccc5b9;
+  --color-rustic-bg-light: #eb5e28;
+  --color-rustic-container-light: #403d39;
+  --color-rustic-container-medium: #252422;
+  --color-rustic-accent-medium: #eb5e28;
+  --color-rustic-accent-strong: #252422;
+  --color-rustic-deep-primary: #252422;
+  --color-rustic-deep-secondary: #403d39;
+  --color-rustic-deep-tertiary: #eb5e28;
+  
+  /* Peachy Delight Colors */
+  --color-peachy-bg-lightest: #d8e2dc;
+  --color-peachy-bg-lighter: #ffe5d9;
+  --color-peachy-bg-light: #ffcad4;
+  --color-peachy-container-light: #ffcad4;
+  --color-peachy-container-medium: #f4acb7;
+  --color-peachy-accent-medium: #f4acb7;
+  --color-peachy-accent-strong: #9d8189;
+  --color-peachy-deep-primary: #9d8189;
+  --color-peachy-deep-secondary: #f4acb7;
+  --color-peachy-deep-tertiary: #ffcad4;
+  
+  /* Minimalist Colors */
+  --color-minimal-bg-lightest: #ffffff;
+  --color-minimal-bg-lighter: #bfc0c0;
+  --color-minimal-bg-light: #4f5d75;
+  --color-minimal-container-light: #bfc0c0;
+  --color-minimal-container-medium: #4f5d75;
+  --color-minimal-accent-medium: #ef8354;
+  --color-minimal-accent-strong: #2d3142;
+  --color-minimal-deep-primary: #2d3142;
+  --color-minimal-deep-secondary: #4f5d75;
+  --color-minimal-deep-tertiary: #ef8354;
+  
+  /* Summer Melody Colors */
+  --color-melody-bg-lightest: #f7ede2;
+  --color-melody-bg-lighter: #f5cac3;
+  --color-melody-bg-light: #f6bd60;
+  --color-melody-container-light: #84a59d;
+  --color-melody-container-medium: #f28482;
+  --color-melody-accent-medium: #f6bd60;
+  --color-melody-accent-strong: #84a59d;
+  --color-melody-deep-primary: #84a59d;
+  --color-melody-deep-secondary: #f28482;
+  --color-melody-deep-tertiary: #f6bd60;
 }
 
 @media (prefers-color-scheme: dark) {

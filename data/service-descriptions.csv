@@ -1,0 +1,8 @@
+Service,Details,Stack,svg-icon
+Automation & Workflow Design,"End-to-end automation setups between apps, with smart triggers and logic for seamless business processes","Zapier, n8n, Open-Ai, Slack, Google Workspace",automation-and-workflow-design.svg
+Web Development,"Custom, high-performance websites with animations, interactive UI, and mobile optimization","React, Next.js, Framer, Tailwind CSS",web-development.svg
+E-Commerce Solutions,"Custom E-Commerce stores, headless setups, and automated product listing creation","Shopify, Webflow, Stripe",e-commerce-solutions.svg
+Creative & Design Services,"Brand identity, logos, motion graphics, and interactive 3D visuals","Figma, Adobe Suite, Blender, Three.js",creative-and-design-services.svg
+Consulting & Technical Support,"Tech stack planning, troubleshooting, and training for in-house teams","Notion, Google Sheets, Vercel, Zapier, Salesforce, Slack",consulting-and-technical-support.svg
+CRM Assistance & Optimization,"Setup, customization, and optimization of CRM platforms for lead tracking, pipeline management, and automation","Salesforce, Zapier, Google Sheets",crm-assistance-and-optimization.svg
+Data Integration,"Secure migration of data between platforms with validation, cleanup, and integration into existing workflows","Google Sheets, Airtable, Zapier, n8n, AWS, BigQuery",data-integration.svg
