@@ -68,17 +68,22 @@ const services: Service[] = [
 ];
 
 // Separate component for menu items to handle hooks properly
-const MenuItem = memo(({ item, index, svgFilter, styles, isClient, isDesktop, toggleTheme }: {
-  item: any;
+const MenuItem = memo(({ item, index, svgFilter, styles, isClient }: {
+  item: {
+    icon: string;
+    label: string;
+    onClick: () => void;
+  };
   index: number;
   svgFilter: string;
-  styles: any;
+  styles: {
+    background: string;
+    text: string;
+    accent: string;
+  };
   isClient: boolean;
-  isDesktop: boolean;
-  toggleTheme: () => void;
 }) => {
   const textRef = useRef<HTMLSpanElement>(null);
-  const [hasAnimated, setHasAnimated] = useState(false);
   const [initialAnimationComplete, setInitialAnimationComplete] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   
@@ -93,12 +98,11 @@ const MenuItem = memo(({ item, index, svgFilter, styles, isClient, isDesktop, to
   
   const description = descriptions[item.label] || null;
   
-  // Set hasAnimated to true after initial animation
+  // Set initialAnimationComplete to true after initial animation
   useEffect(() => {
     if (!isClient) return;
     
     const timer = setTimeout(() => {
-      setHasAnimated(true);
       setInitialAnimationComplete(true);
     }, (index * 0.08 + 0.6) * 1000 + 800); // After animation completes
     
@@ -196,11 +200,17 @@ const MenuItem = memo(({ item, index, svgFilter, styles, isClient, isDesktop, to
   );
 });
 
+MenuItem.displayName = 'MenuItem';
+
 // ServiceItem component for accordion-style service display
 const ServiceItem = memo(({ service, index, styles, svgFilter }: {
   service: Service;
   index: number;
-  styles: any;
+  styles: {
+    background: string;
+    text: string;
+    accent: string;
+  };
   svgFilter: string;
 }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -370,6 +380,8 @@ const ServiceItem = memo(({ service, index, styles, svgFilter }: {
   );
 });
 
+ServiceItem.displayName = 'ServiceItem';
+
 export default function Home() {
   const { toggleTheme, currentTheme } = useTheme();
   const { svgFilter, styles } = useThemeStyles();
@@ -446,8 +458,6 @@ export default function Home() {
               svgFilter={svgFilter}
               styles={styles}
               isClient={isClient}
-              isDesktop={isDesktop}
-              toggleTheme={toggleTheme}
             />
           ))}
         </motion.div>

@@ -1,56 +1,41 @@
 /**
  * React hook for using color palettes in components
+ * Note: This file is for documentation purposes and compatibility.
+ * The main theming system is handled by ThemeContext and useThemeStyles.
  */
 
-import { useEffect } from 'react';
 import { 
   blueSerenity, 
   summerSunset, 
-  colors, 
-  applyCSSVariables,
-  type BlueSerenityColor,
-  type SummerSunsetColor 
+  type ColorPalette
 } from './colors';
 
 export const useColorPalette = () => {
-  useEffect(() => {
-    applyCSSVariables();
-  }, []);
-
   return {
     blueSerenity,
     summerSunset,
-    colors,
   };
 };
 
 // Hook for getting specific color values
 export const useColor = () => {
-  const getBlueSerenityColor = (colorName: BlueSerenityColor): string => {
-    return blueSerenity[colorName];
-  };
-
-  const getSummerSunsetColor = (colorName: SummerSunsetColor): string => {
-    return summerSunset[colorName];
-  };
-
-  const getSemanticColor = (palette: 'blue' | 'sunset', category: string, shade: string): string => {
+  const getColorFromPalette = (palette: ColorPalette, colorPath: string): string => {
     try {
-      // @ts-ignore - Dynamic access for semantic colors
-      return colors[palette][category][shade];
+      const keys = colorPath.split('.');
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      let value: any = palette;
+      for (const key of keys) {
+        value = value[key];
+      }
+      return typeof value === 'string' ? value : '#000000';
     } catch {
-      console.warn(`Color not found: ${palette}.${category}.${shade}`);
+      console.warn(`Color not found: ${colorPath}`);
       return '#000000';
     }
   };
 
   return {
-    getBlueSerenityColor,
-    getSummerSunsetColor,
-    getSemanticColor,
-    blueSerenity,
-    summerSunset,
-    colors,
+    getColorFromPalette,
   };
 };
 

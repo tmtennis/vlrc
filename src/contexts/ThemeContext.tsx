@@ -22,12 +22,10 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   // Start with a default theme to avoid hydration mismatch
   const [currentTheme, setCurrentTheme] = useState<ThemeName>('blue-serenity');
-  const [isClient, setIsClient] = useState(false);
   const availableThemes = Object.keys(themes) as ThemeName[];
 
   // Set random theme only after client-side hydration
   useEffect(() => {
-    setIsClient(true);
     setCurrentTheme(getRandomTheme());
   }, []);
 
