@@ -167,6 +167,7 @@ const MenuItem = memo(({ item, index, svgFilter, styles, isClient }: {
     icon: string;
     label: string;
     onClick: () => void;
+    sectionId: string | null;
   };
   index: number;
   svgFilter: string;
@@ -500,6 +501,28 @@ const ServiceItem = memo(({ service, index, styles, svgFilter }: {
 
 ServiceItem.displayName = 'ServiceItem';
 
+// Featured items configuration
+const featuredItems = [
+  { 
+    src: "/svg_icons/tmtennis.svg", 
+    alt: "TM Tennis", 
+    link: "https://tmtennis.co/", 
+    key: "tmtennis" 
+  },
+  { 
+    src: "/svg_icons/lnpwrld.svg", 
+    alt: "LNP World", 
+    link: null, 
+    key: "lnpwrld" 
+  },
+  { 
+    src: "/svg_icons/am-studios.svg", 
+    alt: "AM Studios", 
+    link: null, 
+    key: "am-studios" 
+  }
+];
+
 export default function Home() {
   const { toggleTheme, currentTheme } = useTheme();
   const { svgFilter, styles } = useThemeStyles();
@@ -507,6 +530,12 @@ export default function Home() {
   // Track screen size to prevent mobile scroll effects
   const [isDesktop, setIsDesktop] = useState(false);
   const [isClient, setIsClient] = useState(false);
+  
+  // State for background GIF hover effect
+  const [activeGif, setActiveGif] = useState<string | null>(null);
+  
+  // Ref for featured section magnetic scroll
+  const featuredSectionRef = useRef<HTMLDivElement>(null);
   
   useEffect(() => {
     setIsClient(true);
@@ -519,6 +548,8 @@ export default function Home() {
     
     return () => window.removeEventListener('resize', checkScreenSize);
   }, []);
+
+
 
   // Get current theme name
   const currentThemeName = themes[currentTheme].name;
@@ -540,16 +571,17 @@ export default function Home() {
   };
 
   const menuItems = [
-    { icon: "/svg_icons/featured.svg", label: "Featured", onClick: () => scrollToSection('featured') },
-    { icon: "/svg_icons/services.svg", label: "Services", onClick: () => scrollToSection('services') },
-    { icon: "/svg_icons/releases.svg", label: "Releases", onClick: () => scrollToSection('releases') },
-    { icon: "/svg_icons/contact.svg", label: "Contact", onClick: () => scrollToSection('contact') },
-    { icon: "/svg_icons/market.svg", label: "Market", onClick: () => window.open('https://frank-sigma.vercel.app/', '_blank', 'noopener,noreferrer') },
-    { icon: "/svg_icons/palettes.svg", label: currentThemeName, onClick: toggleTheme },
+    { icon: "/svg_icons/featured.svg", label: "Featured", onClick: () => scrollToSection('featured'), sectionId: 'featured' },
+    { icon: "/svg_icons/services.svg", label: "Services", onClick: () => scrollToSection('services'), sectionId: 'services' },
+    { icon: "/svg_icons/releases.svg", label: "Releases", onClick: () => scrollToSection('releases'), sectionId: 'releases' },
+    { icon: "/svg_icons/contact.svg", label: "Contact", onClick: () => scrollToSection('contact'), sectionId: 'contact' },
+    { icon: "/svg_icons/market.svg", label: "Market", onClick: () => window.open('https://frank-sigma.vercel.app/', '_blank', 'noopener,noreferrer'), sectionId: null },
+    { icon: "/svg_icons/palettes.svg", label: currentThemeName, onClick: toggleTheme, sectionId: null },
   ];
 
   return (
     <div 
+      className="scroll-smooth"
       style={{ 
         backgroundColor: styles.background,
         transition: 'background-color 0.3s ease'
@@ -588,53 +620,118 @@ export default function Home() {
 
       {/* Featured section - appears when scrolling down */}
       <motion.div 
+        ref={featuredSectionRef}
         id="featured" 
-        className="min-h-screen flex items-center justify-center px-4"
+        className="min-h-screen flex items-center justify-center px-4 relative overflow-hidden"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true, amount: 0.2 }}
         transition={{ duration: 1.0, ease: "easeOut" }}
       >
+        {/* Background GIF Layer */}
+        <div className="absolute inset-0 w-full h-full">
+          {featuredItems.map((item) => (
+            <motion.div
+              key={item.key}
+              className="absolute inset-0 w-full"
+              style={{ height: '140vh' }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: activeGif === item.key ? 0.5 : 0 }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
+            >
+              <img
+                src={`/featured-gifs/${item.key}.gif`}
+                alt={`${item.alt} background`}
+                className="w-full h-full object-cover"
+                loading="lazy"
+              />
+            </motion.div>
+          ))}
+        </div>
+
         {/* Featured SVG Icons */}
         <motion.div 
-          className="flex flex-wrap items-center justify-center gap-16 lg:gap-32"
+          className="flex flex-wrap items-center justify-center gap-16 lg:gap-32 relative z-10"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
         >
-          {[
-            { src: "/svg_icons/tmtennis.svg", alt: "TM Tennis", link: "https://tmtennis.co/" },
-            { src: "/svg_icons/lnpwrld.svg", alt: "LNP World", link: null },
-            { src: "/svg_icons/am-studios.svg", alt: "AM Studios", link: null }
-          ].map((item, index) => (
+          {featuredItems.map((item, index) => (
             <motion.div 
               key={index}
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={{ 
-                duration: 0.6, 
-                delay: index * 0.15 + 0.5,
+                duration: 0.8, 
+                delay: index * 0.2 + 0.3,
                 ease: "easeOut"
               }}
             >
               <motion.div
+                animate={{
+                  y: [0, -8, 0],
+                  scale: 1,
+                  opacity: activeGif && activeGif !== item.key ? 0.3 : 1,
+                }}
+                transition={{
+                  y: {
+                    duration: 4,
+                    delay: index * 0.5,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  },
+                  scale: { 
+                    type: "spring", 
+                    stiffness: 600, 
+                    damping: 35,
+                    duration: 0.1
+                  },
+                  opacity: {
+                    duration: 0.4,
+                    ease: "easeInOut"
+                  }
+                }}
                 whileHover={{
-                  scale: 1.05,
-                  transition: { type: "spring", stiffness: 400, damping: 25, duration: 0.3 }
+                  scale: 1.3,
+                  transition: { 
+                    type: "spring", 
+                    stiffness: 400, 
+                    damping: 25,
+                    duration: 0.3
+                  }
                 }}
                 whileTap={{ 
-                  scale: 0.98,
-                  transition: { type: "spring", stiffness: 800, damping: 35, duration: 0.1 }
+                  scale: 0.95,
+                  transition: { type: "spring", stiffness: 600, damping: 30, duration: 0.15 }
                 }}
-                animate={{
-                  scale: 1,
-                  transition: { type: "spring", stiffness: 500, damping: 30, duration: 0.2 }
+                className={`cursor-pointer ${item.link ? '' : 'cursor-default'}`}
+                onMouseEnter={() => {
+                  setActiveGif(item.key);
+                  // Smoothly scroll to perfect viewport when hovering
+                  if (featuredSectionRef.current) {
+                    featuredSectionRef.current.scrollIntoView({
+                      behavior: 'smooth',
+                      block: 'center',
+                      inline: 'nearest'
+                    });
+                  }
                 }}
-                className="cursor-pointer"
-                onClick={() => {
-                  if (item.link) {
+                onMouseLeave={() => setActiveGif(null)}
+                onClick={(e) => {
+                  // Handle mobile touch devices
+                  if (window.innerWidth <= 768) {
+                    e.preventDefault();
+                    if (activeGif === item.key) {
+                      setActiveGif(null);
+                      if (item.link) {
+                        window.open(item.link, '_blank', 'noopener,noreferrer');
+                      }
+                    } else {
+                      setActiveGif(item.key);
+                    }
+                  } else if (item.link) {
                     window.open(item.link, '_blank', 'noopener,noreferrer');
                   }
                 }}
