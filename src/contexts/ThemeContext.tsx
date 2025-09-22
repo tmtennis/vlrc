@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useEffect, useRef } from 'react';
 import { themes, type ThemeName, generateCSSVariables } from '@/styles/colors';
 
 interface ThemeContextType {
@@ -8,6 +8,8 @@ interface ThemeContextType {
   setTheme: (theme: ThemeName) => void;
   availableThemes: ThemeName[];
   toggleTheme: () => void;
+  isAutoSwitching: boolean;
+  toggleAutoSwitch: () => void;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
@@ -22,12 +24,36 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   // Start with a default theme to avoid hydration mismatch
   const [currentTheme, setCurrentTheme] = useState<ThemeName>('blue-serenity');
+  const [isAutoSwitching, setIsAutoSwitching] = useState(true);
   const availableThemes = Object.keys(themes) as ThemeName[];
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Set random theme only after client-side hydration
   useEffect(() => {
     setCurrentTheme(getRandomTheme());
   }, []);
+
+  // Auto-switching timer effect
+  useEffect(() => {
+    if (isAutoSwitching) {
+      timerRef.current = setInterval(() => {
+        const currentIndex = availableThemes.indexOf(currentTheme);
+        const nextIndex = (currentIndex + 1) % availableThemes.length;
+        setCurrentTheme(availableThemes[nextIndex]);
+      }, 15000); // 15 seconds
+
+      return () => {
+        if (timerRef.current) {
+          clearInterval(timerRef.current);
+        }
+      };
+    } else {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+        timerRef.current = null;
+      }
+    }
+  }, [isAutoSwitching, currentTheme, availableThemes]);
 
   // Apply CSS variables when theme changes
   useEffect(() => {
@@ -53,12 +79,18 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     setCurrentTheme(availableThemes[nextIndex]);
   };
 
+  const toggleAutoSwitch = () => {
+    setIsAutoSwitching(!isAutoSwitching);
+  };
+
   return (
     <ThemeContext.Provider value={{ 
       currentTheme, 
       setTheme, 
       availableThemes, 
-      toggleTheme 
+      toggleTheme,
+      isAutoSwitching,
+      toggleAutoSwitch
     }}>
       {children}
     </ThemeContext.Provider>

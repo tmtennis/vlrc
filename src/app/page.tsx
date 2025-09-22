@@ -8,6 +8,44 @@ import { themes } from "@/styles/colors";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useRef, memo } from "react";
 
+// Optimized Image component for SVGs to prevent flashing
+const OptimizedSVG = memo(({ 
+  src, 
+  alt, 
+  width, 
+  height, 
+  className, 
+  svgFilter, 
+  priority = false 
+}: {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+  className?: string;
+  svgFilter: string;
+  priority?: boolean;
+}) => {
+  return (
+    <Image
+      src={src}
+      alt={alt}
+      width={width}
+      height={height}
+      className={className}
+      priority={priority}
+      unoptimized={src.endsWith('.svg')} // Better SVG handling
+      style={{
+        filter: svgFilter,
+        transition: 'filter 0.3s ease', // Reduced transition time
+        willChange: 'filter', // Optimize for frequent filter changes
+      }}
+    />
+  );
+});
+
+OptimizedSVG.displayName = 'OptimizedSVG';
+
 const inter = Inter({ 
   subsets: ["latin"],
   weight: "800"
@@ -19,6 +57,17 @@ interface Service {
   Details: string;
   Stack: string;
   'svg-icon': string;
+}
+
+// Release interface
+interface Release {
+  DATE: string;
+  RELEASES: string;
+  INDUSTRY: string;
+  DESCRIPTION: string;
+  URL?: string;
+  SOCIALS?: string;
+  SVG: string;
 }
 
 // Tech stack text-to-image mapping
@@ -108,6 +157,82 @@ const getAllTechStackImages = (): string[] => {
     'zapier.png'
   ];
 };
+
+// Releases data from CSV
+const releasesData: Release[] = [
+  {
+    DATE: "2025",
+    RELEASES: "All The Best",
+    INDUSTRY: "E-COMMERCE, ART & DESIGN",
+    DESCRIPTION: "Online store offering customized postcards and curated modern art.",
+    URL: "",
+    SOCIALS: "",
+    SVG: "all-the-best.svg"
+  },
+  {
+    DATE: "2025",
+    RELEASES: "The Collection",
+    INDUSTRY: "WEB DESIGN",
+    DESCRIPTION: "AI-driven company that converts affluent individuals into members of an exclusive private club.",
+    URL: "",
+    SOCIALS: "",
+    SVG: "the-collection.svg"
+  },
+  {
+    DATE: "2025",
+    RELEASES: "LNPWRLD",
+    INDUSTRY: "WEB DESIGN & DEVELOPMENT",
+    DESCRIPTION: "High-end graphic design portfolio and digital archive.",
+    URL: "",
+    SOCIALS: "",
+    SVG: "lnpwrld.svg"
+  },
+  {
+    DATE: "2025",
+    RELEASES: "AM / SIZED",
+    INDUSTRY: "WEB DESIGN & DEVELOPMENT",
+    DESCRIPTION: "Interior design and spatial curation portfolio, showcasing modern projects and installations.",
+    URL: "",
+    SOCIALS: "",
+    SVG: "am-sized.svg"
+  },
+  {
+    DATE: "2025",
+    RELEASES: "i'm lazy",
+    INDUSTRY: "WEB DEVELOPMENT, HOBBY PROJECT",
+    DESCRIPTION: "Randomizer tool that generates unique font and color palette pairings.",
+    URL: "https://im-lazy.vercel.app/",
+    SOCIALS: "",
+    SVG: "im-lazy.svg"
+  },
+  {
+    DATE: "2025",
+    RELEASES: "HEATMAP",
+    INDUSTRY: "WEB DEVELOPMENT, HOBBY PROJECT",
+    DESCRIPTION: "Downloadable, interactive heatmap tool attracting hundreds of monthly users.",
+    URL: "https://v0-us-state-heatmap.vercel.app/",
+    SOCIALS: "",
+    SVG: "heatmap.svg"
+  },
+  {
+    DATE: "2023",
+    RELEASES: "tennismenace.",
+    INDUSTRY: "SPORTS, DATA, EDITORIAL, SOCIAL MEDIA, WEB DESIGN",
+    DESCRIPTION: "Multi-platform tennis analysis and betting insight hub with an active community and over 20M impressions in 2025.",
+    URL: "https://tmtennis.co/",
+    SOCIALS: "https://x.com/tmtennisx",
+    SVG: "tennismenace.svg"
+  },
+  {
+    DATE: "2022",
+    RELEASES: "Frank",
+    INDUSTRY: "E-COMMERCE, WEB DESIGN & DEVELOPMENT",
+    DESCRIPTION: "NYC-based apparel brand blending humor and modern culture.",
+    URL: "https://frank-sigma.vercel.app/",
+    SOCIALS: "",
+    SVG: "frank.svg"
+  }
+];
 
 // Service data (in a real app, this would be loaded from CSV)
 const services: Service[] = [
@@ -232,16 +357,14 @@ const MenuItem = memo(({ item, index, svgFilter, styles, isClient }: {
             ease: "easeOut"
           }}
         >
-          <Image
+          <OptimizedSVG
             src={item.icon}
             alt={item.label}
             width={120}
             height={120}
             className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 flex-shrink-0"
-            style={{ 
-              filter: svgFilter,
-              transition: 'filter 0.6s ease'
-            }}
+            svgFilter={svgFilter}
+            priority={true}
           />
         </motion.div>
         <div className="flex flex-col">
@@ -370,16 +493,13 @@ const ServiceItem = memo(({ service, index, styles, svgFilter }: {
                 transition={{ duration: 0.2 }}
                 className="flex-shrink-0"
               >
-                <Image 
+                <OptimizedSVG 
                   src={`/svg_icons/services/${service['svg-icon']}`}
                   alt={service.Service}
                   width={48}
                   height={48}
                   className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12"
-                  style={{ 
-                    filter: svgFilter,
-                    transition: 'filter 0.6s ease'
-                  }}
+                  svgFilter={svgFilter}
                 />
               </motion.div>
               <h3 
@@ -501,6 +621,227 @@ const ServiceItem = memo(({ service, index, styles, svgFilter }: {
 
 ServiceItem.displayName = 'ServiceItem';
 
+// Animated ReleaseItem component (memoized for performance)
+const ReleaseItem = memo(({ 
+  release, 
+  index, 
+  styles, 
+  svgFilter,
+  isRightColumn = false,
+  isDoubleHeight = false,
+  isDoubleWidth = false
+}: { 
+  release: Release; 
+  index: number; 
+  styles: any; 
+  svgFilter: string;
+  isRightColumn?: boolean;
+  isDoubleHeight?: boolean;
+  isDoubleWidth?: boolean;
+}) => {
+  const [isHovered, setIsHovered] = useState(false);
+  const [clickedUrl, setClickedUrl] = useState<string | null>(null);
+
+  const handleClick = (url?: string) => {
+    if (url && url.trim()) {
+      setClickedUrl(url);
+      setTimeout(() => {
+        window.open(url, '_blank', 'noopener,noreferrer');
+        setClickedUrl(null);
+      }, 150);
+    }
+  };
+
+  const hasValidUrl = release.URL && release.URL.trim() && release.URL !== '';
+  const hasValidSocials = release.SOCIALS && release.SOCIALS.trim() && release.SOCIALS !== '';
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ 
+        duration: 0.6, 
+        delay: index * 0.05,
+        ease: "easeOut" 
+      }}
+      viewport={{ once: true, margin: "-20%" }}
+      className={`${
+        isDoubleHeight ? 'py-8 sm:py-10 lg:py-12' : 'py-4 sm:py-5 lg:py-6'
+      } px-4 sm:px-6 lg:px-8 transition-all duration-500 ease-out ${
+        isDoubleHeight ? 'flex items-center justify-center h-full' : ''
+      } cursor-pointer group`}
+      style={{ 
+        borderColor: styles.text + '80',
+        backgroundColor: 'transparent'
+      }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <motion.div 
+        className="h-full"
+        whileHover={{ scale: 1.02 }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
+      >
+        {/* Release Content - New Layout */}
+        <div className="flex items-center justify-between h-full">
+          {/* Left side - Text content */}
+          <div className="flex-1 text-left pr-4">
+            {/* Title - Large font */}
+            <h3 
+              className={`${inter.className} ${
+                isDoubleHeight || isDoubleWidth
+                  ? 'text-xl sm:text-2xl lg:text-3xl mb-2' 
+                  : 'text-lg sm:text-xl lg:text-2xl mb-1'
+              } font-bold tracking-wide transition-all duration-300`}
+              style={{ 
+                color: styles.text,
+                transition: 'color 0.3s ease'
+              }}
+            >
+              {release.RELEASES}
+            </h3>
+
+            {/* Description - Medium font */}
+            <p 
+              className={`${
+                isDoubleHeight || isDoubleWidth
+                  ? 'text-base sm:text-lg leading-relaxed mb-2' 
+                  : 'text-sm sm:text-base leading-snug mb-2'
+              } transition-all duration-300`}
+              style={{ 
+                color: styles.text,
+                opacity: 0.7,
+                transition: 'opacity 0.3s ease'
+              }}
+            >
+              {release.DESCRIPTION}
+            </p>
+
+            {/* Industry - Small font */}
+            <div 
+              className={`${
+                isDoubleHeight || isDoubleWidth
+                  ? 'text-sm sm:text-base mb-1' 
+                  : 'text-xs sm:text-sm mb-1'
+              } font-medium transition-all duration-300`}
+              style={{ 
+                color: styles.accent,
+                opacity: 0.6,
+                transition: 'color 0.3s ease, opacity 0.3s ease'
+              }}
+            >
+              {release.INDUSTRY}
+            </div>
+
+            {/* Year - Medium font */}
+            <div 
+              className={`${
+                isDoubleHeight || isDoubleWidth
+                  ? 'text-base sm:text-lg mb-3' 
+                  : 'text-sm sm:text-base mb-3'
+              } font-semibold transition-all duration-300`}
+              style={{ 
+                color: styles.text,
+                opacity: 0.8,
+                transition: 'color 0.3s ease, opacity 0.3s ease'
+              }}
+            >
+              {release.DATE}
+            </div>
+
+            {/* Action links */}
+            <div className="flex flex-wrap gap-4">
+              {hasValidUrl && (
+                <motion.button
+                  onClick={() => handleClick(release.URL)}
+                  className="text-sm font-bold transition-all duration-300 relative group flex items-center gap-2"
+                  style={{ 
+                    color: styles.accent,
+                    transition: 'all 0.3s ease'
+                  }}
+                  whileHover={{ 
+                    color: styles.text,
+                    y: -1
+                  }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <OptimizedSVG
+                    src="/svg_icons/releases/link.svg"
+                    alt="Link"
+                    width={16}
+                    height={16}
+                    className="w-4 h-4"
+                    svgFilter={svgFilter}
+                  />
+                  <span className="relative">
+                    Visit Project
+                    <span 
+                      className="absolute bottom-0 left-0 w-0 h-px transition-all duration-300 group-hover:w-full"
+                      style={{ backgroundColor: styles.text }}
+                    ></span>
+                  </span>
+                </motion.button>
+              )}
+
+              {hasValidSocials && (
+                <motion.button
+                  onClick={() => handleClick(release.SOCIALS)}
+                  className="text-sm font-bold transition-all duration-300 relative group flex items-center gap-2"
+                  style={{ 
+                    color: styles.accent,
+                    transition: 'all 0.3s ease'
+                  }}
+                  whileHover={{ 
+                    color: styles.text,
+                    y: -1
+                  }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <OptimizedSVG
+                    src="/svg_icons/releases/link.svg"
+                    alt="Link"
+                    width={16}
+                    height={16}
+                    className="w-4 h-4"
+                    svgFilter={svgFilter}
+                  />
+                  <span className="relative">
+                    View Social
+                    <span 
+                      className="absolute bottom-0 left-0 w-0 h-px transition-all duration-300 group-hover:w-full"
+                      style={{ backgroundColor: styles.text }}
+                    ></span>
+                  </span>
+                </motion.button>
+              )}
+            </div>
+          </div>
+
+          {/* Right side - Large Icon */}
+          <div 
+            className="flex-shrink-0 flex items-center justify-center transition-all duration-300"
+          >
+            <OptimizedSVG
+              src={`/svg_icons/releases/${release.SVG}`}
+              alt={release.RELEASES}
+              width={isDoubleHeight || isDoubleWidth ? 120 : 100}
+              height={isDoubleWidth || isDoubleWidth ? 120 : 100}
+              className={`transition-all duration-300 ${
+                isDoubleHeight || isDoubleWidth
+                  ? "w-24 h-24 sm:w-28 sm:h-28 lg:w-32 lg:h-32" 
+                  : "w-20 h-20 sm:w-24 sm:h-24 lg:w-28 lg:h-28"
+              }`}
+              svgFilter={svgFilter}
+            />
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+});
+
+ReleaseItem.displayName = 'ReleaseItem';
+
 // Featured items configuration
 const featuredItems = [
   { 
@@ -524,7 +865,7 @@ const featuredItems = [
 ];
 
 export default function Home() {
-  const { toggleTheme, currentTheme } = useTheme();
+  const { toggleTheme, currentTheme, isAutoSwitching, toggleAutoSwitch } = useTheme();
   const { svgFilter, styles } = useThemeStyles();
   
   // Track screen size to prevent mobile scroll effects
@@ -553,6 +894,7 @@ export default function Home() {
 
   // Get current theme name
   const currentThemeName = themes[currentTheme].name;
+  const paletteLabel = currentThemeName;
 
   // Scroll effects (only for desktop to avoid mobile glitching)
   const { scrollYProgress } = useScroll();
@@ -563,10 +905,36 @@ export default function Home() {
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
-      element.scrollIntoView({ 
-        behavior: 'smooth',
-        block: 'start'
-      });
+      // Add a small delay to ensure the page is ready
+      setTimeout(() => {
+        // Get the element's position relative to the document
+        const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+        const offsetPosition = elementPosition - 20; // Small offset from top
+        
+        // Use both methods for maximum compatibility
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+        
+        // Fallback method
+        element.scrollIntoView({ 
+          behavior: 'smooth',
+          block: 'start',
+          inline: 'nearest'
+        });
+      }, 100);
+    } else {
+      console.warn(`Element with id "${sectionId}" not found`);
+    }
+  };
+
+  // Handle palette click - toggle auto-switching or manual theme switching
+  const handlePaletteClick = () => {
+    if (isAutoSwitching) {
+      toggleAutoSwitch(); // Turn off auto-switching
+    } else {
+      toggleTheme(); // Manual theme switch
     }
   };
 
@@ -576,7 +944,7 @@ export default function Home() {
     { icon: "/svg_icons/releases.svg", label: "Releases", onClick: () => scrollToSection('releases'), sectionId: 'releases' },
     { icon: "/svg_icons/contact.svg", label: "Contact", onClick: () => scrollToSection('contact'), sectionId: 'contact' },
     { icon: "/svg_icons/market.svg", label: "Market", onClick: () => window.open('https://frank-sigma.vercel.app/', '_blank', 'noopener,noreferrer'), sectionId: null },
-    { icon: "/svg_icons/palettes.svg", label: currentThemeName, onClick: toggleTheme, sectionId: null },
+    { icon: "/svg_icons/palettes.svg", label: paletteLabel, onClick: handlePaletteClick, sectionId: null },
   ];
 
   return (
@@ -785,16 +1153,197 @@ export default function Home() {
       </div>
 
       {/* Releases section */}
-      <div id="releases" className="min-h-screen flex items-center justify-center px-4">
-        <h1 
-          className={`${inter.className} text-4xl sm:text-6xl lg:text-9xl font-bold tracking-wide text-center`}
-          style={{ 
-            color: styles.text,
-            transition: 'color 0.3s ease'
-          }}
-        >
-          Releases
-        </h1>
+      <div id="releases" className="min-h-screen flex flex-col justify-center py-8">
+        <div className="w-full px-4 mb-8">
+          <motion.h1 
+            className={`${inter.className} text-4xl sm:text-6xl lg:text-9xl font-bold tracking-wide text-center`}
+            style={{ 
+              color: styles.text,
+              transition: 'color 0.3s ease'
+            }}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            viewport={{ once: true, margin: "-10%" }}
+          >
+            Releases
+          </motion.h1>
+        </div>
+        
+        <div className="w-full">
+          {/* Custom layout with All The Best spanning full width and AM/SIZED double height */}
+          
+          {/* Row 1: All The Best (full width) */}
+          <motion.div
+            key="row-0"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ 
+              duration: 0.6, 
+              delay: 0,
+              ease: "easeOut" 
+            }}
+            viewport={{ once: true, margin: "-20%" }}
+            className="border-t"
+            style={{ 
+              borderColor: styles.text + '33'
+            }}
+          >
+            <ReleaseItem 
+              key={releasesData[0].RELEASES}
+              release={releasesData[0]}
+              index={0}
+              styles={styles}
+              svgFilter={svgFilter}
+              isRightColumn={false}
+              isDoubleWidth={true}
+            />
+          </motion.div>
+
+          {/* Row 2: LNPWRLD | AM/SIZED (double height) */}
+          <motion.div
+            key="row-1"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ 
+              duration: 0.6, 
+              delay: 0.1,
+              ease: "easeOut" 
+            }}
+            viewport={{ once: true, margin: "-20%" }}
+            className="border-t grid grid-cols-1 lg:grid-cols-2"
+            style={{ 
+              borderColor: styles.text + '80'
+            }}
+          >
+            {/* Left side with LNPWRLD and The Collection stacked */}
+            <div className="grid grid-rows-2">
+              <div className="border-b lg:border-b" style={{ borderColor: styles.text + '80' }}>
+                <ReleaseItem 
+                  key={releasesData[2].RELEASES}
+                  release={releasesData[2]}
+                  index={2}
+                  styles={styles}
+                  svgFilter={svgFilter}
+                  isRightColumn={false}
+                />
+              </div>
+              <div>
+                <ReleaseItem 
+                  key={releasesData[1].RELEASES}
+                  release={releasesData[1]}
+                  index={1}
+                  styles={styles}
+                  svgFilter={svgFilter}
+                  isRightColumn={false}
+                />
+              </div>
+            </div>
+            
+            {/* Right side with AM/SIZED taking full height */}
+            <div className="border-l" style={{ borderColor: styles.text + '80' }}>
+              <ReleaseItem 
+                key={releasesData[3].RELEASES}
+                release={releasesData[3]}
+                index={3}
+                styles={styles}
+                svgFilter={svgFilter}
+                isRightColumn={true}
+                isDoubleHeight={true}
+              />
+            </div>
+          </motion.div>
+
+          {/* Row 3: tennismenace (full width) */}
+          <motion.div
+            key="row-2"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ 
+              duration: 0.6, 
+              delay: 0.2,
+              ease: "easeOut" 
+            }}
+            viewport={{ once: true, margin: "-20%" }}
+            className="border-t"
+            style={{ 
+              borderColor: styles.text + '80'
+            }}
+          >
+            <ReleaseItem 
+              key={releasesData[6].RELEASES}
+              release={releasesData[6]}
+              index={6}
+              styles={styles}
+              svgFilter={svgFilter}
+              isRightColumn={false}
+              isDoubleWidth={true}
+            />
+          </motion.div>
+
+          {/* Row 4: Frank (double height) | i'm lazy + HEATMAP (stacked) */}
+          <motion.div
+            key="row-3"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ 
+              duration: 0.6, 
+              delay: 0.3,
+              ease: "easeOut" 
+            }}
+            viewport={{ once: true, margin: "-20%" }}
+            className="border-t grid grid-cols-1 lg:grid-cols-2"
+            style={{ 
+              borderColor: styles.text + '80'
+            }}
+          >
+            {/* Left side with Frank taking full height */}
+            <div>
+              <ReleaseItem 
+                key={releasesData[7].RELEASES}
+                release={releasesData[7]}
+                index={7}
+                styles={styles}
+                svgFilter={svgFilter}
+                isRightColumn={false}
+                isDoubleHeight={true}
+              />
+            </div>
+            
+            {/* Right side with i'm lazy and HEATMAP stacked */}
+            <div className="border-l grid grid-rows-2" style={{ borderColor: styles.text + '80' }}>
+              <div className="border-b lg:border-b" style={{ borderColor: styles.text + '80' }}>
+                <ReleaseItem 
+                  key={releasesData[4].RELEASES}
+                  release={releasesData[4]}
+                  index={4}
+                  styles={styles}
+                  svgFilter={svgFilter}
+                  isRightColumn={true}
+                />
+              </div>
+              <div>
+                <ReleaseItem 
+                  key={releasesData[5].RELEASES}
+                  release={releasesData[5]}
+                  index={5}
+                  styles={styles}
+                  svgFilter={svgFilter}
+                  isRightColumn={true}
+                />
+              </div>
+            </div>
+          </motion.div>
+          
+          {/* Bottom border to close off the grid */}
+          <div 
+            className="w-full h-px border-b"
+            style={{ 
+              borderColor: styles.text + '80',
+              transition: 'border-color 0.3s ease'
+            }}
+          />
+        </div>
       </div>
 
       {/* Contact section */}
