@@ -627,27 +627,24 @@ const ReleaseItem = memo(({
   index, 
   styles, 
   svgFilter,
-  isRightColumn = false,
   isDoubleHeight = false,
   isDoubleWidth = false
 }: { 
   release: Release; 
   index: number; 
-  styles: any; 
+  styles: {
+    background: string;
+    text: string;
+    accent: string;
+  }; 
   svgFilter: string;
-  isRightColumn?: boolean;
   isDoubleHeight?: boolean;
   isDoubleWidth?: boolean;
 }) => {
-  const [isHovered, setIsHovered] = useState(false);
-  const [clickedUrl, setClickedUrl] = useState<string | null>(null);
-
   const handleClick = (url?: string) => {
     if (url && url.trim()) {
-      setClickedUrl(url);
       setTimeout(() => {
         window.open(url, '_blank', 'noopener,noreferrer');
-        setClickedUrl(null);
       }, 150);
     }
   };
@@ -674,8 +671,6 @@ const ReleaseItem = memo(({
         borderColor: styles.text + '80',
         backgroundColor: 'transparent'
       }}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
     >
       <motion.div 
         className="h-full"
@@ -1007,10 +1002,13 @@ export default function Home() {
               animate={{ opacity: activeGif === item.key ? 0.5 : 0 }}
               transition={{ duration: 0.5, ease: "easeInOut" }}
             >
-              <img
+              <Image
                 src={`/featured-gifs/${item.key}.gif`}
                 alt={`${item.alt} background`}
+                width={1920}
+                height={1080}
                 className="w-full h-full object-cover"
+                unoptimized
                 loading="lazy"
               />
             </motion.div>
@@ -1195,7 +1193,6 @@ export default function Home() {
               index={0}
               styles={styles}
               svgFilter={svgFilter}
-              isRightColumn={false}
               isDoubleWidth={true}
             />
           </motion.div>
@@ -1225,7 +1222,6 @@ export default function Home() {
                   index={2}
                   styles={styles}
                   svgFilter={svgFilter}
-                  isRightColumn={false}
                 />
               </div>
               <div>
@@ -1235,7 +1231,6 @@ export default function Home() {
                   index={1}
                   styles={styles}
                   svgFilter={svgFilter}
-                  isRightColumn={false}
                 />
               </div>
             </div>
@@ -1248,7 +1243,6 @@ export default function Home() {
                 index={3}
                 styles={styles}
                 svgFilter={svgFilter}
-                isRightColumn={true}
                 isDoubleHeight={true}
               />
             </div>
@@ -1276,7 +1270,6 @@ export default function Home() {
               index={6}
               styles={styles}
               svgFilter={svgFilter}
-              isRightColumn={false}
               isDoubleWidth={true}
             />
           </motion.div>
@@ -1305,7 +1298,6 @@ export default function Home() {
                 index={7}
                 styles={styles}
                 svgFilter={svgFilter}
-                isRightColumn={false}
                 isDoubleHeight={true}
               />
             </div>
@@ -1319,7 +1311,6 @@ export default function Home() {
                   index={4}
                   styles={styles}
                   svgFilter={svgFilter}
-                  isRightColumn={true}
                 />
               </div>
               <div>
@@ -1329,7 +1320,6 @@ export default function Home() {
                   index={5}
                   styles={styles}
                   svgFilter={svgFilter}
-                  isRightColumn={true}
                 />
               </div>
             </div>
