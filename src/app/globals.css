@@ -183,3 +183,21 @@ img {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+/* Force remove any underlines from contact section */
+.contact-no-underline, .contact-no-underline * {
+  text-decoration: none !important;
+  text-decoration-line: none !important;
+  text-decoration-style: none !important;
+  text-decoration-color: transparent !important;
+  border: none !important;
+  border-bottom: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.contact-no-underline:hover, .contact-no-underline:hover * {
+  text-decoration: none !important;
+  text-decoration-line: none !important;
+  border-bottom: none !important;
+}

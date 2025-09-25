@@ -1355,7 +1355,20 @@ export default function Home() {
         </motion.h1>
 
         {/* Contact Info - ABSOLUTELY MINIMAL */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '24px', cursor: 'pointer' }} onClick={() => window.location.href = 'mailto:info@poweredbystardust.com'}>
+        <div 
+          className="contact-no-underline"
+          style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            gap: '24px', 
+            cursor: 'pointer',
+            textDecoration: 'none',
+            border: 'none',
+            outline: 'none',
+            boxShadow: 'none'
+          }} 
+          onClick={() => window.location.href = 'mailto:info@poweredbystardust.com'}
+        >
           
           <img 
             src="/svg_icons/info.svg" 
@@ -1364,24 +1377,28 @@ export default function Home() {
             height="60"
             style={{
               filter: svgFilter,
-              flexShrink: 0
+              flexShrink: 0,
+              border: 'none',
+              outline: 'none'
             }}
           />
           
-          <div style={{
+          <span style={{
             fontSize: '22px',
             fontFamily: 'var(--font-geist-sans)',
             color: styles.text,
             textDecoration: 'none',
             border: 'none',
+            borderBottom: 'none',
             outline: 'none',
             background: 'none',
             margin: 0,
             padding: 0,
-            lineHeight: 1
+            lineHeight: 1,
+            boxShadow: 'none'
           }}>
             info@poweredbystardust.com
-          </div>
+          </span>
           
         </div>
       </div>
