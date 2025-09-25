@@ -1293,7 +1293,7 @@ export default function Home() {
             }}
           >
             {/* Left side with Frank taking full height */}
-            <div>
+            <div className="border-b lg:border-b" style={{ borderColor: styles.text + '80' }}>
               <ReleaseItem 
                 key={releasesData[7].RELEASES}
                 release={releasesData[7]}
@@ -1354,16 +1354,16 @@ export default function Home() {
           Contact
         </motion.h1>
 
-        {/* Contact Info - Completely rewritten */}
-        <div className="flex items-center space-x-8 cursor-pointer" onClick={() => window.location.href = 'mailto:info@poweredbystardust.com'}>
-          {/* Icon - Using same structure as menu items */}
+        {/* Contact Info - Mobile optimized */}
+        <div className="flex items-center space-x-4 sm:space-x-6 cursor-pointer" onClick={() => window.location.href = 'mailto:info@poweredbystardust.com'}>
+          {/* Icon - Smaller on mobile */}
           <div className="flex-shrink-0">
             <Image
               src="/svg_icons/info.svg"
               alt="Contact Info"
               width={120}
               height={120}
-              className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24"
+              className="w-12 h-12 sm:w-16 sm:h-16 lg:w-20 lg:h-20"
               unoptimized={true}
               style={{
                 filter: svgFilter,
@@ -1372,10 +1372,10 @@ export default function Home() {
             />
           </div>
           
-          {/* Email Text - Clean and simple */}
+          {/* Email Text - Smaller on mobile */}
           <div className="flex items-center">
             <h2 
-              className={`${inter.className} text-2xl sm:text-4xl lg:text-6xl tracking-wide font-normal`}
+              className={`${inter.className} text-lg sm:text-2xl lg:text-4xl tracking-wide font-normal`}
               style={{ 
                 color: styles.text,
                 transition: 'color 0.3s ease'
