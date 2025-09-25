@@ -856,7 +856,7 @@ const featuredItems = [
   { 
     src: "/svg_icons/am-studios.svg", 
     alt: "AM Studios", 
-    link: null, 
+    link: "https://alexandermay.ltd", 
     key: "am-studios" 
   }
 ];
@@ -1377,22 +1377,15 @@ export default function Home() {
             <OptimizedSVG
               src="/svg_icons/info.svg"
               alt="Contact Info"
-              width={120}
-              height={120}
-              className="w-20 h-20 sm:w-24 sm:h-24 lg:w-28 lg:h-28 flex-shrink-0 transition-all duration-300 group-hover:brightness-110"
+              width={200}
+              height={200}
+              className="w-24 h-24 sm:w-32 sm:h-32 lg:w-40 lg:h-40 flex-shrink-0 transition-all duration-300 group-hover:brightness-110"
               svgFilter={svgFilter}
               priority={true}
             />
           </motion.div>
-          <motion.span 
-            className={`${inter.className} text-2xl sm:text-4xl lg:text-6xl tracking-wide whitespace-nowrap transition-all duration-300 group-hover:tracking-wider font-normal`}
-            style={{ 
-              color: styles.text,
-              transition: 'color 0.3s ease, letter-spacing 0.3s ease',
-              textDecoration: 'none',
-              border: 'none',
-              outline: 'none'
-            }}
+          <motion.div
+            className="flex flex-col"
             whileHover={{ 
               x: 3,
               scale: 1.02
@@ -1402,8 +1395,22 @@ export default function Home() {
               ease: [0.25, 0.46, 0.45, 0.94]
             }}
           >
-            info@poweredbystardust.com
-          </motion.span>
+            <span 
+              className={`${inter.className} text-2xl sm:text-4xl lg:text-6xl tracking-wide whitespace-nowrap transition-all duration-300 group-hover:tracking-wider font-normal`}
+              style={{ 
+                color: styles.text,
+                transition: 'color 0.3s ease, letter-spacing 0.3s ease',
+                textDecoration: 'none !important',
+                borderBottom: 'none !important',
+                border: 'none !important',
+                outline: 'none !important',
+                textUnderlineOffset: 'none',
+                textDecorationLine: 'none'
+              }}
+            >
+              info@poweredbystardust.com
+            </span>
+          </motion.div>
         </motion.div>
       </div>
 
