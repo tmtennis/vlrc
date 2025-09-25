@@ -1339,16 +1339,69 @@ export default function Home() {
       </div>
 
       {/* Contact section */}
-      <div id="contact" className="min-h-screen flex items-center justify-center px-4">
-        <h1 
+      <div id="contact" className="min-h-screen flex flex-col items-center justify-center px-4 space-y-16">
+        <motion.h1 
           className={`${inter.className} text-4xl sm:text-6xl lg:text-9xl font-bold tracking-wide text-center`}
           style={{ 
             color: styles.text,
             transition: 'color 0.3s ease'
           }}
+          initial={{ opacity: 0.4, y: 15 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.2, ease: [0.25, 0.46, 0.45, 0.94] }}
+          viewport={{ once: true, margin: "-10%" }}
         >
           Contact
-        </h1>
+        </motion.h1>
+
+        {/* Contact Info */}
+        <motion.div
+          className="flex items-center space-x-6 cursor-pointer group"
+          initial={{ opacity: 0.4, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.2, delay: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+          viewport={{ once: true, margin: "-10%" }}
+          onClick={() => window.location.href = 'mailto:info@poweredbystardust.com'}
+        >
+          <motion.div
+            whileHover={{ 
+              scale: 1.05,
+              rotate: 2
+            }}
+            transition={{ 
+              duration: 0.4,
+              ease: [0.25, 0.46, 0.45, 0.94]
+            }}
+            className="transform-gpu"
+          >
+            <OptimizedSVG
+              src="/svg_icons/info.svg"
+              alt="Contact Info"
+              width={120}
+              height={120}
+              className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 flex-shrink-0 transition-all duration-300 group-hover:brightness-110"
+              svgFilter={svgFilter}
+              priority={true}
+            />
+          </motion.div>
+          <motion.span 
+            className={`${inter.className} text-2xl sm:text-4xl lg:text-6xl tracking-wide whitespace-nowrap transition-all duration-300 group-hover:tracking-wider`}
+            style={{ 
+              color: styles.text,
+              transition: 'color 0.3s ease, letter-spacing 0.3s ease'
+            }}
+            whileHover={{ 
+              x: 3,
+              scale: 1.02
+            }}
+            transition={{ 
+              duration: 0.4,
+              ease: [0.25, 0.46, 0.45, 0.94]
+            }}
+          >
+            info@poweredbystardust.com
+          </motion.span>
+        </motion.div>
       </div>
 
       {/* Fixed Stardust Solutions text - bottom right */}
