@@ -1354,36 +1354,35 @@ export default function Home() {
           Contact
         </motion.h1>
 
-        {/* Contact Info - Mobile optimized */}
-        <div className="flex items-center space-x-4 sm:space-x-6 cursor-pointer" onClick={() => window.location.href = 'mailto:info@poweredbystardust.com'}>
-          {/* Icon - Smaller on mobile */}
-          <div className="flex-shrink-0">
-            <Image
-              src="/svg_icons/info.svg"
-              alt="Contact Info"
-              width={120}
-              height={120}
-              className="w-12 h-12 sm:w-16 sm:h-16 lg:w-20 lg:h-20"
-              unoptimized={true}
-              style={{
-                filter: svgFilter,
-                transition: 'filter 0.3s ease',
-              }}
-            />
+        {/* Contact Info - ABSOLUTELY MINIMAL */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '24px', cursor: 'pointer' }} onClick={() => window.location.href = 'mailto:info@poweredbystardust.com'}>
+          
+          <img 
+            src="/svg_icons/info.svg" 
+            alt="Contact" 
+            width="60" 
+            height="60"
+            style={{
+              filter: svgFilter,
+              flexShrink: 0
+            }}
+          />
+          
+          <div style={{
+            fontSize: '22px',
+            fontFamily: 'var(--font-geist-sans)',
+            color: styles.text,
+            textDecoration: 'none',
+            border: 'none',
+            outline: 'none',
+            background: 'none',
+            margin: 0,
+            padding: 0,
+            lineHeight: 1
+          }}>
+            info@poweredbystardust.com
           </div>
           
-          {/* Email Text - Smaller on mobile */}
-          <div className="flex items-center">
-            <h2 
-              className={`${inter.className} text-lg sm:text-2xl lg:text-4xl tracking-wide font-normal`}
-              style={{ 
-                color: styles.text,
-                transition: 'color 0.3s ease'
-              }}
-            >
-              info@poweredbystardust.com
-            </h2>
-          </div>
         </div>
       </div>
 
