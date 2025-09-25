@@ -998,8 +998,7 @@ export default function Home() {
           {featuredItems.map((item) => (
             <motion.div
               key={item.key}
-              className="absolute inset-0 w-full"
-              style={{ height: '140vh' }}
+              className="absolute inset-0 w-full h-full"
               initial={{ opacity: 0 }}
               animate={{ opacity: activeGif === item.key ? 0.5 : 0 }}
               transition={{ duration: 0.5, ease: "easeInOut" }}
@@ -1009,9 +1008,10 @@ export default function Home() {
                 alt={`${item.alt} background`}
                 width={1920}
                 height={1080}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover object-center"
                 unoptimized
                 loading="lazy"
+                style={{ minHeight: '100vh' }}
               />
             </motion.div>
           ))}
@@ -1379,16 +1379,19 @@ export default function Home() {
               alt="Contact Info"
               width={120}
               height={120}
-              className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 flex-shrink-0 transition-all duration-300 group-hover:brightness-110"
+              className="w-20 h-20 sm:w-24 sm:h-24 lg:w-28 lg:h-28 flex-shrink-0 transition-all duration-300 group-hover:brightness-110"
               svgFilter={svgFilter}
               priority={true}
             />
           </motion.div>
           <motion.span 
-            className={`${inter.className} text-2xl sm:text-4xl lg:text-6xl tracking-wide whitespace-nowrap transition-all duration-300 group-hover:tracking-wider`}
+            className={`${inter.className} text-2xl sm:text-4xl lg:text-6xl tracking-wide whitespace-nowrap transition-all duration-300 group-hover:tracking-wider font-normal`}
             style={{ 
               color: styles.text,
-              transition: 'color 0.3s ease, letter-spacing 0.3s ease'
+              transition: 'color 0.3s ease, letter-spacing 0.3s ease',
+              textDecoration: 'none',
+              border: 'none',
+              outline: 'none'
             }}
             whileHover={{ 
               x: 3,
