@@ -337,26 +337,26 @@ const MenuItem = memo(({ item, index, svgFilter, styles, isClient }: {
       onClick={item.onClick}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      initial={initialAnimationComplete ? { opacity: 1 } : { opacity: 0.3 }}
-      animate={{ opacity: 1 }}
+      initial={initialAnimationComplete ? { opacity: 1, x: 0 } : { opacity: 0, x: -60 }}
+      animate={{ opacity: 1, x: 0 }}
       transition={initialAnimationComplete ? { duration: 0 } : { 
-        duration: 1.2, 
-        delay: index * 0.15,
-        ease: [0.25, 0.46, 0.45, 0.94]
+        duration: 0.8, 
+        delay: index * 0.12,
+        ease: [0.16, 1, 0.3, 1]
       }}
       style={{
         opacity: isHovered ? 0.9 : 1,
-        transition: 'opacity 0.3s ease'
+        transition: 'opacity 0.2s ease'
       }}
     >
       <div className="flex items-center space-x-3 lg:space-x-4">
         <motion.div
-          initial={initialAnimationComplete ? { opacity: 1 } : { opacity: 0.4, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={initialAnimationComplete ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
           transition={initialAnimationComplete ? { duration: 0 } : { 
-            duration: 1, 
-            delay: index * 0.15 + 0.3,
-            ease: [0.25, 0.46, 0.45, 0.94]
+            duration: 0.6, 
+            delay: index * 0.12 + 0.2,
+            ease: [0.16, 1, 0.3, 1]
           }}
         >
           <OptimizedSVG
@@ -377,12 +377,12 @@ const MenuItem = memo(({ item, index, svgFilter, styles, isClient }: {
               color: styles.text,
               transition: 'color 0.3s ease'
             }}
-            initial={initialAnimationComplete ? { opacity: 1 } : { opacity: 0.4, x: -20 }}
+            initial={initialAnimationComplete ? { opacity: 1, x: 0 } : { opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={initialAnimationComplete ? { duration: 0 } : { 
-              duration: 1, 
-              delay: index * 0.15 + 0.5,
-              ease: [0.25, 0.46, 0.45, 0.94]
+              duration: 0.7, 
+              delay: index * 0.12 + 0.1,
+              ease: [0.16, 1, 0.3, 1]
             }}
           >
             {item.label}
@@ -1354,64 +1354,37 @@ export default function Home() {
           Contact
         </motion.h1>
 
-        {/* Contact Info */}
-        <motion.div
-          className="flex items-center space-x-6 cursor-pointer group"
-          initial={{ opacity: 0.4, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.2, delay: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
-          viewport={{ once: true, margin: "-10%" }}
-          onClick={() => window.location.href = 'mailto:info@poweredbystardust.com'}
-        >
-          <motion.div
-            whileHover={{ 
-              scale: 1.05,
-              rotate: 2
-            }}
-            transition={{ 
-              duration: 0.4,
-              ease: [0.25, 0.46, 0.45, 0.94]
-            }}
-            className="transform-gpu"
-          >
-            <OptimizedSVG
+        {/* Contact Info - Completely rewritten */}
+        <div className="flex items-center space-x-8 cursor-pointer" onClick={() => window.location.href = 'mailto:info@poweredbystardust.com'}>
+          {/* Icon - Using same structure as menu items */}
+          <div className="flex-shrink-0">
+            <Image
               src="/svg_icons/info.svg"
               alt="Contact Info"
-              width={200}
-              height={200}
-              className="w-24 h-24 sm:w-32 sm:h-32 lg:w-40 lg:h-40 flex-shrink-0 transition-all duration-300 group-hover:brightness-110"
-              svgFilter={svgFilter}
-              priority={true}
+              width={120}
+              height={120}
+              className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24"
+              unoptimized={true}
+              style={{
+                filter: svgFilter,
+                transition: 'filter 0.3s ease',
+              }}
             />
-          </motion.div>
-          <motion.div
-            className="flex flex-col"
-            whileHover={{ 
-              x: 3,
-              scale: 1.02
-            }}
-            transition={{ 
-              duration: 0.4,
-              ease: [0.25, 0.46, 0.45, 0.94]
-            }}
-          >
-            <span 
-              className={`${inter.className} text-2xl sm:text-4xl lg:text-6xl tracking-wide whitespace-nowrap transition-all duration-300 group-hover:tracking-wider font-normal`}
+          </div>
+          
+          {/* Email Text - Clean and simple */}
+          <div className="flex items-center">
+            <h2 
+              className={`${inter.className} text-2xl sm:text-4xl lg:text-6xl tracking-wide font-normal`}
               style={{ 
                 color: styles.text,
-                transition: 'color 0.3s ease, letter-spacing 0.3s ease',
-                textDecoration: 'none !important',
-                borderBottom: 'none !important',
-                border: 'none !important',
-                outline: 'none !important',
-                textUnderlineOffset: 'none',
-                textDecorationLine: 'none'
+                transition: 'color 0.3s ease'
               }}
             >
               info@poweredbystardust.com
-            </span>
-          </motion.div>
-        </motion.div>
+            </h2>
+          </div>
+        </div>
       </div>
 
       {/* Fixed Stardust Solutions text - bottom right */}
